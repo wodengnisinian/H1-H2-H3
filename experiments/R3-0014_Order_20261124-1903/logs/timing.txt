@@ -1,0 +1,7 @@
+{
+  "exit_code": 0,
+  "elapsed_seconds": 9.012283794116229,
+  "user_cpu_seconds": 8.221033,
+  "system_cpu_seconds": 0.756884,
+  "max_resident_kib": 795364
+}

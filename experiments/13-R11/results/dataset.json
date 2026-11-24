@@ -1,0 +1,14 @@
+{
+  "graphs": 100,
+  "questions": 200,
+  "oov_token_counts": {
+    "实际": 200,
+    "已放弃": 200,
+    "已采用": 200,
+    "方案": 600,
+    "采用": 200
+  },
+  "source_sha256": "e0874ff72e05b859156d7f45dc1318f115cbd2100c7bcb3ffeee628fb1d770d3",
+  "inputs_sha256": "d2aa652a133cb666d3be37e40769990d1966a08884bcf2dccda335dfbe2bc1c8",
+  "gold_sha256": "a2128fad071b18342ca7b07fb511b244c5d09b72daf12628ab84622da848bca1"
+}

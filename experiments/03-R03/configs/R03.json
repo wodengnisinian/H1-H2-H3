@@ -1,0 +1,24 @@
+{
+  "id": "R03",
+  "hypothesis": "Frozen representations encode first-relation identity on held-out wording. A matched linear question-only readout exceeds its randomized-label control.",
+  "criteria": "Constrained two-relation probe accuracy exceeds shuffled-label accuracy by at least 5pp in fresh, template and combination original questions. Same ridge penalty and same training examples in both fits. Learned word mass identifies the first relation only when its mass exceeds the competing relation; exact ties are reported as 0.5.",
+  "argv": [
+    "src/mech_run.py",
+    "--round",
+    "readout",
+    "--b13",
+    "{inputs}/b13",
+    "--b16",
+    "{inputs}/b16",
+    "--prior",
+    "{inputs}/prior",
+    "--out",
+    "{out}"
+  ],
+  "sources": [
+    "src/mech_*.py",
+    "configs/mech_protocol.json"
+  ],
+  "receipt": "metrics.json",
+  "after": "按本轮逐题结果和冻结判据评估下轮实验"
+}

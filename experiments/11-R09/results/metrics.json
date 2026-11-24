@@ -1,0 +1,1141 @@
+{
+  "seeds": [
+    1701,
+    2701,
+    3701
+  ],
+  "question_views": {
+    "original": {
+      "overall": {
+        "graphs": 4800,
+        "graph_seed_judgments": 14400,
+        "coverage": {
+          "hits": 14400,
+          "denominator": 14400,
+          "percent": 100.0
+        },
+        "coverage_by_graph": {
+          "hits": 4800,
+          "denominator": 4800,
+          "percent": 100.0
+        },
+        "accuracy": {
+          "first": {
+            "hits": 9495,
+            "denominator": 14400,
+            "percent": 65.9375
+          },
+          "pool": {
+            "hits": 10203,
+            "denominator": 14400,
+            "percent": 70.85416666666667
+          },
+          "direction": {
+            "hits": 10419,
+            "denominator": 14400,
+            "percent": 72.35416666666667
+          },
+          "old": {
+            "hits": 10144,
+            "denominator": 14400,
+            "percent": 70.44444444444444
+          },
+          "uniform": {
+            "hits": 10357,
+            "denominator": 14400,
+            "percent": 71.92361111111111
+          },
+          "learned": {
+            "hits": 12906,
+            "denominator": 14400,
+            "percent": 89.625
+          }
+        }
+      },
+      "by_kind": {
+        "competing_chain": {
+          "graphs": 1600,
+          "graph_seed_judgments": 4800,
+          "coverage": {
+            "hits": 4800,
+            "denominator": 4800,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 1600,
+            "denominator": 1600,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 4800,
+              "denominator": 4800,
+              "percent": 100.0
+            },
+            "pool": {
+              "hits": 3803,
+              "denominator": 4800,
+              "percent": 79.22916666666667
+            },
+            "direction": {
+              "hits": 4022,
+              "denominator": 4800,
+              "percent": 83.79166666666667
+            },
+            "old": {
+              "hits": 4022,
+              "denominator": 4800,
+              "percent": 83.79166666666667
+            },
+            "uniform": {
+              "hits": 4022,
+              "denominator": 4800,
+              "percent": 83.79166666666667
+            },
+            "learned": {
+              "hits": 4022,
+              "denominator": 4800,
+              "percent": 83.79166666666667
+            }
+          }
+        },
+        "relation_order": {
+          "graphs": 1600,
+          "graph_seed_judgments": 4800,
+          "coverage": {
+            "hits": 4800,
+            "denominator": 4800,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 1600,
+            "denominator": 1600,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 2322,
+              "denominator": 4800,
+              "percent": 48.375
+            },
+            "pool": {
+              "hits": 3194,
+              "denominator": 4800,
+              "percent": 66.54166666666667
+            },
+            "direction": {
+              "hits": 3181,
+              "denominator": 4800,
+              "percent": 66.27083333333333
+            },
+            "old": {
+              "hits": 3064,
+              "denominator": 4800,
+              "percent": 63.833333333333336
+            },
+            "uniform": {
+              "hits": 3166,
+              "denominator": 4800,
+              "percent": 65.95833333333333
+            },
+            "learned": {
+              "hits": 4453,
+              "denominator": 4800,
+              "percent": 92.77083333333333
+            }
+          }
+        },
+        "role_reversal": {
+          "graphs": 1600,
+          "graph_seed_judgments": 4800,
+          "coverage": {
+            "hits": 4800,
+            "denominator": 4800,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 1600,
+            "denominator": 1600,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 2373,
+              "denominator": 4800,
+              "percent": 49.4375
+            },
+            "pool": {
+              "hits": 3206,
+              "denominator": 4800,
+              "percent": 66.79166666666667
+            },
+            "direction": {
+              "hits": 3216,
+              "denominator": 4800,
+              "percent": 67.0
+            },
+            "old": {
+              "hits": 3058,
+              "denominator": 4800,
+              "percent": 63.708333333333336
+            },
+            "uniform": {
+              "hits": 3169,
+              "denominator": 4800,
+              "percent": 66.02083333333333
+            },
+            "learned": {
+              "hits": 4431,
+              "denominator": 4800,
+              "percent": 92.3125
+            }
+          }
+        }
+      },
+      "by_seed": {
+        "1701": {
+          "graphs": 4800,
+          "graph_seed_judgments": 4800,
+          "coverage": {
+            "hits": 4800,
+            "denominator": 4800,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 4800,
+            "denominator": 4800,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 3165,
+              "denominator": 4800,
+              "percent": 65.9375
+            },
+            "pool": {
+              "hits": 3159,
+              "denominator": 4800,
+              "percent": 65.8125
+            },
+            "direction": {
+              "hits": 3361,
+              "denominator": 4800,
+              "percent": 70.02083333333333
+            },
+            "old": {
+              "hits": 3115,
+              "denominator": 4800,
+              "percent": 64.89583333333333
+            },
+            "uniform": {
+              "hits": 3281,
+              "denominator": 4800,
+              "percent": 68.35416666666667
+            },
+            "learned": {
+              "hits": 4363,
+              "denominator": 4800,
+              "percent": 90.89583333333333
+            }
+          }
+        },
+        "2701": {
+          "graphs": 4800,
+          "graph_seed_judgments": 4800,
+          "coverage": {
+            "hits": 4800,
+            "denominator": 4800,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 4800,
+            "denominator": 4800,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 3165,
+              "denominator": 4800,
+              "percent": 65.9375
+            },
+            "pool": {
+              "hits": 3587,
+              "denominator": 4800,
+              "percent": 74.72916666666667
+            },
+            "direction": {
+              "hits": 3598,
+              "denominator": 4800,
+              "percent": 74.95833333333333
+            },
+            "old": {
+              "hits": 3518,
+              "denominator": 4800,
+              "percent": 73.29166666666667
+            },
+            "uniform": {
+              "hits": 3567,
+              "denominator": 4800,
+              "percent": 74.3125
+            },
+            "learned": {
+              "hits": 4304,
+              "denominator": 4800,
+              "percent": 89.66666666666667
+            }
+          }
+        },
+        "3701": {
+          "graphs": 4800,
+          "graph_seed_judgments": 4800,
+          "coverage": {
+            "hits": 4800,
+            "denominator": 4800,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 4800,
+            "denominator": 4800,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 3165,
+              "denominator": 4800,
+              "percent": 65.9375
+            },
+            "pool": {
+              "hits": 3457,
+              "denominator": 4800,
+              "percent": 72.02083333333333
+            },
+            "direction": {
+              "hits": 3460,
+              "denominator": 4800,
+              "percent": 72.08333333333333
+            },
+            "old": {
+              "hits": 3511,
+              "denominator": 4800,
+              "percent": 73.14583333333333
+            },
+            "uniform": {
+              "hits": 3509,
+              "denominator": 4800,
+              "percent": 73.10416666666667
+            },
+            "learned": {
+              "hits": 4239,
+              "denominator": 4800,
+              "percent": 88.3125
+            }
+          }
+        }
+      },
+      "by_gate": {
+        "on": {
+          "graphs": 3200,
+          "graph_seed_judgments": 9600,
+          "coverage": {
+            "hits": 9600,
+            "denominator": 9600,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 3200,
+            "denominator": 3200,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 4695,
+              "denominator": 9600,
+              "percent": 48.90625
+            },
+            "pool": {
+              "hits": 6400,
+              "denominator": 9600,
+              "percent": 66.66666666666667
+            },
+            "direction": {
+              "hits": 6397,
+              "denominator": 9600,
+              "percent": 66.63541666666667
+            },
+            "old": {
+              "hits": 6122,
+              "denominator": 9600,
+              "percent": 63.770833333333336
+            },
+            "uniform": {
+              "hits": 6335,
+              "denominator": 9600,
+              "percent": 65.98958333333333
+            },
+            "learned": {
+              "hits": 8884,
+              "denominator": 9600,
+              "percent": 92.54166666666667
+            }
+          }
+        },
+        "off": {
+          "graphs": 1600,
+          "graph_seed_judgments": 4800,
+          "coverage": {
+            "hits": 4800,
+            "denominator": 4800,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 1600,
+            "denominator": 1600,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 4800,
+              "denominator": 4800,
+              "percent": 100.0
+            },
+            "pool": {
+              "hits": 3803,
+              "denominator": 4800,
+              "percent": 79.22916666666667
+            },
+            "direction": {
+              "hits": 4022,
+              "denominator": 4800,
+              "percent": 83.79166666666667
+            },
+            "old": {
+              "hits": 4022,
+              "denominator": 4800,
+              "percent": 83.79166666666667
+            },
+            "uniform": {
+              "hits": 4022,
+              "denominator": 4800,
+              "percent": 83.79166666666667
+            },
+            "learned": {
+              "hits": 4022,
+              "denominator": 4800,
+              "percent": 83.79166666666667
+            }
+          }
+        }
+      },
+      "macro_accuracy_percent": {
+        "first": 65.9375,
+        "pool": 70.85416666666667,
+        "direction": 72.35416666666667,
+        "old": 70.44444444444444,
+        "uniform": 71.92361111111111,
+        "learned": 89.625
+      }
+    },
+    "paraphrase": {
+      "overall": {
+        "graphs": 4800,
+        "graph_seed_judgments": 14400,
+        "coverage": {
+          "hits": 14400,
+          "denominator": 14400,
+          "percent": 100.0
+        },
+        "coverage_by_graph": {
+          "hits": 4800,
+          "denominator": 4800,
+          "percent": 100.0
+        },
+        "accuracy": {
+          "first": {
+            "hits": 9495,
+            "denominator": 14400,
+            "percent": 65.9375
+          },
+          "pool": {
+            "hits": 10542,
+            "denominator": 14400,
+            "percent": 73.20833333333333
+          },
+          "direction": {
+            "hits": 10996,
+            "denominator": 14400,
+            "percent": 76.36111111111111
+          },
+          "old": {
+            "hits": 11681,
+            "denominator": 14400,
+            "percent": 81.11805555555556
+          },
+          "uniform": {
+            "hits": 11081,
+            "denominator": 14400,
+            "percent": 76.95138888888889
+          },
+          "learned": {
+            "hits": 13273,
+            "denominator": 14400,
+            "percent": 92.17361111111111
+          }
+        }
+      },
+      "by_kind": {
+        "competing_chain": {
+          "graphs": 1600,
+          "graph_seed_judgments": 4800,
+          "coverage": {
+            "hits": 4800,
+            "denominator": 4800,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 1600,
+            "denominator": 1600,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 4800,
+              "denominator": 4800,
+              "percent": 100.0
+            },
+            "pool": {
+              "hits": 4010,
+              "denominator": 4800,
+              "percent": 83.54166666666667
+            },
+            "direction": {
+              "hits": 4134,
+              "denominator": 4800,
+              "percent": 86.125
+            },
+            "old": {
+              "hits": 4134,
+              "denominator": 4800,
+              "percent": 86.125
+            },
+            "uniform": {
+              "hits": 4134,
+              "denominator": 4800,
+              "percent": 86.125
+            },
+            "learned": {
+              "hits": 4134,
+              "denominator": 4800,
+              "percent": 86.125
+            }
+          }
+        },
+        "relation_order": {
+          "graphs": 1600,
+          "graph_seed_judgments": 4800,
+          "coverage": {
+            "hits": 4800,
+            "denominator": 4800,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 1600,
+            "denominator": 1600,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 2322,
+              "denominator": 4800,
+              "percent": 48.375
+            },
+            "pool": {
+              "hits": 3277,
+              "denominator": 4800,
+              "percent": 68.27083333333333
+            },
+            "direction": {
+              "hits": 3420,
+              "denominator": 4800,
+              "percent": 71.25
+            },
+            "old": {
+              "hits": 3790,
+              "denominator": 4800,
+              "percent": 78.95833333333333
+            },
+            "uniform": {
+              "hits": 3459,
+              "denominator": 4800,
+              "percent": 72.0625
+            },
+            "learned": {
+              "hits": 4564,
+              "denominator": 4800,
+              "percent": 95.08333333333333
+            }
+          }
+        },
+        "role_reversal": {
+          "graphs": 1600,
+          "graph_seed_judgments": 4800,
+          "coverage": {
+            "hits": 4800,
+            "denominator": 4800,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 1600,
+            "denominator": 1600,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 2373,
+              "denominator": 4800,
+              "percent": 49.4375
+            },
+            "pool": {
+              "hits": 3255,
+              "denominator": 4800,
+              "percent": 67.8125
+            },
+            "direction": {
+              "hits": 3442,
+              "denominator": 4800,
+              "percent": 71.70833333333333
+            },
+            "old": {
+              "hits": 3757,
+              "denominator": 4800,
+              "percent": 78.27083333333333
+            },
+            "uniform": {
+              "hits": 3488,
+              "denominator": 4800,
+              "percent": 72.66666666666667
+            },
+            "learned": {
+              "hits": 4575,
+              "denominator": 4800,
+              "percent": 95.3125
+            }
+          }
+        }
+      },
+      "by_seed": {
+        "1701": {
+          "graphs": 4800,
+          "graph_seed_judgments": 4800,
+          "coverage": {
+            "hits": 4800,
+            "denominator": 4800,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 4800,
+            "denominator": 4800,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 3165,
+              "denominator": 4800,
+              "percent": 65.9375
+            },
+            "pool": {
+              "hits": 4026,
+              "denominator": 4800,
+              "percent": 83.875
+            },
+            "direction": {
+              "hits": 3734,
+              "denominator": 4800,
+              "percent": 77.79166666666667
+            },
+            "old": {
+              "hits": 3919,
+              "denominator": 4800,
+              "percent": 81.64583333333333
+            },
+            "uniform": {
+              "hits": 3785,
+              "denominator": 4800,
+              "percent": 78.85416666666667
+            },
+            "learned": {
+              "hits": 4542,
+              "denominator": 4800,
+              "percent": 94.625
+            }
+          }
+        },
+        "2701": {
+          "graphs": 4800,
+          "graph_seed_judgments": 4800,
+          "coverage": {
+            "hits": 4800,
+            "denominator": 4800,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 4800,
+            "denominator": 4800,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 3165,
+              "denominator": 4800,
+              "percent": 65.9375
+            },
+            "pool": {
+              "hits": 3596,
+              "denominator": 4800,
+              "percent": 74.91666666666667
+            },
+            "direction": {
+              "hits": 3788,
+              "denominator": 4800,
+              "percent": 78.91666666666667
+            },
+            "old": {
+              "hits": 3968,
+              "denominator": 4800,
+              "percent": 82.66666666666667
+            },
+            "uniform": {
+              "hits": 3841,
+              "denominator": 4800,
+              "percent": 80.02083333333333
+            },
+            "learned": {
+              "hits": 4465,
+              "denominator": 4800,
+              "percent": 93.02083333333333
+            }
+          }
+        },
+        "3701": {
+          "graphs": 4800,
+          "graph_seed_judgments": 4800,
+          "coverage": {
+            "hits": 4800,
+            "denominator": 4800,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 4800,
+            "denominator": 4800,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 3165,
+              "denominator": 4800,
+              "percent": 65.9375
+            },
+            "pool": {
+              "hits": 2920,
+              "denominator": 4800,
+              "percent": 60.833333333333336
+            },
+            "direction": {
+              "hits": 3474,
+              "denominator": 4800,
+              "percent": 72.375
+            },
+            "old": {
+              "hits": 3794,
+              "denominator": 4800,
+              "percent": 79.04166666666667
+            },
+            "uniform": {
+              "hits": 3455,
+              "denominator": 4800,
+              "percent": 71.97916666666667
+            },
+            "learned": {
+              "hits": 4266,
+              "denominator": 4800,
+              "percent": 88.875
+            }
+          }
+        }
+      },
+      "by_gate": {
+        "on": {
+          "graphs": 3200,
+          "graph_seed_judgments": 9600,
+          "coverage": {
+            "hits": 9600,
+            "denominator": 9600,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 3200,
+            "denominator": 3200,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 4695,
+              "denominator": 9600,
+              "percent": 48.90625
+            },
+            "pool": {
+              "hits": 6532,
+              "denominator": 9600,
+              "percent": 68.04166666666667
+            },
+            "direction": {
+              "hits": 6862,
+              "denominator": 9600,
+              "percent": 71.47916666666667
+            },
+            "old": {
+              "hits": 7547,
+              "denominator": 9600,
+              "percent": 78.61458333333333
+            },
+            "uniform": {
+              "hits": 6947,
+              "denominator": 9600,
+              "percent": 72.36458333333333
+            },
+            "learned": {
+              "hits": 9139,
+              "denominator": 9600,
+              "percent": 95.19791666666667
+            }
+          }
+        },
+        "off": {
+          "graphs": 1600,
+          "graph_seed_judgments": 4800,
+          "coverage": {
+            "hits": 4800,
+            "denominator": 4800,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 1600,
+            "denominator": 1600,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 4800,
+              "denominator": 4800,
+              "percent": 100.0
+            },
+            "pool": {
+              "hits": 4010,
+              "denominator": 4800,
+              "percent": 83.54166666666667
+            },
+            "direction": {
+              "hits": 4134,
+              "denominator": 4800,
+              "percent": 86.125
+            },
+            "old": {
+              "hits": 4134,
+              "denominator": 4800,
+              "percent": 86.125
+            },
+            "uniform": {
+              "hits": 4134,
+              "denominator": 4800,
+              "percent": 86.125
+            },
+            "learned": {
+              "hits": 4134,
+              "denominator": 4800,
+              "percent": 86.125
+            }
+          }
+        }
+      },
+      "macro_accuracy_percent": {
+        "first": 65.9375,
+        "pool": 73.20833333333333,
+        "direction": 76.36111111111111,
+        "old": 81.11805555555556,
+        "uniform": 76.95138888888889,
+        "learned": 92.17361111111111
+      }
+    }
+  },
+  "paired_comparisons": {
+    "original": {
+      "graphs": 4800,
+      "graph_seed_judgments": 14400,
+      "graphs_by_kind": {
+        "competing_chain": 1600,
+        "relation_order": 1600,
+        "role_reversal": 1600
+      },
+      "replicates": 10000,
+      "seed": 619482,
+      "lower_rank_one_based": 500,
+      "resampling": "paired graph within stratum, fixed seeds averaged per graph, equal stratum weight",
+      "rng": "numpy.default_rng PCG64; joint multinomial",
+      "contrasts_learned_minus": {
+        "first": {
+          "delta_pp": 23.6875,
+          "lower_95_one_sided_pp": 22.604166666666668,
+          "point_pass": true,
+          "interval_pass": true
+        },
+        "pool": {
+          "delta_pp": 18.770833333333332,
+          "lower_95_one_sided_pp": 18.17361111111111,
+          "point_pass": true,
+          "interval_pass": true
+        }
+      },
+      "both_thresholds_met": true
+    },
+    "paraphrase": {
+      "graphs": 4800,
+      "graph_seed_judgments": 14400,
+      "graphs_by_kind": {
+        "competing_chain": 1600,
+        "relation_order": 1600,
+        "role_reversal": 1600
+      },
+      "replicates": 10000,
+      "seed": 619482,
+      "lower_rank_one_based": 500,
+      "resampling": "paired graph within stratum, fixed seeds averaged per graph, equal stratum weight",
+      "rng": "numpy.default_rng PCG64; joint multinomial",
+      "contrasts_learned_minus": {
+        "first": {
+          "delta_pp": 26.23611111111111,
+          "lower_95_one_sided_pp": 25.166666666666664,
+          "point_pass": true,
+          "interval_pass": true
+        },
+        "pool": {
+          "delta_pp": 18.96527777777778,
+          "lower_95_one_sided_pp": 18.375000000000004,
+          "point_pass": true,
+          "interval_pass": true
+        }
+      },
+      "both_thresholds_met": true
+    }
+  },
+  "development_stability": {
+    "learned_minus_macro_pp": {
+      "original": {
+        "direction": 17.270833333333332,
+        "old": 19.180555555555557,
+        "uniform": 17.70138888888889
+      },
+      "paraphrase": {
+        "direction": 15.8125,
+        "old": 11.055555555555555,
+        "uniform": 15.222222222222221
+      }
+    },
+    "all_six_strictly_positive": true
+  },
+  "h3": {
+    "primary_view": "original",
+    "reference_panel_three_fixed_seeds_and_three_kinds": true,
+    "development_primary_meets_numerical_rule": true
+  },
+  "four_question": {
+    "overall": {
+      "graphs": 1600,
+      "graph_seed_quartets": 4800,
+      "all_four": {
+        "first": {
+          "hits": 0,
+          "denominator": 4800,
+          "percent": 0.0
+        },
+        "pool": {
+          "hits": 0,
+          "denominator": 4800,
+          "percent": 0.0
+        },
+        "direction": {
+          "hits": 0,
+          "denominator": 4800,
+          "percent": 0.0
+        },
+        "old": {
+          "hits": 5,
+          "denominator": 4800,
+          "percent": 0.10416666666666667
+        },
+        "uniform": {
+          "hits": 0,
+          "denominator": 4800,
+          "percent": 0.0
+        },
+        "learned": {
+          "hits": 3850,
+          "denominator": 4800,
+          "percent": 80.20833333333333
+        }
+      }
+    },
+    "by_kind": {
+      "relation_order": {
+        "graphs": 1600,
+        "graph_seed_quartets": 4800,
+        "all_four": {
+          "first": {
+            "hits": 0,
+            "denominator": 4800,
+            "percent": 0.0
+          },
+          "pool": {
+            "hits": 0,
+            "denominator": 4800,
+            "percent": 0.0
+          },
+          "direction": {
+            "hits": 0,
+            "denominator": 4800,
+            "percent": 0.0
+          },
+          "old": {
+            "hits": 5,
+            "denominator": 4800,
+            "percent": 0.10416666666666667
+          },
+          "uniform": {
+            "hits": 0,
+            "denominator": 4800,
+            "percent": 0.0
+          },
+          "learned": {
+            "hits": 3850,
+            "denominator": 4800,
+            "percent": 80.20833333333333
+          }
+        }
+      }
+    },
+    "by_seed": {
+      "1701": {
+        "graphs": 1600,
+        "graph_seed_quartets": 1600,
+        "all_four": {
+          "first": {
+            "hits": 0,
+            "denominator": 1600,
+            "percent": 0.0
+          },
+          "pool": {
+            "hits": 0,
+            "denominator": 1600,
+            "percent": 0.0
+          },
+          "direction": {
+            "hits": 0,
+            "denominator": 1600,
+            "percent": 0.0
+          },
+          "old": {
+            "hits": 0,
+            "denominator": 1600,
+            "percent": 0.0
+          },
+          "uniform": {
+            "hits": 0,
+            "denominator": 1600,
+            "percent": 0.0
+          },
+          "learned": {
+            "hits": 1360,
+            "denominator": 1600,
+            "percent": 85.0
+          }
+        }
+      },
+      "2701": {
+        "graphs": 1600,
+        "graph_seed_quartets": 1600,
+        "all_four": {
+          "first": {
+            "hits": 0,
+            "denominator": 1600,
+            "percent": 0.0
+          },
+          "pool": {
+            "hits": 0,
+            "denominator": 1600,
+            "percent": 0.0
+          },
+          "direction": {
+            "hits": 0,
+            "denominator": 1600,
+            "percent": 0.0
+          },
+          "old": {
+            "hits": 1,
+            "denominator": 1600,
+            "percent": 0.0625
+          },
+          "uniform": {
+            "hits": 0,
+            "denominator": 1600,
+            "percent": 0.0
+          },
+          "learned": {
+            "hits": 979,
+            "denominator": 1600,
+            "percent": 61.1875
+          }
+        }
+      },
+      "3701": {
+        "graphs": 1600,
+        "graph_seed_quartets": 1600,
+        "all_four": {
+          "first": {
+            "hits": 0,
+            "denominator": 1600,
+            "percent": 0.0
+          },
+          "pool": {
+            "hits": 0,
+            "denominator": 1600,
+            "percent": 0.0
+          },
+          "direction": {
+            "hits": 0,
+            "denominator": 1600,
+            "percent": 0.0
+          },
+          "old": {
+            "hits": 4,
+            "denominator": 1600,
+            "percent": 0.25
+          },
+          "uniform": {
+            "hits": 0,
+            "denominator": 1600,
+            "percent": 0.0
+          },
+          "learned": {
+            "hits": 1511,
+            "denominator": 1600,
+            "percent": 94.4375
+          }
+        }
+      }
+    }
+  },
+  "paraphrase_same_ordered_candidates_by_graph": {
+    "hits": 4800,
+    "denominator": 4800,
+    "percent": 100.0
+  },
+  "input_sha256": "42e66740330d518d216368fc2b11499ff754f6a595582f8d407b15ff908597b4"
+}

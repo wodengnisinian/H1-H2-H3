@@ -1,0 +1,19 @@
+{
+  "id": "R01",
+  "hypothesis": "归档完整，历史训练与开发图的人物集合分离。候选首位可能与题型相关。",
+  "criteria": "85 个输入文件逐字节匹配。检查图的实体集合、训练开发交集和金标位置分布；报告直接首位的分题型基数与命中。",
+  "argv": [
+    "src/input_audit.py",
+    "--inputs",
+    "{inputs}",
+    "--manifest",
+    "datasets/inputs.json",
+    "--out",
+    "{out}"
+  ],
+  "sources": [
+    "src/input_audit.py"
+  ],
+  "receipt": "metrics.json",
+  "after": "重放历史模型及核对统计"
+}

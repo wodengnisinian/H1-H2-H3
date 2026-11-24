@@ -1,0 +1,33 @@
+{
+  "utc": "2026-11-24T09:59:46.323386+00:00",
+  "out": "/data/spiderweb-r3-20261124-1740/R3/experiments/11-R09/results",
+  "module": "sharp_core",
+  "candidate": "/data/spiderweb-r3-20261124-1740/R3/experiments/10-R12/results",
+  "sha256": {
+    "/data/spiderweb-r3-20261124-1740/R3/experiments/10-R12/results/checkpoint-1701.json": "98f1c920d07cb74a4409c4aaab32c8f21069e6e8cfcbefc8a5344dcd25a2e33d",
+    "/data/spiderweb-r3-20261124-1740/R3/experiments/10-R12/results/checkpoint-2701.json": "3e1653c209aee3161b1431fb7029d1b9464c25195c2136cafd0e9ab107012dd7",
+    "/data/spiderweb-r3-20261124-1740/R3/experiments/10-R12/results/checkpoint-3701.json": "2bd1a3da698ed71c9d816843c75cfd3d3a9299a11e5d743faed421f039f792e8",
+    "/data/spiderweb-r3-20261124-1740/R3/experiments/10-R12/results/metrics.json": "ffec9f418b33258750af9c3b9e41f9cfb2e8150f3545216693598935f86b367f",
+    "/data/spiderweb-r3-20261124-1740/R3/configs/research_protocol.json": "2685817419c4c32724f294ebcde7df8f548e5937e7778a069d82ffbd28f0e610",
+    "/data/spiderweb-r3-20261124-1740/R3/configs/formal_templates.json": "40f0dee7c8f11eb6027fed054f0c010b57dced6f42caa61971e09596daf4cddc",
+    "/data/spiderweb-r3-20261124-1740/R3/src/formal.py": "fd8d7bc3fabe9b4118de4734e8a5ca52450c23a4609932cafe60f7d28575ed2e",
+    "/data/spiderweb-r3-20261124-1740/inputs/prior/code/evaluate.py": "9fc47f0c9ce644eb31bca0747012784340b62b0b85ddc045e83adaaca9518d90",
+    "/data/spiderweb-r3-20261124-1740/inputs/prior/code/model.py": "f85636ffa19443880e48d953c7d552af3d6bda5238c60ad424f445202c2c2b0f",
+    "/data/spiderweb-r3-20261124-1740/R3/src/history_audit.py": "16330abe926701856dbbc2fd66a53132e6d0a5f99a680acd43f057f4ac4addf8",
+    "/data/spiderweb-r3-20261124-1740/R3/src/input_audit.py": "fb894f0c23029096acee886b6bfdde9648ecd1db23cdfef9ddc29045b63bb40b",
+    "/data/spiderweb-r3-20261124-1740/R3/src/mech_core.py": "8a2ae2cf12883285ca2c42499210ba406cb5bdbe598964f6c192d4d5859f1795",
+    "/data/spiderweb-r3-20261124-1740/R3/src/mech_data.py": "82bd90f8af14bf8422506fbac63437586e85ac8d8cd7cedd09a06a4f4737f8c7",
+    "/data/spiderweb-r3-20261124-1740/R3/src/mech_metrics.py": "ffbf7261adae5583b0ba39d62c22a72d60cfd8dd85de7c5b207938a6f98672b5",
+    "/data/spiderweb-r3-20261124-1740/R3/src/mech_probe.py": "514a3bd1d7c586ae6c70e296efc588439a6f00ce4330f41be6e72dd3aff3ac23",
+    "/data/spiderweb-r3-20261124-1740/R3/src/mech_run.py": "ebb7b9690b66eb10f8d1f25ee1031cd6137383a1758d6d941f367913cbe0f485",
+    "/data/spiderweb-r3-20261124-1740/R3/src/challenge.py": "e60019470e0c5bc100d8b483658ce901dd11dd1367cdf3ead1764acab837aeef",
+    "/data/spiderweb-r3-20261124-1740/R3/src/role_core.py": "713909ab7c417c2b7f950938e291498c51651adfef3922a169067749a509ab8f",
+    "/data/spiderweb-r3-20261124-1740/R3/src/role_run.py": "3e71c5a167116fc1bc191621c97d4ade056b4778383c7c435951ae87f3188c98",
+    "/data/spiderweb-r3-20261124-1740/R3/src/replicate.py": "12ee1225037a23bc23928c4e637b7edb92d4df7f013824c01a27718d443ef88c",
+    "/data/spiderweb-r3-20261124-1740/R3/src/contrast_scope.py": "085f239f54c06655a5350a25d64dc1da79f6c8b68b8c8c089b9b9e08e08a6f45",
+    "/data/spiderweb-r3-20261124-1740/R3/src/sharp_core.py": "f56c15184956476784b4922b453d4898178412e4c709f0f5dc632ab5dba86c54",
+    "/data/spiderweb-r3-20261124-1740/R3/src/sharp_run.py": "58ecee6a641031e950606e69efb25447271552136f37aa648230ac4c18eb69c1",
+    "/data/spiderweb-r3-20261124-1740/inputs/b13/冻结清单.json": "12eedcf17da956ed9bea234e412dd93a3d6f21c11ea5d102f12a8770ab26e485",
+    "/data/spiderweb-r3-20261124-1740/inputs/b13/inputs/source/generate.py": "c6d8eaa5081868946bc24969ddeed4450d6685ae9bd782a3cdb70dd43717b46f"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "R12",
+  "hypothesis": "R08 选中首步关系达到100%，而软分配仍限制最终纠错。仅改变软分配到最高质量关系硬分配能否提升同题表现？",
+  "criteria": "主候选只使用 R08 冻结、无标签的关系选择。原问相对同权重软对照的配对点估计和单侧下界均大于零。H3开发门槛维持原设定。",
+  "argv": [
+    "src/sharp_run.py",
+    "--b13",
+    "{inputs}/b13",
+    "--prior",
+    "{inputs}/prior",
+    "--candidate",
+    "{root}/experiments/08-R08/results",
+    "--out",
+    "{out}"
+  ],
+  "sources": [
+    "src/sharp_*.py",
+    "src/role_*.py",
+    "src/mech_*.py",
+    "configs/sharp_protocol.json"
+  ],
+  "receipt": "metrics.json",
+  "after": "通过开发门槛后冻结 sharp_role。在全新图上仅开封一次。"
+}

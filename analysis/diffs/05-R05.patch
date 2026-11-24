@@ -1,0 +1,27 @@
+--- /dev/null
++++ R05/configs/R05.json
+@@ -0,0 +1,24 @@
++{
++  "id": "R05",
++  "hypothesis": "Position-specific learned word weights contribute to actual ranking beyond uniform, random and shuffled alternatives.",
++  "criteria": "Learned beats all three weighting controls on fresh original and fresh quartet. Report all seeds. Random vector is Gaussian with learned norm. Shuffled p deterministically permutes valid positions in each example. Candidate swap must preserve p and permute logits within 2e-5.",
++  "argv": [
++    "src/mech_run.py",
++    "--round",
++    "ablation",
++    "--b13",
++    "{inputs}/b13",
++    "--b16",
++    "{inputs}/b16",
++    "--prior",
++    "{inputs}/prior",
++    "--out",
++    "{out}"
++  ],
++  "sources": [
++    "src/mech_*.py",
++    "configs/mech_protocol.json"
++  ],
++  "receipt": "metrics.json",
++  "after": "按本轮逐题结果和冻结判据评估下轮实验"
++}

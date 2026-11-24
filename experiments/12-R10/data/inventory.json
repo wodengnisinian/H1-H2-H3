@@ -1,0 +1,73 @@
+{
+  "path_base": "R3",
+  "shared_input_manifest": {
+    "path": "datasets/inputs.json",
+    "sha256": "54d20d22a43daea1f6ea58f2cf38ce3d3f59a3fc8ab3cd20b56040332122052c",
+    "bytes": 14343
+  },
+  "shared_archive": {
+    "path": "datasets/归档输入.zip",
+    "sha256": "72c84de654b7b84ecadf32147d3255dc96ed8dc2befccf5b93b976e34c8f19ce",
+    "bytes": 10390056
+  },
+  "declared_archive_prefixes": [],
+  "available_members_within_prefixes": [],
+  "round_data_files": [
+    {
+      "path": "experiments/12-R10/results/train-features.jsonl",
+      "sha256": "4ce19531fe33081ffc08d9312dc3ede5d321aa2a8392229cec7fd137a3221c3e",
+      "bytes": 3402240
+    },
+    {
+      "path": "experiments/12-R10/results/train-gold.jsonl",
+      "sha256": "08f51b90b7baa613233063043c53c63409294b5dd2a8ea1e01d7f2a80ac7bfbf",
+      "bytes": 146544
+    },
+    {
+      "path": "experiments/12-R10/results/dev-features.jsonl",
+      "sha256": "7492536f38944a8205ae3dd71d5972b71f56aa4465bb2d131d4e4f18e295583e",
+      "bytes": 428544
+    },
+    {
+      "path": "experiments/12-R10/results/dev-gold.jsonl",
+      "sha256": "5749305424f0612ef21c8c74f28868238287fdf1205333dad95f9fa43dee54a8",
+      "bytes": 18524
+    },
+    {
+      "path": "experiments/12-R10/results/seen_pair_test-features.jsonl",
+      "sha256": "3aa1f15719106d60f1217914c33a2ea8d091e1b0198f338b13b6a8a29cdf8036",
+      "bytes": 1290240
+    },
+    {
+      "path": "experiments/12-R10/results/seen_pair_test-gold.jsonl",
+      "sha256": "cee5fcc80d8ecf67ff15a9e772c967910e625c89ee805075e7d50fd449a59a77",
+      "bytes": 54324
+    },
+    {
+      "path": "experiments/12-R10/results/challenge-features.jsonl",
+      "sha256": "b12f1811d600c411c2677473c7b7cb6ffbf68eec889ea7e36dc913aae2456516",
+      "bytes": 1267200
+    },
+    {
+      "path": "experiments/12-R10/results/challenge-gold.jsonl",
+      "sha256": "2cf119fd72616d1463586408781787e8c21611185066cfc7b287770e4cb59617",
+      "bytes": 53974
+    },
+    {
+      "path": "experiments/12-R10/results/challenge_second-features.jsonl",
+      "sha256": "756852c500d8f43ce5408a5348699d6a47c39a5020f81830e005bc1a8fcc31c1",
+      "bytes": 1276160
+    },
+    {
+      "path": "experiments/12-R10/results/challenge_second-gold.jsonl",
+      "sha256": "38f9c1adf015482ab3cc99e6f9f1d9354a0e35d4be57d63e5977b6ebf9691a63",
+      "bytes": 62934
+    },
+    {
+      "path": "experiments/12-R10/results/dataset-manifest.json",
+      "sha256": "8bb3a0ecfa15546356ab7d601649b7cd014fe56aacc1873144908a06c36dfc06",
+      "bytes": 5123
+    }
+  ],
+  "upstream_result_directories": []
+}

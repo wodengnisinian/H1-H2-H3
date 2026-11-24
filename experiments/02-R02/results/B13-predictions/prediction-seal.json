@@ -1,0 +1,50 @@
+{
+  "schema": "spiderweb-r2-v13-prediction-seal-v1",
+  "mode": "direction",
+  "documents": 3000,
+  "seeds": [
+    1701,
+    2701,
+    3701
+  ],
+  "features_sha256": "b49a3323c58e702d2562588e3ca823f604b90803b071614260611e84f399f44c",
+  "cohort_seal_sha256": "5ebf2e981ed0d28d7e30e6a70d1229e12585c443f29ca6c378a5b928506bc4b8",
+  "protocol_sha256": "6589000b03d1dd99c0d54bb7219007ea577ce05b5806536b4bab9d9986501fbd",
+  "freeze_sha256": "12eedcf17da956ed9bea234e412dd93a3d6f21c11ea5d102f12a8770ab26e485",
+  "inference_code_sha256": {
+    "evaluate.py": "68c64cf602d16f6477011fe4092677775a178a3a7c5b32b0da057443b38b0501",
+    "tie_rank.py": "41c5b4b19b67be9ffe6a5735a15275ba152921466244771585d2bc324e4c64f9",
+    "train.py": "21d9dff3d252c8499319b05ad5aed0c05a46d9d2f37c7e811ca4890d648a8661",
+    "predict_sealed.py": "77596fbcd64cabc6686c07f17a02482c8b358685e8412177bd29f5ef31571ded"
+  },
+  "checkpoints_sha256": {
+    "serial": {
+      "1701": "703b3edfbf72b2213431c054e38dcad3300dd880f8443707b7119b9859a7728c",
+      "2701": "521911f7ec4b7679a4ba733754d3f87b890f0723596f075fd79b1a9b21cfa4bf",
+      "3701": "d5585978da8310b9e5452f0a3cd3a6a6be07559a91943816076d52d42895939b"
+    },
+    "pooled": {
+      "1701": "e9115ffc1f49266ff49efa12f3a7470fee5047bea32621f0a3d481a066e52bc7",
+      "2701": "146b7c702f326cc9fb050fddc076850eacd7295abf12a6a0a7bbaddaee91bae9",
+      "3701": "462f8ef29c84f13036353588308d17ef2858c060839bdf198e64dcb46ba69f2b"
+    }
+  },
+  "started_utc": "2026-11-24T09:44:04.601113+00:00",
+  "sealed_utc": "2026-11-24T09:44:11.777362+00:00",
+  "prediction_sha256": {
+    "direct.jsonl": "6335c006da01096b398f51ad0ac3634e5c04429c86f7e7b03bc3932b9b3e836a",
+    "serial-1701.jsonl": "0b0157f0ddaf5be94c8371635508a1ff333090790454efb31be82b63c0b176b5",
+    "serial-2701.jsonl": "6be9dc0f106d56143da4f7a0c61d4acdaa101eb9778f533dcb8475c06029ee29",
+    "serial-3701.jsonl": "a103b18ccab467c0c488788f0303c8cc117dd305c7a8e5347a3e6e73ec8d7710",
+    "pooled-1701.jsonl": "553032a0130824860f37b43d0db1733f9459f24d199028954722cc6590ef7569",
+    "pooled-2701.jsonl": "3a61fcc06b5acc82182ef4cf7180e3f969f50628bb538fea25d46079d19ac457",
+    "pooled-3701.jsonl": "c2057d6f5d70be8138b80ffd48f9707f01d729eaf02a0655b426b984efe606d0"
+  },
+  "environment": {
+    "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39",
+    "python": "3.12.13",
+    "torch": "2.10.0+cu128",
+    "device": "cpu",
+    "threads": 1
+  }
+}

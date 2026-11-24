@@ -1,0 +1,20 @@
+{
+  "id": "R02",
+  "hypothesis": "同一数据、冻结检查点与旧协议可在独立服务器重放原问与四问。",
+  "criteria": "三个种子的六组封存模型预测及直接首位逐条匹配。配对下界和历史数值按相同抽样实现核对。",
+  "argv": [
+    "src/history_audit.py",
+    "--archive",
+    "{inputs}/b13",
+    "--prior",
+    "{inputs}/prior",
+    "--out",
+    "{out}"
+  ],
+  "sources": [
+    "src/history_audit.py",
+    "src/legacy/*.py"
+  ],
+  "receipt": "receipt.json",
+  "after": "在开发数据上独立诊断 H1、H2"
+}

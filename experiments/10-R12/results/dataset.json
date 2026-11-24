@@ -1,0 +1,194 @@
+{
+  "roles": [
+    "协助",
+    "拜访",
+    "指导",
+    "推荐",
+    "提醒",
+    "联系",
+    "跟随",
+    "邀请"
+  ],
+  "held_pairs": [
+    [
+      "协助",
+      "拜访"
+    ],
+    [
+      "协助",
+      "联系"
+    ],
+    [
+      "拜访",
+      "推荐"
+    ],
+    [
+      "拜访",
+      "邀请"
+    ],
+    [
+      "指导",
+      "跟随"
+    ],
+    [
+      "推荐",
+      "跟随"
+    ],
+    [
+      "提醒",
+      "邀请"
+    ]
+  ],
+  "frozen_train_pairs": 28,
+  "head_train_pairs": [
+    [
+      "协助",
+      "指导"
+    ],
+    [
+      "协助",
+      "推荐"
+    ],
+    [
+      "协助",
+      "提醒"
+    ],
+    [
+      "协助",
+      "跟随"
+    ],
+    [
+      "协助",
+      "邀请"
+    ],
+    [
+      "拜访",
+      "指导"
+    ],
+    [
+      "拜访",
+      "提醒"
+    ],
+    [
+      "拜访",
+      "联系"
+    ],
+    [
+      "拜访",
+      "跟随"
+    ],
+    [
+      "指导",
+      "推荐"
+    ],
+    [
+      "指导",
+      "提醒"
+    ],
+    [
+      "指导",
+      "联系"
+    ],
+    [
+      "指导",
+      "邀请"
+    ],
+    [
+      "推荐",
+      "提醒"
+    ],
+    [
+      "推荐",
+      "联系"
+    ],
+    [
+      "推荐",
+      "邀请"
+    ],
+    [
+      "提醒",
+      "联系"
+    ],
+    [
+      "提醒",
+      "跟随"
+    ],
+    [
+      "联系",
+      "跟随"
+    ],
+    [
+      "联系",
+      "邀请"
+    ],
+    [
+      "跟随",
+      "邀请"
+    ]
+  ],
+  "head_train_graphs": 9007,
+  "challenge_templates": [
+    "请 确定 第一步 的 记录 。 从 {anchor} 出发 ， 首先 追踪 {first} 关系 ， 之后 沿 {second} 关系 找 一人 。",
+    "最后 一段 按 {second} 关系 。 此前 从 {anchor} 开始 ， 首先 沿 {first} 关系 找 一人 。 应 先 使用 哪条 记录 ？",
+    "以 {anchor} 为 起点 ， 第一步 沿 {first} 关系 ， 随后 按 {second} 关系 找 一人 。 哪条 记录 对应 开头 一段 ？",
+    "第二 段 沿 {second} 关系 找 一人 。 第一步 以 {anchor} 为 起点 ， 追踪 {first} 关系 。 应 先 使用 哪条 记录 ？"
+  ],
+  "checked_existing_templates": 34,
+  "archived_train_hash": "e3243c31689df96c8f4190c81fecbdd205ef6168322b501f28617946eb2d0713",
+  "archived_dev_hash": "a1912c1da3437b3c33eb8ac18ee62b5643c2c3f9e49e52420149a46e9f3de851",
+  "fresh_index_hash": "60b4aaee8b3a6c4f3cd9ad9ebed705b9d2987494a126d6344e0b13d55d445e08",
+  "dataset": {
+    "fresh": {
+      "size": 600,
+      "ids_sha256": "90c2e073c3b6ca926d64b53d0ec6ac49c2e8df276e7dc3c4aa9e91c0579d1d08",
+      "graphs_sha256": "91c5ad4f61593f88e7639f56f470dc497066f454822376400c3a2e062a71b8cf",
+      "candidates_sha256": "30d7d0cf6af7911de7d7990170f9e62978da60bf02492963c1799943fb631a00",
+      "gold_sha256": "7b67fa5a4cd249f13479cacc2fdf51efaee19e1ae1d225b9684eeb6e87d16651",
+      "question_sha256": "ae98876e0f6af4cdfb4d915a48bf2bc821440426722969c7fc8cb41626ca5327",
+      "strata": {
+        "relation_order": 200,
+        "role_reversal": 200,
+        "competing_chain": 200
+      }
+    },
+    "archive": {
+      "size": 1800,
+      "ids_sha256": "1922226719267f68788d22bbe925fb6c16db76fcb0569ae047c8f549e0050563",
+      "graphs_sha256": "a1912c1da3437b3c33eb8ac18ee62b5643c2c3f9e49e52420149a46e9f3de851",
+      "candidates_sha256": "4717962aed39306cdaa6b4c2924cb18d14f61aafc29cea468a6fc2f6fff9a0ca",
+      "gold_sha256": "89cea63cc52efa9ceeebb39ef5e99a48c932e69a91cc2ae1d036dd34a1a98a95",
+      "question_sha256": "1f678d799d074e87e0afe7a707d8c972b1a9a4d147dd04e524cea9b7bda422b9",
+      "strata": {
+        "relation_order": 600,
+        "competing_chain": 600,
+        "role_reversal": 600
+      }
+    },
+    "template": {
+      "size": 300,
+      "ids_sha256": "31b15166d3b313deb6c2e48da0cdac6ba10bbf680107bbd26f8e356be13dad0d",
+      "graphs_sha256": "c7f43a2140f80a1b623ceb8d4ef0eec846b53a761bcdb3027edb6a77a0788f9c",
+      "candidates_sha256": "52a69bc784dd20fe3ef22efb45d90b096c7761d55a6c921d183e86e015602492",
+      "gold_sha256": "bf0db5bcab1d9d9451df96743dcb98989ce07d5018b2b1a8e420580f36c63105",
+      "question_sha256": "764259e8fe3e33b4b779b0b29e23762107b17ffe7b47cf78de2e1a56ffaccdd1",
+      "strata": {
+        "relation_order": 100,
+        "competing_chain": 100,
+        "role_reversal": 100
+      }
+    },
+    "combination": {
+      "size": 300,
+      "ids_sha256": "c2d462cfa53c4daec1a8bb80f1d752a3cb2dbc7a1990292830ab96fbcd1edd0d",
+      "graphs_sha256": "771a6083ccfccae32b22dfeee84345abe7fed23701b8440fc3d387d80806e913",
+      "candidates_sha256": "ae64bebbdae95493305757f621b2ed357f558527a79728d5b9d8d582ed9664ac",
+      "gold_sha256": "f5533a4c0465d15785aad5188283a34cc5ddcd59d5d950b3fe1c9354e1bb66fe",
+      "question_sha256": "d463f5516c3c7954b5c04523991844fb6ad221e3bca00d61e7b1d04880563ee2",
+      "strata": {
+        "relation_order": 100,
+        "competing_chain": 100,
+        "role_reversal": 100
+      }
+    }
+  }
+}

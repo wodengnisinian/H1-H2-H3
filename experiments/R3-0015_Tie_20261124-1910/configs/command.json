@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "/data/miniconda/envs/torch/bin/python",
+    "-B",
+    "/data/spiderweb-r3-supplement-R3-0015_Tie_20261124-1910/r3_content_tie_audit.py",
+    "--r3",
+    "/data/spiderweb-r3-20261124-1740/R3",
+    "--inputs",
+    "/data/spiderweb-r3-20261124-1740/inputs",
+    "--r14",
+    "/data/spiderweb-r3-supplement-R3-0014_Order_20261124-1903/results",
+    "--out",
+    "/data/spiderweb-r3-supplement-R3-0015_Tie_20261124-1910/results"
+  ],
+  "env": {
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "PYTHONUNBUFFERED": "1",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "timeout_seconds": 600,
+  "cpus_used": 1
+}

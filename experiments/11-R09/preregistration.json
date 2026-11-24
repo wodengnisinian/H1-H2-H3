@@ -1,0 +1,27 @@
+{
+  "id": "R09",
+  "hypothesis": "R12 达到开发门槛后，检验冻结模型在新图和新句式上的首跳增益。",
+  "criteria": "抽取 4,800 张独立合成图，三个固定种子、每类 1,600 图；相对池化与直接首位均至少提高 5 个百分点，题型内按图配对重抽 10,000 次的两个单侧 95% 下界均大于零。每个图及四问同组，只有一次正式开封。",
+  "argv": [
+    "src/formal.py",
+    "all",
+    "--inputs",
+    "{inputs}",
+    "--module",
+    "sharp_core",
+    "--candidate",
+    "{root}/experiments/10-R12/results",
+    "--out",
+    "{out}"
+  ],
+  "sources": [
+    "src/formal.py",
+    "src/sharp_core.py",
+    "src/role_core.py",
+    "src/mech_core.py",
+    "configs/formal_templates.json",
+    "configs/sharp_protocol.json"
+  ],
+  "receipt": "metrics.json",
+  "after": "记录惟一正式验收结果，检查两跳挑战、范围假设和复现。"
+}

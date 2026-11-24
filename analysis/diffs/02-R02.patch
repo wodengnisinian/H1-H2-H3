@@ -1,0 +1,890 @@
+--- /dev/null
++++ R02/configs/R02.json
+@@ -0,0 +1,20 @@
++{
++  "id": "R02",
++  "hypothesis": "同一数据、冻结检查点与旧协议可在独立服务器重放原问与四问。",
++  "criteria": "三个种子的六组封存模型预测及直接首位逐条匹配。配对下界和历史数值按相同抽样实现核对。",
++  "argv": [
++    "src/history_audit.py",
++    "--archive",
++    "{inputs}/b13",
++    "--prior",
++    "{inputs}/prior",
++    "--out",
++    "{out}"
++  ],
++  "sources": [
++    "src/history_audit.py",
++    "src/legacy/*.py"
++  ],
++  "receipt": "receipt.json",
++  "after": "在开发数据上独立诊断 H1、H2"
++}
+--- /dev/null
++++ R02/src/history_audit.py
+@@ -0,0 +1,244 @@
++"""Replay a public B13 archive and check the prior H1/H2/H3 development run.
++
++python history_audit.py --archive /data/B13 --prior /data/H1_H2_H3 --out /results/history-01
++Inputs are read-only. Frozen model replay uses the original CPU forward implementation.
++"""
++import argparse
++from collections import Counter, defaultdict
++from datetime import datetime, timezone
++import hashlib
++import json
++import os
++from pathlib import Path
++import platform
++import random
++import runpy
++import subprocess
++import sys
++import time
++
++SEEDS = (1701, 2701, 3701)
++KINDS = ("role_reversal", "relation_order", "competing_chain")
++LEGACY = Path(__file__).resolve().parent / "legacy"
++
++
++def utc():
++    return datetime.now(timezone.utc).isoformat(timespec="seconds")
++
++
++def require(value, detail):
++    if not value:
++        raise ValueError(detail)
++
++
++def write(path, obj):
++    path.write_text(json.dumps(obj, ensure_ascii=False, indent=2, allow_nan=False)+"\n", encoding="utf-8")
++
++
++def sha(path):
++    h = hashlib.sha256()
++    with path.open("rb") as file:
++        for block in iter(lambda: file.read(1024 * 1024), b""):
++            h.update(block)
++    return h.hexdigest()
++
++
++def rows(path):
++    with path.open(encoding="utf-8") as file:
++        for line in file:
++            yield json.loads(line)
++
++
++def index(path):
++    items = {}
++    for row in rows(path):
++        key = row["doc_id"]
++        require(key not in items, f"duplicate doc ID in {path.name}")
++        items[key] = row
++    return items
++
++
++def cpu_replay(script, args):
++    # B12 imports hashlib.file_digest, added in 3.11. Its use is a SHA256 of a file.
++    if not hasattr(hashlib, "file_digest"):
++        def file_digest(stream, name):
++            digest = hashlib.new(name)
++            for block in iter(lambda: stream.read(262144), b""):
++                digest.update(block)
++            return digest
++        hashlib.file_digest = file_digest
++    sys.path.insert(0, str(script.parent))
++    sys.argv = [str(script), *args]
++    runpy.run_path(str(script), run_name="__main__")
++
++
++def original_counts(archive, pred, output):
++    import numpy as np
++    gold = index(archive / "cohort/gold.jsonl")
++    features = index(archive / "cohort/features.jsonl")
++    direct = index(pred / "direct.jsonl")
++    streams = {(arm,s): index(pred / f"{arm}-{s}.jsonl") for arm in ("serial","pooled") for s in SEEDS}
++    require(all(x.keys() == gold.keys() for x in (features,direct,*streams.values())), "B13 IDs differ")
++    parse = runpy.run_path(str(archive/"inputs/b12-code/tie_rank.py"))["parse_question"]
++    histogram = {k: Counter() for k in KINDS}
++    strata = {k:Counter() for k in KINDS}
++    positions = Counter()
++    people_sets = set()
++    with (output / "B13-original-by-graph.jsonl").open("x", encoding="utf-8") as raw:
++        for key, row in gold.items():
++            kind = row["stratum"]
++            y = row["gold"]
++            feat = features[key]
++            require(set(feat) == {"doc_id","stratum","question","nodes"} and feat["stratum"] == kind,
++                    "feature schema or stratum differs")
++            nodes = feat["nodes"]
++            pair = direct[key]["candidates"]
++            require(len(pair) == len(set(pair)) == 2 and direct[key]["prediction"] == pair[0],
++                    "invalid direct predictions")
++            anchor, first_relation = parse(feat["question"], nodes)
++            matching = [i for i,(h,r,t) in enumerate(nodes) if (h,r)==(anchor,first_relation)]
++            c = strata[kind]
++            c["graphs"] += 1
++            c["gold_covered"] += y in pair
++            c["gold_rank_one"] += y == pair[0]
++            c["first_edge_rule_hits"] += matching == [y]
++            positions[y] += 1
++            people_sets.add(frozenset(v for a,_,b in nodes for v in (a,b)))
++            per_seed = {}
++            for s in SEEDS:
++                answers = {}
++                for arm in ("serial","pooled"):
++                    p = streams[arm,s][key]
++                    require(p["candidates"] == pair and p["stratum"] == kind and p["prediction"] in pair,
++                            "method changed the shared candidate list")
++                    answers[arm] = p["prediction"]
++                    c[f"{arm}_{s}"] += answers[arm] == y
++                per_seed[str(s)] = answers
++            serial = sum(a["serial"] == y for a in per_seed.values())
++            pooled = sum(a["pooled"] == y for a in per_seed.values())
++            histogram[kind][serial-pooled, serial-3*(y==pair[0])] += 1
++            raw.write(json.dumps(dict(doc_id=key,kind=kind,gold=y,candidates=pair,
++                                      anchor_relation_matches=matching,per_seed=per_seed), ensure_ascii=False)+"\n")
++    require(set(positions) == set(range(12)) and set(positions.values()) == {250}, "gold positions changed")
++    scored = json.loads((archive / "assessment/score.json").read_bytes())
++    for k,c in strata.items():
++        ref = scored["by_stratum"][k]
++        require(c["graphs"]==ref["documents"]==1000 and
++                c["gold_covered"]==round(ref["candidate_coverage"]*1000) and
++                c["gold_rank_one"]==round(ref["accuracy"]["lexical"]*1000), "B13 stratum mismatch")
++        for s in SEEDS:
++            require(all(c[f"{arm}_{s}"]==round(ref["accuracy_by_seed"][str(s)][name]*1000)
++                        for arm,name in (("serial","candidate"),("pooled","pooled"))), "seed totals differ")
++
++    keys = ("pooled", "lexical")
++    all_counts = sum(strata.values(),Counter())
++    effects = [sum(v[i]*n for h in histogram.values() for v,n in h.items()) / 9000 for i in range(2)]
++    if hasattr(random.Random, "binomialvariate"):
++        original = runpy.run_path(str(archive/"inputs/source/verify.py"))
++        bounds = [v/9000 for v in original["paired_bootstrap_lower"](histogram)]
++        implementation = "archive CPython conditional-binomial, seed 619482"
++    else:
++        rng = np.random.default_rng(619482)
++        draws = np.zeros((10000,2), dtype=np.int64)
++        for k in KINDS:
++            items = sorted(histogram[k].items())
++            vectors = np.asarray([v for v,n in items])
++            prob = np.asarray([n/1000 for v,n in items])
++            draws += rng.multinomial(1000,prob,size=10000) @ vectors
++        bounds = (np.sort(draws,axis=0)[499]/9000).tolist()
++        implementation = "numpy paired joint multinomial, seed 619482; independent finite Monte Carlo"
++    comparisons = {}
++    for name,point,lower in zip(keys,effects,bounds):
++        ref = scored["contrasts"]["candidate_minus_"+name]
++        require(abs(point-ref["effect"])<1e-13, f"effect differs for {name}")
++        if implementation.startswith("archive"):
++            require(abs(lower-ref["lower_95"])<1e-13, f"frozen lower differs for {name}")
++        comparisons[name] = dict(effect_pp=100*point, lower95_pp=100*lower,
++                                 archived_lower95_pp=100*ref["lower_95"],
++                                 threshold_met=point>=0.05 and lower>0)
++    return dict(per_stratum=strata,pooled_counts=all_counts,seed_order=SEEDS,document_count=len(gold),
++                model_denominator=3*len(gold),distinct_people_sets=len(people_sets),raw_edge_position=positions,
++                bootstrap=implementation,contrasts=comparisons)
++
++
++def audit(archive, prior, out):
++    out.mkdir(parents=True, exist_ok=False)
++    start = time.perf_counter()
++    steps = []
++    env = dict(os.environ, PYTHONIOENCODING="utf-8", PYTHONDONTWRITEBYTECODE="1", CUDA_VISIBLE_DEVICES="")
++
++    def note(event, **fields):
++        with (out/"timeline.jsonl").open("a", encoding="utf-8") as stream:
++            stream.write(json.dumps(dict(utc=utc(),event=event,**fields),ensure_ascii=False)+"\n")
++
++    def stage(name, script, args, json_output=True):
++        args = list(map(str, args))
++        filename = name+(".json" if json_output else ".txt")
++        command = [sys.executable, "-B", str(Path(__file__).resolve()), "--replay", str(script), *args]
++        note("start", stage=name, source_sha256=sha(script))
++        then=time.perf_counter()
++        with (out/filename).open("wb") as stdout, (out/(name+".stderr.txt")).open("wb") as stderr:
++            proc = subprocess.run(command, stdout=stdout, stderr=stderr, env=env, cwd=out)
++        info = dict(stage=name, duration_seconds=round(time.perf_counter()-then,3),
++                    returncode=proc.returncode, stdout_sha256=sha(out/filename))
++        steps.append(info)
++        note("end", **info)
++        require(proc.returncode==0, f"{name} failed; see its stderr in {out}")
++        if json_output:
++            return json.loads((out/filename).read_bytes())
++
++    note("started")
++    inputs = {}
++    for p in sorted(archive.rglob("*")):
++        if p.is_file() and p.suffix not in {".zip",".pyc"}:
++            inputs["B13/"+p.relative_to(archive).as_posix()] = sha(p)
++    frozen = json.loads((archive/"冻结清单.json").read_bytes())
++    require(all(inputs.get("B13/"+k)==v for k,v in frozen["sha256"].items()),"freeze SHA256 mismatch")
++    for p in [Path(__file__).resolve(), *sorted(LEGACY.glob("*.py"))]:
++        inputs["audit_src/"+p.name] = sha(p)
++    prior_run = prior/"runs/本地开发-01"
++    prior_script = prior/"code/verify_results.py"
++    require(prior_run.is_dir() and prior_script.is_file(), "--prior must contain code/ and runs/本地开发-01/")
++    for p in [prior_script,prior/"code/evaluate.py",prior/"实验协议.json",*prior_run.glob("*")]:
++        if p.is_file(): inputs["prior/"+p.relative_to(prior).as_posix()] = sha(p)
++    write(out/"input-manifest.json",inputs)
++    stage("B13-recorded-seals",archive/"复核归档.py",[])
++    real_preds = out/"B13-predictions"
++    stage("B13-frozen-inference",archive/"code/predict_sealed.py",
++          ["--features",archive/"cohort/features.jsonl","--features-sha256",sha(archive/"cohort/features.jsonl"),
++           "--cohort-seal-sha256",sha(archive/"cohort/seal.json"),"--protocol-sha256",sha(archive/"实验协议.json"),
++           "--freeze-sha256",sha(archive/"冻结清单.json"),"--b11",archive/"inputs/server-run",
++           "--b12-code",archive/"inputs/b12-code","--out",real_preds],json_output=False)
++    seals = json.loads((archive/"predictions/prediction-seal.json").read_bytes())["prediction_sha256"]
++    require(len(seals)==7 and all(sha(real_preds/k)==v for k,v in seals.items()),"7 replays differ from B13")
++    b13=original_counts(archive,real_preds,out)
++    write(out/"B13-primary.json",b13)
++    for name, script in [("B13-layers","第13项逐层复核"),("B13-reverse","第13项关系换序复核"),
++                         ("B13-margins","第13项响应分差复核"),("B13-components","第13项首层分项复核"),
++                         ("B13-quartets","第13项语义与分句顺序复核")]:
++        stage(name, LEGACY/(script+".py"), [archive],json_output=(name != "B13-layers"))
++    quartet=json.loads((out/"B13-quartets.json").read_bytes())
++    require([quartet["counts"][k]["all_four_correct"] for k in ("serial","pooled")]==[1509,2089],
++            "historical quartet counts differ")
++    stage("prior-verifier",prior_script,[prior_run,out/"prior-development.json"],json_output=False)
++    output_hashes = {p.relative_to(out).as_posix():sha(p) for p in sorted(out.rglob("*")) if p.is_file()
++                     and p.name!="timeline.jsonl"}
++    import torch
++    import numpy as np
++    write(out/"receipt.json",dict(status="completed",finished_utc=utc(),elapsed_s=round(time.perf_counter()-start,3),
++          environment=dict(platform=platform.platform(),python=sys.version,torch=str(torch.__version__),
++                           numpy=np.__version__,historical_device="cpu"),steps=steps,outputs_sha256=output_hashes))
++    note("finished",receipt_sha256=sha(out/"receipt.json"))
++
++
++if __name__=="__main__":
++    if sys.argv[1:2] == ["--replay"]:
++        cpu_replay(Path(sys.argv[2]),sys.argv[3:])
++    else:
++        parser=argparse.ArgumentParser(description=__doc__)
++        parser.add_argument("--archive",type=Path,required=True)
++        parser.add_argument("--prior",type=Path,required=True)
++        parser.add_argument("--out",type=Path,required=True)
++        args=parser.parse_args()
++        audit(args.archive.resolve(),args.prior.resolve(),args.out.resolve())
++
+--- /dev/null
++++ R02/src/legacy/第13项关系换序复核.py
+@@ -0,0 +1,152 @@
++"""在已公开的第 13 项样本上复核交换关系名称后的首跳选择。
++
++用法：python -B 第13项关系换序复核.py <第13项实验目录>
++依赖与实验目录中的 environment.json 一致。输出 JSON 到标准输出。
++"""
++
++import argparse
++from collections import Counter
++from dataclasses import replace
++import json
++from pathlib import Path
++import runpy
++import sys
++
++sys.dont_write_bytecode = True
++import numpy as np
++import torch
++
++
++def read_index(path):
++    rows = [json.loads(line) for line in path.read_bytes().splitlines()]
++    index = {row["doc_id"]: row for row in rows}
++    if len(index) != len(rows):
++        raise ValueError(f"重复的文档编号：{path}")
++    return index
++
++
++def directed_paths(nodes, anchor, first, second):
++    """枚举两条有向边，要求起点、中间点、终点各不相同。"""
++    return [
++        (i, j)
++        for i, (head, relation, bridge) in enumerate(nodes)
++        if head == anchor and relation == first
++        for j, (next_head, next_relation, tail) in enumerate(nodes)
++        if next_head == bridge and next_relation == second and len({anchor, bridge, tail}) == 3
++    ]
++
++
++def matched_roles(question, templates):
++    matches = [
++        t for t in templates if len(t) == len(question)
++        and all(word.startswith("{") or word == token for word, token in zip(t, question))
++    ]
++    if len(matches) != 1:
++        raise ValueError("题目无法唯一还原为归档中的问法模板")
++    return {word: token for word, token in zip(matches[0], question) if word.startswith("{")}
++
++
++def construct_pairs(examples, gold, templates, evaluator):
++    pairs = []
++    eligible, no_unique_reverse = Counter(), Counter()
++    if {ex.doc_id for ex in examples} != set(gold):
++        raise ValueError("特征和金标的文档编号不一致")
++    for ex in examples:
++        question = ex.question
++        roles = matched_roles(question, templates)
++        anchor, first, second = (roles[k] for k in ("{anchor}", "{first}", "{second}"))
++        original = directed_paths(ex.nodes, anchor, first, second)
++        reverse = directed_paths(ex.nodes, anchor, second, first)
++        if len(original) != 1 or original[0][0] != gold[ex.doc_id]["gold"]:
++            raise ValueError(f"从图重建的原问金标与归档不一致：{ex.doc_id}")
++        if len(reverse) != 1:
++            no_unique_reverse[ex.stratum] += 1
++            continue
++        swap = {first: second, second: first}
++        new_question = tuple(swap.get(token, token) for token in question)
++        if sum(a != b for a, b in zip(question, new_question)) != 2:
++            raise ValueError("交换操作未精确改变两个关系词元")
++        other = evaluator.shortlist([replace(ex, question=new_question)], "direction")[0]
++        g1, g2 = original[0][0], reverse[0][0]
++        if ex.candidates != other.candidates or {g1, g2} != set(ex.candidates):
++            raise ValueError(f"配对未保持候选或未交换正确首跳：{ex.doc_id}")
++        pairs.append((ex, other, g1, g2))
++        eligible[ex.stratum] += 1
++    return pairs, eligible, no_unique_reverse
++
++
++def predict(rows, model, vocab, method, serial, trainer, device):
++    encoded = trainer.encode_examples(rows, vocab, method, with_alignment=serial)
++    with torch.inference_mode():
++        choices = trainer.predict_indices(model, encoded, device)
++    return trainer.prediction_rows(rows, choices)
++
++
++def run(root):
++    b11 = root / "inputs/server-run"
++    frozen = runpy.run_path(str(root / "code/predict_sealed.py"))
++    templates = runpy.run_path(str(root / "code/generate_cohort.py"))["TEMPLATES"]
++    frozen["configure_cpu"]()
++    evaluator = frozen["load_implementation"](root / "inputs/b12-code")
++    trainer = evaluator.frozen_trainer(b11)
++    features = frozen["parse_input"](trainer, (root / "cohort/features.jsonl").read_bytes())
++    examples = evaluator.shortlist(features, "direction")
++    pairs, eligible, excluded = construct_pairs(
++        examples, read_index(root / "cohort/gold.jsonl"), [t.split() for t in templates], evaluator
++    )
++    if not pairs:
++        raise ValueError("没有可用的换序配对")
++    report = {
++        "original_gold_checked": len(examples),
++        "eligible_graphs": eligible,
++        "excluded_without_unique_reverse_path": excluded,
++        "models": {},
++    }
++    device = torch.device("cpu")
++    by_graph = {}
++    for kind in ("serial", "pooled"):
++        seeds, total = {}, Counter()
++        by_graph[kind] = np.zeros(len(pairs), dtype=np.int64)
++        for seed in frozen["SEEDS"]:
++            model, vocab, method = evaluator.load_model(trainer, b11, device, kind, seed)
++            archived = read_index(root / f"predictions/{kind}-{seed}.jsonl")
++            left = predict([p[0] for p in pairs], model, vocab, method, kind == "serial", trainer, device)
++            right = predict([p[1] for p in pairs], model, vocab, method, kind == "serial", trainer, device)
++            counts = Counter(pairs=len(pairs))
++            for i, ((ex, _, g1, g2), original, reverse) in enumerate(zip(pairs, left, right, strict=True)):
++                if original != archived[ex.doc_id]:
++                    raise ValueError(f"原问预测未复现归档：{kind}, {seed}, {ex.doc_id}")
++                a, b = original["prediction"], reverse["prediction"]
++                counts["original_correct"] += a == g1
++                counts["reverse_correct"] += b == g2
++                counts["prediction_flipped"] += a != b
++                counts["both_correct"] += a == g1 and b == g2
++                by_graph[kind][i] += a == g1 and b == g2
++            seeds[seed] = counts
++            total.update(counts)
++        report["models"][kind] = {"by_seed": seeds, "all_seeds": total}
++    # 每个图的三个固定种子先求平均。换序后保留的图只来自关系顺序层。
++    delta = (by_graph["serial"] - by_graph["pooled"]) / len(frozen["SEEDS"])
++    rng = np.random.default_rng(619482)
++    resampled = np.empty(10_000)
++    for start in range(0, len(resampled), 100):
++        indices = rng.integers(len(pairs), size=(100, len(pairs)))
++        resampled[start:start + 100] = delta[indices].mean(axis=1)
++    ordered = np.sort(resampled)
++    report["paired_both_correct_difference"] = {
++        "contrast": "serial_minus_pooled",
++        "difference_pp": round(100 * delta.mean(), 4),
++        "one_sided_95_lower_pp": round(100 * ordered[499], 4),
++        "two_sided_95_interval_pp": [round(100 * ordered[249], 4), round(100 * ordered[9749], 4)],
++        "bootstrap_unit": "graph",
++        "bootstrap_draws": len(resampled),
++        "bootstrap_seed": 619482,
++    }
++    return report
++
++
++if __name__ == "__main__":
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("experiment_root", type=Path, help="已解压的完整第 13 项实验目录")
++    args = parser.parse_args()
++    print(json.dumps(run(args.experiment_root.resolve()), ensure_ascii=False, indent=2))
+--- /dev/null
++++ R02/src/legacy/第13项响应分差复核.py
+@@ -0,0 +1,122 @@
++"""对第 13 项的合法关系换序题复核方向底座、两层残差与池化的响应分差。
++
++用法：python -B 第13项响应分差复核.py <第13项已解压目录>
++以原题金标边为 A，反序题金标边为 B。两次都计算 A 分减 B 分。
++D 为原题分差减去反序题分差。输出只写入标准输出。
++"""
++
++import argparse
++from collections import defaultdict
++import json
++from pathlib import Path
++import runpy
++import sys
++
++sys.dont_write_bytecode = True
++import numpy as np
++import torch
++
++from 第13项关系换序复核 import construct_pairs, read_index
++from 第13项逐层复核 import checked_bytes
++
++
++@torch.inference_mode()
++def logits_for_view(examples, model, vocab, method, kind, trainer, device):
++    serial = kind == "serial"
++    encoded = trainer.encode_examples(examples, vocab, method, with_alignment=serial)
++    stages = defaultdict(list)
++    for start in range(0, len(encoded), trainer.BATCH_SIZE):
++        batch = encoded[start:start + trainer.BATCH_SIZE]
++        question, facts = trainer.collate(batch, device)
++        if serial:
++            alignment = trainer.collate_alignment(batch, question.shape[1], device)
++            base = model.layer1.base(question, facts)
++            final, active = model(question, facts, *alignment, return_layer_scores=True)
++            first = base.index_copy(0, alignment[0], active.layer1_active_logits)
++            stages["z0"].append(base)
++            stages["z1"].append(first)
++            stages["z2"].append(final)
++        else:
++            stages["pooled"].append(model(question, facts))
++    return {name: torch.cat(batches).numpy().astype(np.float64) for name, batches in stages.items()}
++
++
++def describe(original, reverse, a_index):
++    indices = np.arange(len(a_index))
++    b_index = 1 - a_index
++    margin = original[indices, a_index] - original[indices, b_index]
++    reverse_margin = reverse[indices, a_index] - reverse[indices, b_index]
++    delta = margin - reverse_margin
++    left = original.argmax(axis=1) == a_index
++    right = reverse.argmax(axis=1) == b_index
++    return {
++        "pairs": len(delta),
++        "D_positive": int((delta > 0).sum()),
++        "D_zero": int((delta == 0).sum()),
++        "D_negative": int((delta < 0).sum()),
++        "D_mean_logit": float(delta.mean()),
++        "D_median_logit": float(np.median(delta)),
++        "both_correct": int((left & right).sum()),
++        "both_wrong": int((~left & ~right).sum()),
++        "only_original_correct": int((left & ~right).sum()),
++        "only_reverse_correct": int((~left & right).sum()),
++        "tied_original": int((margin == 0).sum()),
++        "tied_reverse": int((reverse_margin == 0).sum()),
++        "mean_accuracy": float((left.mean() + right.mean()) / 2),
++    }
++
++
++def run(root):
++    pred_dir = root / "predictions"
++    receipt = json.loads((pred_dir / "prediction-seal.json").read_bytes())
++    cohort = root / "cohort"
++    seal = json.loads(checked_bytes(cohort / "seal.json", receipt["cohort_seal_sha256"]))
++    feature_bytes = checked_bytes(cohort / "features.jsonl", seal["features_sha256"])
++    checked_bytes(cohort / "gold.jsonl", seal["gold_sha256"])
++    inference = root / "code/predict_sealed.py"
++    checked_bytes(inference, receipt["inference_code_sha256"]["predict_sealed.py"])
++    frozen = runpy.run_path(str(inference))
++    frozen["configure_cpu"]()
++    evaluator = frozen["load_implementation"](root / "inputs/b12-code")
++    model_root = root / "inputs/server-run"
++    trainer = evaluator.frozen_trainer(model_root)
++    examples = evaluator.shortlist(frozen["parse_input"](trainer, feature_bytes), "direction")
++    templates = runpy.run_path(str(root / "code/generate_cohort.py"))["TEMPLATES"]
++    pairs, eligible, excluded = construct_pairs(
++        examples, read_index(cohort / "gold.jsonl"), [t.split() for t in templates], evaluator
++    )
++    a_index = np.array([ex.candidates.index(gold) for ex, _, gold, _ in pairs])
++    original = [p[0] for p in pairs]
++    reverse = [p[1] for p in pairs]
++    report = {"eligible_graphs": eligible, "excluded_graphs": excluded, "by_seed": {}, "aggregate": {}}
++    pooled_seeds = defaultdict(list)
++    device = torch.device("cpu")
++    for seed in frozen["SEEDS"]:
++        report["by_seed"][seed] = {}
++        for kind in ("serial", "pooled"):
++            model, vocab, method = evaluator.load_model(trainer, model_root, device, kind, seed)
++            left = logits_for_view(original, model, vocab, method, kind, trainer, device)
++            right = logits_for_view(reverse, model, vocab, method, kind, trainer, device)
++            filename = f"{kind}-{seed}.jsonl"
++            checked_bytes(pred_dir / filename, receipt["prediction_sha256"][filename])
++            archived = read_index(pred_dir / filename)
++            final = left["z2" if kind == "serial" else "pooled"]
++            predictions = trainer.prediction_rows(original, final.argmax(axis=1).tolist())
++            if predictions != [archived[ex.doc_id] for ex in original]:
++                raise ValueError(f"原问逐题预测不同于归档：{filename}")
++            for stage in left:
++                pooled_seeds[stage].append((left[stage], right[stage]))
++                report["by_seed"][seed][stage] = describe(left[stage], right[stage], a_index)
++    for stage, batches in pooled_seeds.items():
++        left, right = zip(*batches)
++        report["aggregate"][stage] = describe(np.concatenate(left), np.concatenate(right), np.tile(a_index, len(left)))
++    for stage, expected in (("z2", 444), ("pooled", 743)):
++        if report["aggregate"][stage]["both_correct"] != expected:
++            raise ValueError(f"{stage} 双正确数与前次按选择复核结果不一致")
++    return report
++
++
++if __name__ == "__main__":
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("archive", type=Path, help="第13项已解压归档目录")
++    print(json.dumps(run(parser.parse_args().archive.resolve()), ensure_ascii=False, indent=2))
+--- /dev/null
++++ R02/src/legacy/第13项语义与分句顺序复核.py
+@@ -0,0 +1,92 @@
++"""用第13项的一组措辞交叉改变语义顺序和分句次序。在已解压的归档上只读运行。"""
++
++import argparse
++from collections import Counter
++from dataclasses import replace
++import json
++from pathlib import Path
++import runpy
++import sys
++
++sys.dont_write_bytecode = True
++
++import torch
++
++from 第13项关系换序复核 import construct_pairs, matched_roles, predict, read_index
++
++
++def make_views(pairs, templates, evaluator):
++    # 第七种归档措辞包含两个角色标记明确、可单独成句的分句。
++    last, first, ask, *extra = templates[6].split(" 。 ")
++    if extra or "{second}" not in last or "{first}" not in first or "{" in ask:
++        raise ValueError("归档问法与预期不同")
++    styles = (" 。 ".join((first, last, ask)), templates[6])
++    template_tokens = [template.split() for template in templates]
++    views = [[], [], [], []]
++    gold = [[], [], [], []]
++    archived_view = []
++    for ex, _, original_gold, reversed_gold in pairs:
++        roles = matched_roles(ex.question, template_tokens)
++        anchor, a, b = (roles[k] for k in ("{anchor}", "{first}", "{second}"))
++        bag = None
++        for j, style in enumerate(styles):
++            for k, (r1, r2, target) in enumerate(((a, b, original_gold), (b, a, reversed_gold))):
++                q = tuple(style.format(anchor=anchor, first=r1, second=r2).split())
++                row = evaluator.shortlist([replace(ex, question=q)], "direction")[0]
++                if bag is None:
++                    bag = Counter(q)
++                if Counter(q) != bag or row.candidates != ex.candidates:
++                    raise ValueError(f"词元或有序候选未保持：{ex.doc_id}")
++                views[2 * j + k].append(row)
++                gold[2 * j + k].append(target)
++                if j == 1 and k == 0:
++                    archived_view.append(q == ex.question)
++    return views, gold, archived_view
++
++
++def run(root):
++    frozen = runpy.run_path(str(root / "code/predict_sealed.py"))
++    templates = runpy.run_path(str(root / "code/generate_cohort.py"))["TEMPLATES"]
++    frozen["configure_cpu"]()
++    evaluator = frozen["load_implementation"](root / "inputs/b12-code")
++    model_root = root / "inputs/server-run"
++    trainer = evaluator.frozen_trainer(model_root)
++    examples = frozen["parse_input"](trainer, (root / "cohort/features.jsonl").read_bytes())
++    pairs, eligible, _ = construct_pairs(
++        evaluator.shortlist(examples, "direction"), read_index(root / "cohort/gold.jsonl"),
++        [t.split() for t in templates], evaluator,
++    )
++    if eligible != {"relation_order": 1000}:
++        raise ValueError(f"归档可换序文档发生变化：{eligible}")
++    views, gold, archived_view = make_views(pairs, templates, evaluator)
++    if sum(archived_view) != 125:
++        raise ValueError("归档中的第七种问法应覆盖 125 道关系顺序题")
++    device = torch.device("cpu")
++    result = {}
++    for kind in ("serial", "pooled"):
++        counts = Counter()
++        for seed in frozen["SEEDS"]:
++            model, vocab, method = evaluator.load_model(trainer, model_root, device, kind, seed)
++            predictions = [predict(v, model, vocab, method, kind == "serial", trainer, device) for v in views]
++            archived = read_index(root / f"predictions/{kind}-{seed}.jsonl")
++            for i, quartet in enumerate(zip(*predictions, strict=True)):
++                if archived_view[i] and quartet[2] != archived[quartet[2]["doc_id"]]:
++                    raise ValueError("相同题面的预测与归档不同")
++                choices = [row["prediction"] for row in quartet]
++                hits = [p == targets[i] for p, targets in zip(choices, gold, strict=True)]
++                counts["graph_seed"] += 1
++                counts["both_meanings_correct_first_step_described_first"] += hits[0] and hits[1]
++                counts["both_meanings_correct_first_step_described_last"] += hits[2] and hits[3]
++                counts["all_four_correct"] += all(hits)
++                counts["matches_first_relation_mentioned_in_all_four"] += hits == [True, True, False, False]
++                counts["matches_last_relation_mentioned_in_all_four"] += hits == [False, False, True, True]
++                counts["constant_candidate_in_all_four"] += len(set(choices)) == 1
++                counts["selection_changed_on_clause_reordering"] += (choices[0] != choices[2]) + (choices[1] != choices[3])
++        result[kind] = counts
++    return {"template": templates[6], "graphs": len(pairs), "seeds": frozen["SEEDS"], "counts": result}
++
++
++if __name__ == "__main__":
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("archive", type=Path, help="第13项实验归档目录")
++    print(json.dumps(run(parser.parse_args().archive.resolve()), indent=2, ensure_ascii=False))
+--- /dev/null
++++ R02/src/legacy/第13项逐层复核.py
+@@ -0,0 +1,107 @@
++"""在已开封的第13项归档上复算逐层首跳命中。位置参数为该项归档的根目录。"""
++
++import argparse
++from collections import Counter, defaultdict
++from hashlib import sha256
++import json
++from pathlib import Path
++import sys
++
++import torch
++
++
++STAGES = ("直接首位", "方向底座 z0", "第一层 z1", "串联 z2")
++
++
++def checked_bytes(path, digest):
++    payload = path.read_bytes()
++    if sha256(payload).hexdigest() != digest:
++        raise ValueError(f"SHA-256 校验失败：{path}")
++    return payload
++
++
++def record(counts, hits):
++    counts["判断次数"] += 1
++    for stage, hit in enumerate(hits):
++        counts[stage, "命中"] += hit
++        if stage:
++            counts[stage, "纠正"] += hit and not hits[stage - 1]
++            counts[stage, "改错"] += not hit and hits[stage - 1]
++
++
++def print_counts(title, counts):
++    total = counts["判断次数"]
++    print(f"\n{title}（{total:,} 次判断）")
++    print("阶段\t命中\t准确率\t相邻层纠正\t相邻层改错\t净变化")
++    for stage, name in enumerate(STAGES):
++        hits = counts[stage, "命中"]
++        fixed = counts[stage, "纠正"]
++        broken = counts[stage, "改错"]
++        change = f"{fixed}\t{broken}\t{fixed - broken:+d}" if stage else "—\t—\t—"
++        print(f"{name}\t{hits:,}\t{hits / total:.2%}\t{change}")
++
++
++@torch.inference_mode()
++def replay(root):
++    # 归档的推理入口同时校验冻结的评估代码、底座代码和模型检查点。
++    sys.dont_write_bytecode = True
++    predictions = root / "predictions"
++    seal = json.loads((predictions / "prediction-seal.json").read_bytes())
++    cohort = root / "cohort"
++    data_seal = json.loads(checked_bytes(cohort / "seal.json", seal["cohort_seal_sha256"]))
++    checked_bytes(root / "code/predict_sealed.py", seal["inference_code_sha256"]["predict_sealed.py"])
++    sys.path.insert(0, str(root / "code"))
++    import predict_sealed as original
++
++    original.configure_cpu()
++    evaluator = original.load_implementation(root / "inputs/b12-code")
++    model_root = root / "inputs/server-run"
++    trainer = evaluator.frozen_trainer(model_root)
++    features = checked_bytes(cohort / "features.jsonl", data_seal["features_sha256"])
++    docs = evaluator.shortlist(original.parse_input(trainer, features), "direction")
++    gold_data = checked_bytes(cohort / "gold.jsonl", data_seal["gold_sha256"])
++    gold = {row["doc_id"]: row["gold"] for row in map(json.loads, gold_data.splitlines())}
++    if gold.keys() != {doc.doc_id for doc in docs}:
++        raise ValueError("标签与特征的文档 ID 不一致")
++
++    def check_predictions(filename, selected):
++        rows = trainer.prediction_rows(docs, selected)
++        saved = checked_bytes(predictions / filename, seal["prediction_sha256"][filename])
++        if trainer.jsonl_payload(rows) != saved:
++            raise ValueError(f"逐题预测与归档不同：{filename}")
++
++    check_predictions("direct.jsonl", [0] * len(docs))
++    counts = defaultdict(Counter)
++    device = torch.device("cpu")
++    for seed in original.SEEDS:
++        model, vocab, method = evaluator.load_model(trainer, model_root, device, "serial", seed)
++        encoded = trainer.encode_examples(docs, vocab, method, with_alignment=True)
++        selected = []
++        for offset in range(0, len(encoded), trainer.BATCH_SIZE):
++            batch = encoded[offset : offset + trainer.BATCH_SIZE]
++            questions, nodes = trainer.collate(batch, device)
++            alignments = trainer.collate_alignment(batch, questions.shape[1], device)
++            z0 = model.layer1.base(questions, nodes)
++            z2, layers = model(questions, nodes, *alignments, return_layer_scores=True)
++            # 未触发门控的题沿用底座分数。
++            z1 = z0.index_copy(0, alignments[0], layers.layer1_active_logits)
++            layer_choices = torch.stack((z0, z1, z2)).argmax(dim=-1).T.tolist()
++            for index, (base, first, final) in enumerate(layer_choices):
++                selected.append(final)
++                doc = docs[offset + index]
++                choices = (0, base, first, final)
++                hits = [doc.candidates[choice] == gold[doc.doc_id] for choice in choices]
++                gate = "门内" if batch[index].alignment is not None else "门外"
++                for group in ("全部", gate, f"种子 {seed}"):
++                    record(counts[group], hits)
++        check_predictions(f"serial-{seed}.jsonl", selected)
++
++    print(f"已逐字节匹配直接首位和三个种子的最终预测，共 {len(docs):,} 篇文档。")
++    for group in ("全部", "门内", "门外", *(f"种子 {seed}" for seed in original.SEEDS)):
++        print_counts(group, counts[group])
++
++
++if __name__ == "__main__":
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("archive", type=Path, help="第13项已解压归档目录")
++    replay(parser.parse_args().archive.resolve())
+--- /dev/null
++++ R02/src/legacy/第13项首层分项复核.py
+@@ -0,0 +1,132 @@
++"""复算第13项第一层显著度、关系匹配对合法换序的响应。用法见 --help。"""
++
++import argparse
++import json
++from pathlib import Path
++import runpy
++import sys
++from unittest.mock import patch
++
++sys.dont_write_bytecode = True
++import numpy as np
++import torch
++
++from 第13项关系换序复核 import construct_pairs, read_index
++from 第13项逐层复核 import checked_bytes
++
++
++NAMES = ("底座", "门控显著度", "门控关系匹配", "第一层", "仅加显著度", "仅加关系匹配")
++
++
++@torch.inference_mode()
++def decompose(examples, signs, model, vocab, method, trainer, device):
++    adapter = model.layer1
++    if trainer.RERANKERS[adapter.reranker_index] != "factorized":
++        raise ValueError("本分解只适用于冻结的分解式对齐器")
++    encoded = trainer.encode_examples(examples, vocab, method, with_alignment=True)
++    margins = []
++    max_error = 0.0
++    for offset in range(0, len(encoded), trainer.BATCH_SIZE):
++        batch = encoded[offset:offset + trainer.BATCH_SIZE]
++        questions, nodes = trainer.collate(batch, device)
++        alignment = trainer.collate_alignment(batch, questions.shape[1], device)
++        if len(alignment[0]) != len(batch):
++            raise ValueError("合法换序配对中出现了未触发门控的题目")
++
++        # 直接捕获冻结实现计算的两个 logmeanexp；其余两次调用属于其他备选评分器。
++        reductions = []
++        logmeanexp = adapter.logmeanexp
++
++        def capture(values, mask):
++            result = logmeanexp(values, mask)
++            reductions.append(result)
++            return result
++
++        with patch.object(adapter, "logmeanexp", side_effect=capture):
++            base, first, _ = adapter.layer_outputs(questions, nodes, *alignment)
++        salience, relation, _, _ = reductions
++        gate = (adapter.alpha + adapter.beta * (base[:, 0] - base[:, 1]).abs()).sigmoid()
++        reconstructed = base + gate[:, None] * (salience + relation)
++        torch.testing.assert_close(first, reconstructed, rtol=1e-6, atol=1e-6)
++        max_error = max(max_error, (first - reconstructed).abs().max().item())
++
++        direction = signs[offset:offset + len(batch)]
++
++        def margin(scores):
++            return direction * (scores[:, 0] - scores[:, 1])
++
++        margins.append(torch.stack(
++            (margin(base), gate * margin(salience), gate * margin(relation), margin(first),
++             margin(base + gate[:, None] * salience), margin(base + gate[:, None] * relation)), dim=1
++        ).double().numpy())
++    return np.concatenate(margins), max_error
++
++
++def summarize(left, right, signs):
++    delta = left - right
++    # torch.argmax 在完全同分时取第一个候选。sign=+1 表示原问金标是第一个候选。
++    models = {}
++    for index in (0, 3, 4, 5):
++        correct_left = (left[:, index] > 0) | ((left[:, index] == 0) & (signs > 0))
++        correct_right = (right[:, index] < 0) | ((right[:, index] == 0) & (signs < 0))
++        models[NAMES[index]] = {
++            "D大于零": int((delta[:, index] > 0).sum()),
++            "双正确": int((correct_left & correct_right).sum()),
++        }
++    return {
++        "配对数": len(delta),
++        "原问减反序的平均分差变化_logit": dict(zip(NAMES, delta.mean(axis=0).tolist())),
++        "冻结首层分项消融_两问分别沿用各自底座门值": models,
++        "显著度候选分差的平均绝对值_含门值_两问合计": float(
++            (np.abs(left[:, 1]).mean() + np.abs(right[:, 1]).mean()) / 2
++        ),
++    }
++
++
++def run(root):
++    cohort = root / "cohort"
++    receipt = json.loads((root / "predictions/prediction-seal.json").read_bytes())
++    seal = json.loads(checked_bytes(cohort / "seal.json", receipt["cohort_seal_sha256"]))
++    features = checked_bytes(cohort / "features.jsonl", seal["features_sha256"])
++    checked_bytes(cohort / "gold.jsonl", seal["gold_sha256"])
++    inference = root / "code/predict_sealed.py"
++    checked_bytes(inference, receipt["inference_code_sha256"]["predict_sealed.py"])
++    frozen = runpy.run_path(str(inference))
++    frozen["configure_cpu"]()
++    evaluator = frozen["load_implementation"](root / "inputs/b12-code")
++    model_dir = root / "inputs/server-run"
++    trainer = evaluator.frozen_trainer(model_dir)
++    docs = evaluator.shortlist(frozen["parse_input"](trainer, features), "direction")
++    templates = runpy.run_path(str(root / "code/generate_cohort.py"))["TEMPLATES"]
++    pairs, eligible, _ = construct_pairs(docs, read_index(cohort / "gold.jsonl"), [
++        template.split() for template in templates
++    ], evaluator)
++    if dict(eligible) != {"relation_order": 1000}:
++        raise ValueError(f"可合法反序的图与预期不一致：{eligible}")
++    # A 始终为原问的正确首跳。即使在反序问法上，候选分差也是 A 减 B。
++    signs = torch.tensor([1.0 if ex.candidates[0] == gold else -1.0 for ex, _, gold, _ in pairs])
++    left_rows = [p[0] for p in pairs]
++    right_rows = [p[1] for p in pairs]
++    device = torch.device("cpu")
++    left_parts, right_parts = [], []
++    result = {"文档数": len(pairs), "各种子": {}, "逐候选第一层重构最大绝对误差": 0.0}
++    for seed in frozen["SEEDS"]:
++        model, vocab, method = evaluator.load_model(trainer, model_dir, device, "serial", seed)
++        args = (signs, model, vocab, method, trainer, device)
++        left, error_left = decompose(left_rows, *args)
++        right, error_right = decompose(right_rows, *args)
++        result["各种子"][seed] = summarize(left, right, signs.numpy())
++        result["逐候选第一层重构最大绝对误差"] = max(
++            result["逐候选第一层重构最大绝对误差"], error_left, error_right
++        )
++        left_parts.append(left)
++        right_parts.append(right)
++    result["汇总"] = summarize(np.concatenate(left_parts), np.concatenate(right_parts),
++                               np.tile(signs.numpy(), len(left_parts)))
++    return result
++
++
++if __name__ == "__main__":
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("archive", type=Path, help="已解压的第13项实验归档")
++    print(json.dumps(run(parser.parse_args().archive.resolve()), ensure_ascii=False, indent=2))

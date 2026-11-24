@@ -1,0 +1,27 @@
+--- /dev/null
++++ R07/configs/R07.json
+@@ -0,0 +1,24 @@
++{
++  "id": "R07",
++  "hypothesis": "Old context-only weights overfit original syntax. A question-only clause-order feature helps rank relations across unseen wording with fixed H2.",
++  "criteria": "Compare replacing the 64th hidden coordinate with an annotated ordinal cue feature on precisely the same examples and loss; retain 64 parameters. Fresh original >=5pp gain over each baseline, fresh paraphrase >0 against each baseline and fresh quartet >first, >=pool. Report separate combination and template challenge metrics.",
++  "argv": [
++    "src/mech_run.py",
++    "--round",
++    "joint",
++    "--b13",
++    "{inputs}/b13",
++    "--b16",
++    "{inputs}/b16",
++    "--prior",
++    "{inputs}/prior",
++    "--out",
++    "{out}"
++  ],
++  "sources": [
++    "src/mech_*.py",
++    "configs/mech_protocol.json"
++  ],
++  "receipt": "metrics.json",
++  "after": "按本轮逐题结果和冻结判据评估下轮实验"
++}

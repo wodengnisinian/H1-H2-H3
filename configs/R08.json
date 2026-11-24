@@ -1,0 +1,23 @@
+{
+  "id": "R08",
+  "hypothesis": "R07 对首位仅提高0.28个百分点。把共享权重限制在题面的关系词上后，直接监督首步关系与候选损失的训练效果是否不同？",
+  "criteria": "主候选 cue_role 和 cue_candidate 同结构、同参数量、同数据和批顺序。在新开发原问的关系识别与最终排序两者上均严格更高才支持训练目标假设。进入 H3 的标准另由总协议规定。",
+  "argv": [
+    "src/role_run.py",
+    "--b13",
+    "{inputs}/b13",
+    "--b16",
+    "{inputs}/b16",
+    "--prior",
+    "{inputs}/prior",
+    "--out",
+    "{out}"
+  ],
+  "sources": [
+    "src/role_*.py",
+    "src/mech_*.py",
+    "configs/role_protocol.json"
+  ],
+  "receipt": "metrics.json",
+  "after": "若预设开发条件满足，冻结唯一主候选进入 H3。同时检验训练损失的因果对照。"
+}

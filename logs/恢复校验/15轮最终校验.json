@@ -1,0 +1,47 @@
+{
+  "utc": "2026-11-24T11:13:22.198902+00:00",
+  "rounds": 15,
+  "registered_artifacts": 478,
+  "formal_openings": 1,
+  "study_state": "completed",
+  "new_development": [
+    "R14",
+    "R15"
+  ],
+  "checks": [
+    {
+      "cmd": [
+        "C:\\Users\\xxs\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+        "-B",
+        "C:\\Users\\xxs\\Desktop\\spiderweb项目资料\\实验记录以及结果\\H1_H2_H3实验\\logs\\恢复校验\\verify_r3_local_archive.py",
+        "C:\\Users\\xxs\\Desktop\\spiderweb项目资料\\实验记录以及结果\\H1_H2_H3实验",
+        "--verify"
+      ],
+      "return_code": 0,
+      "stdout": "{\"rounds\": 13, \"verified_round_artifacts\": 364, \"verified_input_members\": 85, \"navigation_files\": 210, \"new_files_added\": 0, \"missing_after\": 0, \"status_path\": \"logs/恢复校验/本地逐轮归档核验.json\"}",
+      "stderr": ""
+    },
+    {
+      "cmd": [
+        "C:\\Users\\xxs\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+        "-B",
+        "C:\\Users\\xxs\\Desktop\\spiderweb项目资料\\实验记录以及结果\\H1_H2_H3实验\\experiments\\R3-0014_Order_20261124-1903\\code\\verify_r14.py",
+        "C:\\Users\\xxs\\Desktop\\spiderweb项目资料\\实验记录以及结果\\H1_H2_H3实验\\experiments\\R3-0014_Order_20261124-1903"
+      ],
+      "return_code": 0,
+      "stdout": "{\"id\": \"R14\", \"status\": \"verified\", \"local_manifest_files\": 57, \"registered_artifacts\": 57, \"artifact_manifest_sha256\": \"4d9657241ac257b96c72e9e8079a62260239f65574cbc5e699952bc2c0e466ce\", \"downloaded_results\": 7, \"remote_sealed_entries\": 14, \"remote_elapsed_seconds\": 9.012283794116229, \"max_resident_kib\": 795364, \"remote_exit_code\": 0}",
+      "stderr": ""
+    },
+    {
+      "cmd": [
+        "C:\\Users\\xxs\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+        "-B",
+        "C:\\Users\\xxs\\Desktop\\spiderweb项目资料\\实验记录以及结果\\H1_H2_H3实验\\experiments\\R3-0015_Tie_20261124-1910\\code\\verify_r15.py",
+        "C:\\Users\\xxs\\Desktop\\spiderweb项目资料\\实验记录以及结果\\H1_H2_H3实验\\experiments\\R3-0015_Tie_20261124-1910"
+      ],
+      "return_code": 0,
+      "stdout": "{\"id\": \"R15\", \"status\": \"verified\", \"local_manifest_files\": 57, \"registered_artifacts\": 57, \"artifact_manifest_sha256\": \"02da395f12a31b5bb734c978964a46627a305c2f838f85a6a65c3c203d0e8793\", \"downloaded_results\": 5, \"remote_sealed_entries\": 13, \"remote_elapsed_seconds\": 12.739981720224023, \"max_resident_kib\": 797056, \"remote_exit_code\": 0}",
+      "stderr": ""
+    }
+  ]
+}

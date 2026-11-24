@@ -1,0 +1,28 @@
+{
+  "event": "start",
+  "id": "R15",
+  "path": "experiments/R3-0015_Tie_20261124-1910",
+  "utc": "2026-11-24T11:10:01.041763+00:00",
+  "command": [
+    "/data/miniconda/envs/torch/bin/python",
+    "-B",
+    "/data/spiderweb-r3-supplement-R3-0015_Tie_20261124-1910/r3_content_tie_audit.py",
+    "--r3",
+    "/data/spiderweb-r3-20261124-1740/R3",
+    "--inputs",
+    "/data/spiderweb-r3-20261124-1740/inputs",
+    "--r14",
+    "/data/spiderweb-r3-supplement-R3-0014_Order_20261124-1903/results",
+    "--out",
+    "/data/spiderweb-r3-supplement-R3-0015_Tie_20261124-1910/results"
+  ],
+  "protocol_sha256": "2485931d4e86c8e6bbc614004144a587bfcd21b9aa7ffe67c358946d654d1fb1",
+  "source_sha256": {
+    "code/r3_dev_order_audit.py": "affd20a5d4d1b1404d4e630e7eba8d8e03528825bd9dc7b3c049beee027e76f4",
+    "code/r3_content_tie_audit.py": "593f13b3e3da49e14b691b63cc084e2d48b3c5a5d96052596fe7198537deb3a0",
+    "code/launch_from_windows.py": "ae2f99bb69008dc3074d3f4a261f73dfef57ae8d3596edbcab03b8e276ab04df",
+    "code/record_resources.py": "c0465903299abf480840e9169a9dccd96d5b7a1ff9c2ffa8156f075507863bed"
+  },
+  "input_manifest_sha256": "4fa2160ca13a1234629209a5cb932b2668c3c98400fb621c5949de49307a1f41",
+  "remote_preflight": "125 []"
+}

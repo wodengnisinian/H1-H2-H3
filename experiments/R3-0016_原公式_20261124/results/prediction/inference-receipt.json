@@ -1,0 +1,100 @@
+{
+  "version": "original",
+  "primary_variant": "learned",
+  "seeds": [
+    1701,
+    2701,
+    3701
+  ],
+  "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad",
+  "source_sha256": {
+    "/data/spiderweb-r3-20261124-1740/inputs/prior/code/model.py": "f85636ffa19443880e48d953c7d552af3d6bda5238c60ad424f445202c2c2b0f",
+    "/data/spiderweb-r3-20261124-1740/inputs/prior/实验协议.json": "22c42d26fe59b8bc2a16c13ed5b5a7a9b737263b3dc02431d2f21a6e432904ce",
+    "/data/spiderweb-r3-20261124-1740/R3/experiments/03-R03/snapshot/src/mech_core.py": "8a2ae2cf12883285ca2c42499210ba406cb5bdbe598964f6c192d4d5859f1795",
+    "/data/spiderweb-r3-20261124-1740/R3/experiments/03-R03/snapshot/src/mech_probe.py": "514a3bd1d7c586ae6c70e296efc588439a6f00ce4330f41be6e72dd3aff3ac23"
+  },
+  "script_sha256": "935c22a287e26921502ee4f7a5f3ac02b057f8753aa989a8c4f05b28de48a023",
+  "receipts": [
+    {
+      "version": "original",
+      "seed": 1701,
+      "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad",
+      "script_sha256": "935c22a287e26921502ee4f7a5f3ac02b057f8753aa989a8c4f05b28de48a023",
+      "frozen_files_sha256": {
+        "/data/spiderweb-r3-20261124-1740/inputs/prior/runs/本地开发-01/w-1701.json": "a3cf4167344c14eb0d0e281e9e43ce379289fe40157e39de9a230074c211fa59",
+        "/data/spiderweb-r3-20261124-1740/R3/experiments/03-R03/results/parameters-1701.json": "e3ea1d8e7c43620bc661880eff3f5b5447da9f5819fc0b13ec42856e8dd64bfd",
+        "/data/spiderweb-r3-20261124-1740/R3/experiments/06-R06/results/parameters-1701.json": "37ee3fcc9da697e3a419631ef41f3348470043c994ab6b270ed03326d0c51355",
+        "/data/spiderweb-r3-20261124-1740/inputs/b13/inputs/server-run/development/serial/1701/best.pt": "703b3edfbf72b2213431c054e38dcad3300dd880f8443707b7119b9859a7728c",
+        "/data/spiderweb-r3-20261124-1740/inputs/b13/inputs/server-run/controls/pooled/1701/best.pt": "e9115ffc1f49266ff49efa12f3a7470fee5047bea32621f0a3d481a066e52bc7"
+      },
+      "counts": {
+        "prediction_rows": 41600,
+        "primary_rows": 2600,
+        "primary_hits": 1687
+      },
+      "predictions_sha256": "c92b27f34381da5dfdde1e5a0c731796f2fd36576f58dfd1273acceee5f84639"
+    },
+    {
+      "version": "original",
+      "seed": 2701,
+      "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad",
+      "script_sha256": "935c22a287e26921502ee4f7a5f3ac02b057f8753aa989a8c4f05b28de48a023",
+      "frozen_files_sha256": {
+        "/data/spiderweb-r3-20261124-1740/inputs/prior/runs/本地开发-01/w-2701.json": "1d3a0e23cdb417f229a7231cec039b8d9b7ec803c08b539a4f38ce4fc6f183a9",
+        "/data/spiderweb-r3-20261124-1740/R3/experiments/03-R03/results/parameters-2701.json": "a1bc12ee4b806c7ac4b6b345c131ffe264b93feef8497015bc4ffe9faf01b50e",
+        "/data/spiderweb-r3-20261124-1740/R3/experiments/06-R06/results/parameters-2701.json": "ad101a3b8533e9cf738da41806913dea738acedcf895b572ad664bee681fb027",
+        "/data/spiderweb-r3-20261124-1740/inputs/b13/inputs/server-run/development/serial/2701/best.pt": "521911f7ec4b7679a4ba733754d3f87b890f0723596f075fd79b1a9b21cfa4bf",
+        "/data/spiderweb-r3-20261124-1740/inputs/b13/inputs/server-run/controls/pooled/2701/best.pt": "146b7c702f326cc9fb050fddc076850eacd7295abf12a6a0a7bbaddaee91bae9"
+      },
+      "counts": {
+        "prediction_rows": 41600,
+        "primary_rows": 2600,
+        "primary_hits": 1735
+      },
+      "predictions_sha256": "236a392111bf4171a6c91229cb8f982c1fac05ac13b5fa7e5af2ab15b35efbf0"
+    },
+    {
+      "version": "original",
+      "seed": 3701,
+      "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad",
+      "script_sha256": "935c22a287e26921502ee4f7a5f3ac02b057f8753aa989a8c4f05b28de48a023",
+      "frozen_files_sha256": {
+        "/data/spiderweb-r3-20261124-1740/inputs/prior/runs/本地开发-01/w-3701.json": "9217b8edda35fad73650fbe8bdf354e26df0a4f0f8530b6549d62773f93f670e",
+        "/data/spiderweb-r3-20261124-1740/R3/experiments/03-R03/results/parameters-3701.json": "6c44e08bfeba8f0bd6db4e061bb7cb5131ba57292bbc877a0b0fa07047bfaeec",
+        "/data/spiderweb-r3-20261124-1740/R3/experiments/06-R06/results/parameters-3701.json": "561a5fe7d04d8511d9a78271721b7318c7d5a3ac3ec8816c59c32276e81ee036",
+        "/data/spiderweb-r3-20261124-1740/inputs/b13/inputs/server-run/development/serial/3701/best.pt": "d5585978da8310b9e5452f0a3cd3a6a6be07559a91943816076d52d42895939b",
+        "/data/spiderweb-r3-20261124-1740/inputs/b13/inputs/server-run/controls/pooled/3701/best.pt": "462f8ef29c84f13036353588308d17ef2858c060839bdf198e64dcb46ba69f2b"
+      },
+      "counts": {
+        "prediction_rows": 41600,
+        "primary_rows": 2600,
+        "primary_hits": 1777
+      },
+      "predictions_sha256": "088f18f9aee4176a8735b6b78f5655f9171720ef473dcd1a1372cd19b9a41338"
+    }
+  ],
+  "predictions_sha256": "a23a33f84b0ff4dd0d09f40c53b80025a5d8359e44295f5d52ffdbf95af133e9",
+  "historic_training_unchanged": true,
+  "new_training_updates": 0,
+  "primary_uniform": "All valid question positions, identical candidate scorer and H2 gate.",
+  "restricted_uniform": "uniform_mentions assigns equal weight to each visible relation-token occurrence.",
+  "r12_h1": "Sum soft question-only relation masses before hard decoding. Exact ties receive half credit.",
+  "r12_h2": "Choose highest mass relation, Unicode lexical tie break, uniform weight on its mentions.",
+  "original_h1": "Softmax of frozen h_j dot w over every valid token; sum by mentioned relation.",
+  "original_h2": "Frozen direction plus gated weighted relation logmeanexp; archived L2 disabled.",
+  "random_controls": "Random normal vector with learned norm. Original shuffles over all valid positions; R12 shuffles only relation-mention positions and redecodes with its frozen hard policy.",
+  "matched_groups": "one/four are paired 64-parameter rankers trained on identical filtered rows and 5,992 eligible slots/epoch for 12 epochs. They are a separate controlled comparison.",
+  "probe_groups": "Same 9,007 training graphs and ridge-1 readout. One vector versus 16 coordinates from each of four readouts gives 64 dimensions for both. Random-label controls share the original training-label permutation.",
+  "labels": "Used only for cohort checks and post-inference hit counting. Supplied feature-only Example.gold is None.",
+  "views": {
+    "original": 600,
+    "paraphrase": 600,
+    "q0": 200,
+    "q1": 200,
+    "q2": 200,
+    "q3": 200,
+    "unseen_template": 600
+  },
+  "python": "3.12.13",
+  "torch": "2.10.0+cu128"
+}

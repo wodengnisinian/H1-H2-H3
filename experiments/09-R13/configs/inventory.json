@@ -1,0 +1,25 @@
+{
+  "path_base": "R3",
+  "registered_configurations": [
+    {
+      "path": "experiments/09-R13/preregistration.json",
+      "sha256": "b7c3adef9dbb176f8e1713da54cd700a51b4ea01d16db651a3f34aae7947baf3",
+      "bytes": 707
+    },
+    {
+      "path": "experiments/09-R13/snapshot/configs/role_protocol.json",
+      "sha256": "a1572d5267397f5567f61c8a6859cd1f4da0734f2394fc2ac2e9fa154e0ac5aa",
+      "bytes": 4000
+    },
+    {
+      "path": "experiments/09-R13/snapshot/configs/R13.json",
+      "sha256": "b7c3adef9dbb176f8e1713da54cd700a51b4ea01d16db651a3f34aae7947baf3",
+      "bytes": 707
+    },
+    {
+      "path": "experiments/09-R13/snapshot/configs/research_protocol.json",
+      "sha256": "2685817419c4c32724f294ebcde7df8f548e5937e7778a069d82ffbd28f0e610",
+      "bytes": 1937
+    }
+  ]
+}

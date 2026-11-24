@@ -1,0 +1,24 @@
+{
+  "id": "R06",
+  "hypothesis": "相同的64维权重训练预算下，四个冻结查询的方向评分优于单个冻结查询。",
+  "criteria": "在新开发原问和四问上，四查询均严格优于单查询。单查询以四个冻结查询的算术平均作为一个查询，只做一次词位置 softmax。",
+  "argv": [
+    "src/mech_run.py",
+    "--round",
+    "groups",
+    "--b13",
+    "{inputs}/b13",
+    "--b16",
+    "{inputs}/b16",
+    "--prior",
+    "{inputs}/prior",
+    "--out",
+    "{out}"
+  ],
+  "sources": [
+    "src/mech_*.py",
+    "configs/mech_protocol.json"
+  ],
+  "receipt": "metrics.json",
+  "after": "按本轮逐题结果和冻结判据评估下轮实验"
+}

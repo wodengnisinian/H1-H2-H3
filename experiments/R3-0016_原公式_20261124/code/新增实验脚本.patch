@@ -1,0 +1,1371 @@
+--- /dev/null
++++ b/r3_shared_cohort.py
+@@ -0,0 +1,218 @@
++"""Build a deterministic, graph-disjoint R16/R17 development cohort."""
++from __future__ import annotations
++
++import argparse
++from collections import Counter
++import gzip
++import hashlib
++import json
++import math
++from pathlib import Path
++import random
++import runpy
++import sys
++
++
++DRAW_SEED = 2026112416
++LOW, HIGH = 60_000_000, 65_000_000
++PER_STRATUM = 200
++PARAPHRASE = (
++    "从 {anchor} 开始 ， 第一步 追踪 {first} 关系 。 最后 一段 追踪 {second} 关系 。 哪条 记录 对应 开头 一段 ？",
++    "最后 一段 追踪 {second} 关系 。 从 {anchor} 开始 ， 第一步 追踪 {first} 关系 。 哪条 记录 对应 开头 一段 ？",
++)
++UNSEEN = (
++    "请 确定 对应 第一步 的 记录 。 以 {anchor} 为 起点 ， 首先 按 {first} 关系 追踪 。 最后 一段 按 {second} 关系 找 一人 。",
++    "请 确定 对应 第一步 的 记录 。 最后 一段 按 {second} 关系 找 一人 。 以 {anchor} 为 起点 ， 首先 按 {first} 关系 追踪 。",
++)
++CLAUSE_A = "从 {anchor} 出发 ， 开头 一段 沿 {first} 关系 找 一人"
++CLAUSE_B = "第二 段 按 {second} 关系 找 一人"
++QUARTET = tuple(" 。 ".join((a, b, "哪条 记录 对应 第一步 ？")) for a, b in
++                ((CLAUSE_A, CLAUSE_B), (CLAUSE_B, CLAUSE_A)))
++DEV_ROUNDS = ("03-R03", "04-R04", "05-R05", "06-R06", "07-R07", "08-R08", "09-R13", "10-R12")
++
++
++def require(test, message):
++    if not test:
++        raise ValueError(message)
++
++
++def hash_file(path):
++    with path.open("rb") as stream:
++        return hashlib.file_digest(stream, "sha256").hexdigest()
++
++
++def hash_value(value):
++    return hashlib.sha256(json.dumps(value, ensure_ascii=False, separators=(",", ":")).encode()).hexdigest()
++
++
++def rows(path):
++    opener = gzip.open if path.suffix == ".gz" else open
++    with opener(path, "rt", encoding="utf8") as stream:
++        yield from map(json.loads, stream)
++
++
++def personnel(nodes):
++    return tuple(sorted({name for head, _, tail in nodes for name in (head, tail)}))
++
++
++def style_key(question, people, relations):
++    # Ignore the particular bound names and even which relation occurs first.
++    return " ".join("{P}" if word in people else "{R}" if word in relations else word for word in question)
++
++
++def history(r3, inputs, generator, dv):
++    people = set(generator["PEOPLE"]) | {"{anchor}"}
++    rels = set(generator["RELATIONS"]) | {"{first}", "{second}"}
++    signatures, blocked, sources = set(), set(), {}
++
++    def add_style(question):
++        signatures.add(style_key(question, people, rels))
++
++    b13 = inputs / "b13"
++    b16data = inputs / "b16" / dv.DATA_RELATIVE
++    declared = [
++        *generator["QUESTION_FAMILIES"].values(), dv.PARAPHRASE, dv.QUARTET, dv.FRESH_TEMPLATES,
++        runpy.run_path(str(b13 / "code/generate_cohort.py"))["TEMPLATES"],
++        runpy.run_path(str(r3 / "src/mech_data.py"))["NEW_TEMPLATES"],
++        *json.loads((r3 / "configs/formal_templates.json").read_bytes()).values(),
++    ]
++    for family in declared:
++        for template in family:
++            add_style(template.split())
++    graph_paths = [b16data / "train.jsonl", b16data / "dev.jsonl", b13 / "cohort/features.jsonl"]
++    graph_paths += [r3 / "experiments" / name / "results" /
++                    ("training/development-inputs.jsonl.gz" if name == "09-R13" else "development-inputs.jsonl.gz")
++                    for name in DEV_ROUNDS]
++    for path in graph_paths:
++        count, original_sets = 0, set()
++        for row in rows(path):
++            count += 1
++            add_style(row["question"])
++            if "nodes" in row:
++                original_sets.add(personnel(row["nodes"]))
++        require(original_sets and count, f"Archive graph source is empty: {path}")
++        blocked.update(original_sets)
++        sources[str(path)] = {"sha256": hash_file(path), "rows": count, "personnel_sets": len(original_sets)}
++    path = b16data / "train-clause-views.jsonl"
++    count = 0
++    for row in rows(path):
++        count += 1
++        for orientation in ("original", "swapped"):
++            for pair in row[orientation] or ():
++                for item in pair:
++                    add_style(item["question"])
++    sources[str(path)] = {"sha256": hash_file(path), "rows": count}
++    # R11 reuses R07 graphs. Include its changed state language without using labels.
++    path = r3 / "experiments/13-R11/results/inputs.jsonl"
++    for row in rows(path):
++        add_style(row["question"])
++        require(personnel(row["nodes"]) in blocked, "Missing historical R11 graph")
++    sources[str(path)] = {"sha256": hash_file(path)}
++    new_keys = [style_key(t.split(), people, rels) for t in PARAPHRASE + UNSEEN + QUARTET]
++    require(len(set(new_keys)) == len(new_keys) and signatures.isdisjoint(new_keys),
++            "A proposed held-out wording is already represented")
++    return blocked, sources, len(signatures)
++
++
++def build(r3, inputs, out):
++    sys.path.insert(0, str(inputs / "prior/code"))
++    import data_views as dv
++    import model
++
++    b13 = inputs / "b13"
++    gen_path = b13 / "inputs/source/generate.py"
++    dv.checked(gen_path)
++    generator = runpy.run_path(str(gen_path))
++    require(HIGH < 70_000_000 < generator["PERSON_SET_SPACE"] and
++            math.gcd(generator["RANK_MULTIPLIER"], generator["PERSON_SET_SPACE"]) == 1,
++            "Generator does not provide the expected disjoint reserved personnel indices")
++    blocked, history_sources, template_count = history(r3, inputs, generator, dv)
++    bundle = model.load_bundle(b13, 1701)
++    rng = random.Random(DRAW_SEED)
++    originals = dv.FRESH_TEMPLATES
++    raw, metadata, selected = [], {}, set()
++    rejected = 0
++    for k, kind in enumerate(generator["STRATA"]):
++        positions = [(i + k * PER_STRATUM) % 12 for i in range(PER_STRATUM)]
++        styles = [i % len(originals) for i in range(PER_STRATUM)]
++        challenges = [i % len(UNSEEN) for i in range(PER_STRATUM)]
++        for allocation in (positions, styles, challenges):
++            rng.shuffle(allocation)
++        for pos, style, challenge in zip(positions, styles, challenges, strict=True):
++            while True:
++                index = rng.randrange(LOW, HIGH)
++                group = tuple(sorted(generator["ranked_people"](index)))
++                if group not in selected and group not in blocked:
++                    break
++                rejected += 1
++            selected.add(group)
++            doc = generator["document"](index, kind, pos, originals[style], rng)
++            require(doc["gold"] == pos and personnel(doc["nodes"]) == group, "Source graph/index mismatch")
++            raw.append(doc)
++            metadata[doc["doc_id"]] = (index, style, challenge)
++    require(len(metadata) == len(selected) == 600 and selected.isdisjoint(blocked), "Graph identity collision")
++    rng.shuffle(raw)
++    base = dv.load_view(raw, bundle.trainer, bundle.evaluator)
++    views = dv.make_eval_views(base, originals, bundle.evaluator, paraphrases=PARAPHRASE, quartet=QUARTET)
++    unseen = []
++    for doc in base[0]:
++        roles = dv.roles_for(doc, [s.split() for s in originals])
++        unseen.append(dv.make_question(doc, roles, UNSEEN[metadata[doc.doc_id][2]], bundle.evaluator))
++    views["unseen_template"] = (unseen, base[1])
++    styles_by_view = {"original": originals, "paraphrase": PARAPHRASE, "unseen_template": UNSEEN,
++                      **{f"q{i}": (QUARTET[i // 2],) for i in range(4)}}
++    records = []
++    for view in ("original", "paraphrase", "q0", "q1", "q2", "q3", "unseen_template"):
++        for doc, gold in zip(*views[view], strict=True):
++            family = styles_by_view[view]
++            anchor, first, second = dv.roles_for(doc, [x.split() for x in family])
++            paths = dv.paths(doc.nodes, anchor, first, second)
++            require(len(paths) == 1 and paths[0][0] == gold and doc.nodes[gold][1] == first, "Label/path mismatch")
++            require(set(doc.question) <= set(bundle.vocab) and len(doc.question) <= bundle.trainer.MAX_SEQUENCE_LENGTH,
++                    "Question would be truncated or contains unknown tokens")
++            mentioned = [word for word in doc.question if word in generator["RELATIONS"]]
++            require(len(mentioned) == len(set(mentioned)) == 2, "Expected exactly two distinct relation mentions")
++            style = next(i for i, t in enumerate(family)
++                         if tuple(t.format(anchor=anchor, first=first, second=second).split()) == doc.question)
++            records.append(dict(graph_id=doc.doc_id, graph_index=metadata[doc.doc_id][0], stratum=doc.stratum,
++                                view=view, question=doc.question, nodes=doc.nodes, candidates=doc.candidates,
++                                gold=gold, first_relation=first, first_mentioned=mentioned[0], anchor=anchor,
++                                second_relation=second, template_id=f"{view}-{style}"))
++    require(len(records) == 2600 and set(d.stratum for d in views["q0"][0]) == {"relation_order"}
++            and len(views["q0"][0]) == 200, "Expected 600 graphs with 200 reversible quartets")
++    require(Counter(base[1]) == dict.fromkeys(range(12), 50), "Original gold positions unbalanced")
++    for view in ("original", "paraphrase", "unseen_template"):
++        for kind in generator["STRATA"]:
++            group = [r for r in records if r["view"] == view and r["stratum"] == kind]
++            require(len(group) == 200 and sum(r["first_relation"] == r["first_mentioned"] for r in group) == 100,
++                    f"Unbalanced first mention for {kind}, {view}")
++    out.mkdir(parents=True, exist_ok=False)
++    dest = out / "cohort.jsonl.gz"
++    with dest.open("xb") as raw_file, gzip.GzipFile(filename="", fileobj=raw_file, mode="wb", mtime=0) as stream:
++        for record in records:
++            stream.write((json.dumps(record, ensure_ascii=False, separators=(",", ":")) + "\n").encode())
++    manifest = dict(scope="New development cohort for R16 and R17", generator_sha256=hash_file(gen_path),
++                    graph_rng_seed=DRAW_SEED, index_range_half_open=[LOW, HIGH], formal_index_lower=70_000_000,
++                    model_seeds=[1701, 2701, 3701], archived_personnel_sets=len(blocked),
++                    archived_template_signatures=template_count, historical_sources=history_sources,
++                    archive_personnel_overlap=0, rejected_draws=rejected, graphs=600, questions=len(records),
++                    quartet_graphs=200, graph_id_sha256=hash_value(sorted(metadata)),
++                    personnel_set_sha256=hash_value(sorted(selected)), cohort_sha256=hash_file(dest),
++                    per_stratum=PER_STRATUM, templates=dict(original=originals, paraphrase=PARAPHRASE,
++                                                            unseen_template=UNSEEN, quartet=QUARTET),
++                    view_counts=dict(Counter(r["view"] for r in records)),
++                    candidate_hits_per_view=dict(Counter(r["view"] for r in records if r["gold"] in r["candidates"])),
++                    question_oov=0, instruction_max_length=bundle.trainer.MAX_SEQUENCE_LENGTH,
++                    graph_duplicate_check="six-person sets; entities and relation vocabulary intentionally shared",
++                    primary_views=["original", "paraphrase", "q0", "q1", "q2", "q3"],
++                    quartet_order=["AB/forward", "BA/forward", "AB/reordered", "BA/reordered"])
++    (out / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf8")
++    print(json.dumps({"graphs": 600, "rows": len(records), "cohort_sha256": manifest["cohort_sha256"]}))
++
++
++if __name__ == "__main__":
++    parser = argparse.ArgumentParser(description=__doc__)
++    for name in ("r3", "inputs", "out"):
++        parser.add_argument("--" + name, required=True, type=Path)
++    args = parser.parse_args()
++    build(args.r3.resolve(), args.inputs.resolve(), args.out.resolve())
+--- /dev/null
++++ b/r3_shared_errors.py
+@@ -0,0 +1,167 @@
++"""Describe gate-conditioned H2 decisions and concrete errors in an R16 or R17 round."""
++import argparse
++from collections import Counter, defaultdict
++import gzip
++import hashlib
++import json
++from pathlib import Path
++from statistics import mean
++
++
++SEEDS = (1701, 2701, 3701)
++STRATA = ("competing_chain", "relation_order", "role_reversal")
++VIEWS = ("original", "paraphrase", "q0", "q1", "q2", "q3")
++MODELS = ("actual", "forced_off", "uniform")
++
++
++def require(test, message):
++    if not test:
++        raise ValueError(message)
++
++
++def rows(path):
++    with gzip.open(path, "rt", encoding="utf8") as stream:
++        yield from map(json.loads, stream)
++
++
++def digest(path):
++    with path.open("rb") as stream:
++        return hashlib.file_digest(stream, "sha256").hexdigest()
++
++
++def panel(group):
++    graph_seeds = defaultdict(lambda: defaultdict(list))
++    hits = Counter()
++    strata = {}
++    for row in group:
++        g, seed, hit = row["graph_id"], row["seed"], row["hit"]
++        graph_seeds[g][seed].append(hit)
++        strata[g] = row["stratum"]
++        hits.update({arm: int(hit[arm]) for arm in MODELS})
++    changes = {}
++    for control in MODELS[1:]:
++        counts = Counter()
++        for r in group:
++            if r["choice"]["actual"] != r["choice"][control]:
++                key = "rescued" if r["hit"]["actual"] else "lost" if r["hit"][control] else "different_errors"
++            else:
++                key = "unchanged_correct" if r["hit"]["actual"] else "unchanged_wrong"
++            counts[key] += 1
++        changes["actual_vs_" + control] = {k: counts[k] for k in
++            ("rescued", "lost", "different_errors", "unchanged_correct", "unchanged_wrong")}
++    group_graphs = Counter(strata.values())
++    by_stratum = {}
++    for kind in STRATA:
++        ids = [g for g in graph_seeds if strata[g] == kind]
++        if ids:
++            by_stratum[kind] = {
++                arm: mean(mean(mean(h[arm] for h in vv) for vv in graph_seeds[g].values()) for g in ids)
++                for arm in MODELS}
++    average = None
++    if len(by_stratum) == len(STRATA):
++        average = {arm: mean(r[arm] for r in by_stratum.values()) for arm in MODELS}
++    return dict(decisions=len(group), graphs=len(graph_seeds), graphs_per_stratum=dict(group_graphs),
++                hits={arm: hits[arm] for arm in MODELS}, raw_accuracy={
++                    arm: hits[arm]/len(group) if group else None for arm in MODELS},
++                first_relation_supervision=dict(fully_correct=sum(r["h1_hit"] == 1 for r in group),
++                    wrong=sum(r["h1_hit"] == 0 for r in group), ties=sum(r["h1_hit"] == .5 for r in group)),
++                gold_in_ordered_shortlist=sum(r["covered"] for r in group), matched_choice_changes=changes,
++                graph_mean_by_stratum=by_stratum, equal_three_stratum_graph_mean=average)
++
++
++def analyze(root):
++    cohort_path = root / "data/cohort/cohort.jsonl.gz"
++    pred_path = root / "results/prediction/predictions.jsonl.gz"
++    primary = json.loads((root / "results/stats/metrics.json").read_bytes())["primary"]["variant"]
++    require(primary in {"learned", "sharp_role"}, "Unknown primary variant")
++    cohort = {(r["graph_id"], r["view"]): r for r in rows(cohort_path)}
++    require(len(cohort) == 2600, "Unexpected cohort")
++    predictions = defaultdict(dict)
++    for r in rows(pred_path):
++        arm = r["variant"]
++        if arm in (primary, "direction", "uniform"):
++            g, v, s = r["graph_id"], r["view"], r["seed"]
++            require(arm not in predictions[g, v, s], "Duplicate prediction arm")
++            predictions[g, v, s][arm] = r
++    require(set(predictions) == {(g, v, s) for g, v in cohort for s in SEEDS}, "Missing model decisions")
++    decisions = []
++    closed_max = 0.
++    for (g, v, s), arms in predictions.items():
++        t = cohort[g, v]
++        actual, direction, uniform = (arms[n] for n in (primary, "direction", "uniform"))
++        gold, gate = t["gold"], actual["gate"]
++        for obs in (actual, direction, uniform):
++            require(obs["gold"] == gold and obs["gate"] == gate and obs["candidates"] == t["candidates"]
++                    and obs["predicted"] in t["candidates"], "Unpaired predictions")
++        require(actual["uniform_predicted"] == uniform["predicted"], "Uniform arm mismatch")
++        if not gate:
++            diff = max(abs(x-y) for x, y in zip(actual["logits"], direction["logits"], strict=True))
++            closed_max = max(diff, closed_max)
++            require(diff == 0 and actual["predicted"] == direction["predicted"], "Closed gate differs from direction")
++        choice = dict(zip(MODELS, (actual["predicted"], direction["predicted"], uniform["predicted"])))
++        decisions.append(dict(graph_id=g, view=v, seed=s, stratum=t["stratum"], gate=gate,
++                              covered=gold in t["candidates"], h1_hit=actual["h1_hit"], choice=choice,
++                              hit={arm: pred == gold for arm, pred in choice.items()}))
++    selectors = dict(primary=VIEWS, original=("original",), unseen_template=("unseen_template",))
++    panels = {}
++    for label, allowed in selectors.items():
++        subset = [r for r in decisions if r["view"] in allowed]
++        panels[label] = {}
++        for state, flag in (("open", True), ("closed", False)):
++            group = [r for r in subset if r["gate"] is flag]
++            panels[label][state] = {"all_seeds": panel(group),
++                                    "per_seed": {str(s): panel([r for r in group if r["seed"] == s]) for s in SEEDS}}
++    examples = {}
++    natural = [r for r in decisions if r["view"] in VIEWS]
++    natural.sort(key=lambda r: (VIEWS.index(r["view"]), r["graph_id"], r["seed"]))
++    definitions = {
++        "h1_wrong": lambda r: r["h1_hit"] == 0,
++        "h1_exact_tie": lambda r: r["h1_hit"] == .5,
++        "h2_wrong": lambda r: not r["hit"]["actual"],
++        "h2_changed_from_direction": lambda r: r["choice"]["actual"] != r["choice"]["forced_off"],
++        "h2_recovered_from_direction": lambda r: r["hit"]["actual"] and not r["hit"]["forced_off"],
++        "h2_lost_from_direction": lambda r: not r["hit"]["actual"] and r["hit"]["forced_off"],
++        "h2_changed_from_uniform": lambda r: r["choice"]["actual"] != r["choice"]["uniform"],
++        "h2_wrong_closed_gate": lambda r: not r["gate"] and not r["hit"]["actual"],
++    }
++    for category, predicate in definitions.items():
++        eligible = [r for r in natural if predicate(r)]
++        ex = None
++        if eligible:
++            row = eligible[0]
++            g, v, seed = row["graph_id"], row["view"], row["seed"]
++            t, pred = cohort[g, v], predictions[g, v, seed]
++            p = pred[primary]
++            ex = dict(row, question_tokens=t["question"], question_text="".join(t["question"]),
++                      gold_fact=t["gold"], gold_first_relation=t["first_relation"], first_mentioned=t["first_mentioned"],
++                      selected_relation=p["selected_relation"], relation_names=p["relation_names"],
++                      relation_masses=p["relation_masses"], indexed_candidates=[
++                          {"fact_index": j, "triple": t["nodes"][j]} for j in t["candidates"]],
++                      gold_triple=t["nodes"][t["gold"]], logits={
++                          arm: pred[n]["logits"] for arm, n in zip(MODELS, (primary, "direction", "uniform"))})
++        examples[category] = {"eligible_decisions": len(eligible), "example": ex}
++    return dict(primary_variant=primary, cohort_sha256=digest(cohort_path), predictions_sha256=digest(pred_path),
++                scope="Post hoc descriptive inspection of the fresh development predictions",
++                units={"H1": "First relation in the ordered gold two-step path; exact mass ties receive half credit.",
++                       "H2": "Exact agreement with the indexed gold first fact; uncovered examples count as misses.",
++                       "actual": "Primary model's archived scores, using its natural gate.",
++                       "forced_off": "Direction-base scores on the identical feature rows and ordered shortlist; setting G=0 in H2 removes its token correction exactly.",
++                       "uniform": "Same graph, ordered shortlist, natural gate and frozen H2; uniform real-token weights.",
++                       "counts": "Raw graph-view-seed decision totals. A reversible graph supplies six primary views, other graphs two.",
++                       "graph_means": "Within each gate subgroup, average its available views within seed, then available seeds within graph, then graphs within stratum. Equal-three-stratum value requires a nonempty subgroup in all three strata.",
++                       "comparisons": "Changes compare actual to each control on the same decision. Rescued = control wrong, actual correct; lost = control correct, actual wrong.",
++                       "examples": "First qualifying primary decision by view order original/paraphrase/q0/q1/q2/q3, graph ID, seed. Missing examples have zero qualifying decisions."},
++                closed_gate_max_abs_logit_difference=closed_max, panels=panels, examples=examples)
++
++
++if __name__ == "__main__":
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("round_dir", type=Path)
++    parser.add_argument("--out", type=Path)
++    args = parser.parse_args()
++    output = json.dumps(analyze(args.round_dir), ensure_ascii=False, indent=2, allow_nan=False) + "\n"
++    if args.out:
++        with args.out.open("x", encoding="utf8") as stream:
++            stream.write(output)
++    else:
++        print(output, end="")
+--- /dev/null
++++ b/r3_shared_stats.py
+@@ -0,0 +1,282 @@
++"""Score graph-paired R16/R17 predictions on the frozen shared development cohort."""
++import argparse
++from collections import Counter, defaultdict
++import csv
++import gzip
++import hashlib
++import json
++from pathlib import Path
++from typing import NamedTuple
++
++import numpy as np
++
++
++SEEDS = (1701, 2701, 3701)
++STRATA = ("competing_chain", "relation_order", "role_reversal")
++BASIC = ("original", "paraphrase")
++QUARTET = ("q0", "q1", "q2", "q3")
++ANCILLARY = "unseen_template"
++DRAWS = 10_000
++BOOT_SEED = 2026112417
++RANK = 500
++NAN = float("nan")
++
++
++def require(test, message):
++    if not test:
++        raise ValueError(message)
++
++
++def rows(path):
++    opener = gzip.open if path.suffix == ".gz" else open
++    with opener(path, "rt", encoding="utf8") as stream:
++        yield from map(json.loads, stream)
++
++
++def digest(path):
++    with path.open("rb") as stream:
++        return hashlib.file_digest(stream, "sha256").hexdigest()
++
++
++class Truth(NamedTuple):
++    gold: int
++    first: str
++    mentioned: str
++    candidates: tuple
++    template: str
++
++
++class Decision(NamedTuple):
++    h1: float | None
++    relation: str | None
++    prediction: int | None
++    uniform: int
++
++
++def load_inputs(cohort, predictions):
++    truth, strata = {}, {}
++    for r in rows(cohort):
++        g, view = r["graph_id"], r["view"]
++        require((g, view) not in truth, f"Duplicate cohort row {(g, view)}")
++        require(strata.setdefault(g, r["stratum"]) == r["stratum"], f"Stratum changed {g}")
++        require(r["first_relation"] == r["nodes"][r["gold"]][1], f"Incorrect first-relation label {g}")
++        truth[g, view] = Truth(r["gold"], r["first_relation"], r["first_mentioned"],
++                               tuple(r["candidates"]), r["template_id"])
++    require(Counter(strata.values()) == {s: 200 for s in STRATA}, "Expected 200 graphs in each stratum")
++    required = {(g, v) for g, s in strata.items() for v in
++                BASIC + (ANCILLARY,) + (QUARTET if s == "relation_order" else ())}
++    require(set(truth) == required, "Cohort view mismatch")
++    data = defaultdict(dict)
++    for r in rows(predictions):
++        g, v, arm, seed = r["graph_id"], r["view"], r["variant"], r["seed"]
++        t = truth[g, v]
++        p, u, h, rel = r["predicted"], r["uniform_predicted"], r["h1_hit"], r["selected_relation"]
++        require(seed in SEEDS and r.get("gold", t.gold) == t.gold, f"Gold/seed mismatch {(g, v, arm)}")
++        require((p is None or p in t.candidates) and u in t.candidates, f"Off-shortlist prediction {(g, v, arm)}")
++        require(h in (None, 0, 0.5, 1), f"Invalid H1 score {h}")
++        if h is not None:
++            require((h == .5 and rel is None) or (rel is not None and h == float(rel == t.first)),
++                    f"Relation/tie score mismatch {(g, v, arm)}")
++        key = (g, v, seed)
++        require(key not in data[arm], f"Duplicate prediction {arm}, {key}")
++        data[arm][key] = Decision(h, rel, p, u)
++    for arm, mapping in data.items():
++        require(len(mapping) == len(truth) * len(SEEDS), f"Incomplete arm {arm}")
++    require({"first", "pool", "uniform"} <= data.keys(), "Missing prediction controls")
++    return truth, strata, data
++
++
++def avg(values):
++    return sum(values) / len(values)
++
++
++def view_metrics(arm, selected, seed, g, truth, data):
++    ts = [truth[g, v] for v in selected]
++    ds = [data[arm][g, v, seed] for v in selected]
++    direct = [data["first"][g, v, seed].prediction for v in selected]
++    pool = [data["pool"][g, v, seed].prediction for v in selected]
++    baseline = [data["uniform"][g, v, seed].prediction for v in selected]
++    require(all(d.uniform == u and f == t.candidates[0] and pp is not None
++                for d, u, f, pp, t in zip(ds, baseline, direct, pool, ts, strict=True)), "Control mismatch")
++    h1_na = [d.h1 is None for d in ds]
++    h2_na = [d.prediction is None for d in ds]
++    require(len(set(h1_na)) == len(set(h2_na)) == 1, "Endpoint availability varies across selected views")
++    h1 = NAN if h1_na[0] else avg([d.h1 for d in ds])
++    h2 = NAN if h2_na[0] else avg([d.prediction == t.gold for d, t in zip(ds, ts)])
++    lex = avg([t.mentioned == t.first for t in ts])
++    uniform = avg([u == t.gold for u, t in zip(baseline, ts)])
++    first = avg([f == t.gold for f, t in zip(direct, ts)])
++    pooled = avg([p == t.gold for p, t in zip(pool, ts)])
++    return dict(h1_accuracy=h1, first_mentioned_accuracy=lex, h1_delta=h1-lex, h2_accuracy=h2,
++                uniform_accuracy=uniform, h2_delta=h2-uniform, direct_accuracy=first, pool_accuracy=pooled,
++                h2_minus_direct=h2-first, h2_minus_pool=h2-pooled, coverage=avg([t.gold in t.candidates for t in ts]))
++
++
++def finite(value):
++    return float(value) if np.isfinite(value) else None
++
++
++def mean_or_na(values):
++    valid = np.isfinite(values)
++    return float(values[valid].mean()) if valid.any() else None
++
++
++def make_draws(groups):
++    rng = np.random.default_rng(BOOT_SEED)
++    weights = []
++    for group in groups:
++        n = len(group)
++        indices = rng.integers(n, size=(DRAWS, n))
++        counts = np.zeros((DRAWS, n), dtype=np.uint16)
++        np.add.at(counts, (np.arange(DRAWS)[:, None], indices), 1)
++        weights.append(counts.astype(np.float64) / (len(groups) * n))
++    return weights
++
++
++def paired_bounds(matrix, groups, weights):
++    # One fixed, shared resampling table for all models, endpoints, seeds and views.
++    samples = sum(w @ matrix[group, :] for group, w in zip(groups, weights))
++    indexes = (249, RANK-1, 9749)
++    ranked = np.partition(samples, indexes, axis=0)
++    return ranked[list(indexes)]
++
++
++def pack_estimates(names, values):
++    return {key: finite(val) for key, val in zip(names, values, strict=True)}
++
++
++def thresholds(summary):
++    summary["h1_pass"] = bool(summary["h1_accuracy"] >= .80 - 1e-12 and summary["h1_lcb95"] > 1e-12)
++    summary["h2_pass"] = bool(summary["h2_delta"] >= .02 - 1e-12 and summary["h2_lcb95"] > 1e-12)
++
++
++def summarize(truth, strata, data, primary, graph_file):
++    graphs = sorted(strata)
++    groups = [np.array([i for i, g in enumerate(graphs) if strata[g] == s]) for s in STRATA]
++    weights = make_draws(groups)
++    summaries, primary_by_seed, primary_by_stratum, primary_sensitivity = {}, {}, {}, {}
++    mode_list = ("primary", "original", ANCILLARY, "paraphrase")
++    h1_diagnostics = {}
++    values = {}
++    for arm in sorted(data):
++        arrays = {}
++        for mode in mode_list:
++            graph_seed_rows = []
++            for g in graphs:
++                selected = BASIC + (QUARTET if strata[g] == "relation_order" else ()) if mode == "primary" else (mode,)
++                graph_seed_rows.append([view_metrics(arm, selected, s, g, truth, data) for s in SEEDS])
++            names = list(graph_seed_rows[0][0])
++            arrays[mode] = np.array([[list(r.values()) for r in rr] for rr in graph_seed_rows], dtype=float)
++        values[arm] = arrays["primary"].mean(axis=1)
++        summaries[arm] = {}
++        for mode, a in arrays.items():
++            all_seeds = a.mean(axis=1)
++            summary = pack_estimates(names, all_seeds.mean(axis=0))
++            summaries[arm][mode] = summary
++            if arm != primary:
++                continue
++            blocks = [all_seeds, *(a[:, si, :] for si in range(len(SEEDS)))]
++            stats = paired_bounds(np.concatenate(blocks, axis=1), groups, weights)
++            for bi, (label, block) in enumerate(zip(("pooled", *map(str, SEEDS)), blocks, strict=True)):
++                estimates = pack_estimates(names, block.mean(axis=0))
++                for end, key in (("h1", "h1_delta"), ("h2", "h2_delta"),
++                                 ("h2_minus_direct", "h2_minus_direct"), ("h2_minus_pool", "h2_minus_pool")):
++                    j = bi * len(names) + names.index(key)
++                    lo, lcb, hi = stats[:, j]
++                    estimates[end + "_lcb95"] = finite(lcb)
++                    estimates[end + "_ci95"] = [finite(lo), finite(hi)]
++                thresholds(estimates)
++                if label == "pooled":
++                    primary_sensitivity[mode] = estimates
++                elif mode == "primary":
++                    primary_by_seed[label] = estimates
++            if mode == "primary":
++                for s, group in zip(STRATA, groups):
++                    primary_by_stratum[s] = pack_estimates(names, all_seeds[group].mean(axis=0))
++        # Orientation and invariance metrics have graph-level denominators.
++        beh = []
++        for i, g in enumerate(graphs):
++            reversible = strata[g] == "relation_order"
++            for si, seed in enumerate(SEEDS):
++                def chosen(v):
++                    return data[arm][g, v, seed]
++                original, para = chosen("original"), chosen("paraphrase")
++                base = dict(paraphrase_fact_stability=NAN if original.prediction is None else
++                            float(original.prediction == para.prediction),
++                            paraphrase_both_correct=NAN if original.prediction is None else
++                            float(original.prediction == para.prediction == truth[g, "original"].gold),
++                            paraphrase_relation_stability=NAN if original.h1 is None else
++                            float(original.relation is not None and original.relation == para.relation),
++                            quartet_all_correct=NAN, clause_order_prediction_stability=NAN,
++                            semantic_reversal_flip=NAN, semantic_reversal_both_correct=NAN)
++                if reversible and original.prediction is not None:
++                    preds = [chosen(v).prediction for v in QUARTET]
++                    hits = [p == truth[g, v].gold for p, v in zip(preds, QUARTET)]
++                    base.update(quartet_all_correct=float(all(hits)),
++                                clause_order_prediction_stability=avg([preds[0] == preds[2], preds[1] == preds[3]]),
++                                semantic_reversal_flip=avg([preds[0] != preds[1], preds[2] != preds[3]]),
++                                semantic_reversal_both_correct=avg([hits[0] and hits[1], hits[2] and hits[3]]))
++                beh.append(list(base.values()))
++                if arm == primary:
++                    graph_file.writerow([arm, g, strata[g], seed, *arrays["primary"][i, si],
++                                         *arrays["original"][i, si], *arrays[ANCILLARY][i, si],
++                                         *(finite(x) for x in base.values())])
++        summaries[arm]["behavior"] = {k: mean_or_na(col) for k, col in zip(base, np.array(beh).T)}
++    for measure, i in (("h1", names.index("h1_accuracy")), ("h2", names.index("h2_accuracy"))):
++        pairs = [(primary, name) for name in ("first_mentioned", "uniform", "shuffled", "random", "one", "four", "soft_role")]
++        pairs += [("four", "one"), ("probe_four", "probe_one"), ("probe_one", "probe_one_shuffled_labels"),
++                  ("probe_four", "probe_four_shuffled_labels")]
++        matched = [(x, y) for x, y in pairs if x in values and y in values and
++                   np.isfinite(values[x][:, i]).all() and np.isfinite(values[y][:, i]).all()]
++        if matched:
++            differences = np.column_stack([values[x][:, i] - values[y][:, i] for x, y in matched])
++            cis = paired_bounds(differences, groups, weights)
++            for j, (x, y) in enumerate(matched):
++                h1_diagnostics[f"{measure}.{x}_minus_{y}"] = dict(delta=float(differences[:, j].mean()),
++                    lcb95=float(cis[1, j]), ci95=[float(cis[0, j]), float(cis[2, j])])
++    return dict(primary={"variant": primary, **primary_sensitivity["primary"]},
++                primary_per_seed=primary_by_seed, primary_per_stratum=primary_by_stratum,
++                primary_sensitivity=primary_sensitivity, variants=summaries, paired_controls=h1_diagnostics)
++
++
++def main(args):
++    truth, strata, data = load_inputs(args.cohort, args.predictions)
++    candidates = set(data) & {"learned", "sharp_role"}
++    if args.primary:
++        require(args.primary in candidates, "Requested primary arm missing")
++        primary = args.primary
++    else:
++        require(len(candidates) == 1, "Specify --primary for a mixed prediction file")
++        primary = candidates.pop()
++    require(all(d.h1 is not None and d.prediction is not None for d in data[primary].values()), "Incomplete primary")
++    args.out.mkdir(parents=True, exist_ok=False)
++    with (args.out / "graph_metrics.csv").open("x", encoding="utf8", newline="") as f:
++        csv_out = csv.writer(f)
++        example_graph = next(iter(strata))
++        columns = list(view_metrics(primary, ("original",), SEEDS[0], example_graph, truth, data))
++        csv_out.writerow(["variant", "graph_id", "stratum", "seed",
++                          *(f"{v}.{c}" for v in ("primary", "original", ANCILLARY) for c in columns),
++                          "paraphrase_fact_stability", "paraphrase_both_correct", "paraphrase_relation_stability",
++                          "quartet_all_correct", "clause_order_prediction_stability", "semantic_reversal_flip",
++                          "semantic_reversal_both_correct"])
++        result = summarize(truth, strata, data, primary, csv_out)
++    result.update(scope="Development, same cohort across model versions", cohort_sha256=digest(args.cohort),
++                  predictions_sha256=digest(args.predictions), total_graphs=len(strata), total_views=len(truth),
++                  seed_ids=SEEDS, strata=dict(Counter(strata.values())), primary_views=BASIC + QUARTET,
++                  ancillary_view=ANCILLARY, bootstrap=dict(generator="NumPy PCG64", seed=BOOT_SEED, draws=DRAWS,
++                    unit="graph, stratified; all associated views and three model seeds kept together",
++                    one_sided_95_order_statistic=RANK, two_sided_order_statistics=[250, 9750]),
++                  thresholds=dict(h1_accuracy_min=.80, h1_gain_lcb_strict=0, h2_gain_min=.02, h2_gain_lcb_strict=0),
++                  ancillary_denominators=dict(ordinary_graphs=600, reversible_graphs=200))
++    with (args.out / "metrics.json").open("x", encoding="utf8") as f:
++        json.dump(result, f, ensure_ascii=False, allow_nan=False, indent=2)
++        f.write("\n")
++    print(json.dumps(result["primary"], allow_nan=False))
++
++
++if __name__ == "__main__":
++    argp = argparse.ArgumentParser(description=__doc__)
++    for name in ("cohort", "predictions", "out"):
++        argp.add_argument("--" + name, required=True, type=Path)
++    argp.add_argument("--primary", choices=("learned", "sharp_role"))
++    main(argp.parse_args())
+--- /dev/null
++++ b/r3_shared_steps.py
+@@ -0,0 +1,45 @@
++"""Run preregistered development stages with bounded resources on the assigned CPU."""
++import argparse,hashlib,json,os,platform,resource,shutil,subprocess,sys,time,traceback
++from pathlib import Path
++from datetime import datetime,timezone
++def now():return datetime.now(timezone.utc).isoformat()
++def sha(path):
++    with path.open("rb") as f:return hashlib.file_digest(f,"sha256").hexdigest()
++def save(path,datum):
++    tmp=path.with_suffix(".tmp");tmp.write_text(json.dumps(datum,ensure_ascii=False,indent=2)+"\n",encoding="utf8");os.replace(tmp,path)
++def main():
++    here=Path.cwd();cfg=json.loads((here/"configs/launch.json").read_bytes())
++    ref=Path(cfg["reference"]);inputs=ref.parent/"inputs"; py=sys.executable
++    r16=Path(cfg["first_run"])
++    setup=json.loads((here/"configs/frozen-dependencies.json").read_bytes())
++    for name,h in setup["files"].items():
++        p=ref.parent/name
++        if sha(p)!=h:raise RuntimeError("Frozen study dependency mismatch "+name)
++    import torch,numpy
++    save(here/"configs/environment.json",dict(python=sys.version,torch=torch.__version__,numpy=numpy.__version__,host=platform.node(),platform=platform.platform(),device="cpu",cpu_quota=Path('/sys/fs/cgroup/cpu.max').read_text().strip(),environment={k:os.environ.get(k) for k in ("OMP_NUM_THREADS","OPENBLAS_NUM_THREADS","MKL_NUM_THREADS","PYTHONDONTWRITEBYTECODE")}))
++    print("Verified frozen dependency files",len(setup["files"]),flush=True)
++    output=here/"data/cohort";score=here/"results/prediction";stats=here/"results/stats"
++    if cfg["id"]!="R16":
++        for n,h in cfg["cohort_anchors"].items():
++            if sha(r16/"data/cohort"/n)!=h:raise ValueError("Development cohort hash mismatch")
++        shutil.copytree(r16/"data/cohort",output)
++    argv=dict(py=py,code=str(here/"code"),r3=str(ref),inputs=str(inputs),cohortdir=str(output),cohort=str(output/"cohort.jsonl.gz"),pred=str(score/"predictions.jsonl.gz"),scoredir=str(score),stats=str(stats))
++    for i,parts in enumerate(cfg["steps"]):
++        command=[v.format(**argv) for v in parts]
++        start=time.monotonic()
++        with (here/"logs/stages.jsonl").open("a",encoding="utf8") as f:
++            f.write(json.dumps(dict(utc=now(),event="start",stage=i,argv=command),ensure_ascii=False)+"\n")
++        print("Stage",i+1,Path(command[3] if command[2]=="-u" else command[2]).name,flush=True)
++        proc=subprocess.run(command,check=False)
++        with (here/"logs/stages.jsonl").open("a",encoding="utf8") as f:
++            f.write(json.dumps(dict(utc=now(),event="end",stage=i,returncode=proc.returncode,seconds=time.monotonic()-start))+"\n")
++        if proc.returncode:return proc.returncode
++    return 0
++if __name__=="__main__":
++    t=time.monotonic();rc=1
++    try:rc=main()
++    except Exception:traceback.print_exc()
++    finally:
++        res=resource.getrusage(resource.RUSAGE_CHILDREN); own=resource.getrusage(resource.RUSAGE_SELF)
++        save(Path("logs/resources.json"),dict(exit_code=rc,elapsed_seconds=time.monotonic()-t,user_cpu_seconds=res.ru_utime+own.ru_utime,system_cpu_seconds=res.ru_stime+own.ru_stime,max_resident_kib=max(res.ru_maxrss,own.ru_maxrss)))
++    sys.exit(rc)
+--- /dev/null
++++ b/r3_shared_verify.py
+@@ -0,0 +1,272 @@
++"""Verify a closed R16/R17 development archive without running its models or scoring program.
++
++Usage: python -B r3_shared_verify.py <absolute-round-directory>
++Requires NumPy. All results are written to standard output.
++"""
++
++import argparse
++from collections import Counter, defaultdict
++from datetime import datetime
++import gzip
++import hashlib
++import json
++import math
++from pathlib import Path
++import re
++import sys
++
++import numpy as np
++
++
++SEEDS = {1701, 2701, 3701}
++STRATA = {"role_reversal", "relation_order", "competing_chain"}
++BASE_VIEWS = {"original", "paraphrase", "unseen_template"}
++QUARTET = {"q0", "q1", "q2", "q3"}
++PRIMARY = {"R16": "learned", "R17": "sharp_role"}
++COHORT = "data/cohort/cohort.jsonl.gz"
++PREDICTIONS = "results/prediction/predictions.jsonl.gz"
++METRICS = "results/stats/metrics.json"
++
++
++def require(condition, detail):
++    if not condition:
++        raise ValueError(detail)
++
++
++def unique_keys(pairs):
++    result = {}
++    for key, value in pairs:
++        require(key not in result, f"Duplicate JSON field {key}")
++        result[key] = value
++    return result
++
++
++def read(path):
++    return json.loads(path.read_bytes(), object_pairs_hook=unique_keys)
++
++
++def records(path):
++    opener = gzip.open if path.suffix == ".gz" else open
++    with opener(path, "rt", encoding="utf-8") as stream:
++        for number, line in enumerate(stream, 1):
++            try:
++                yield json.loads(line, object_pairs_hook=unique_keys)
++            except ValueError as error:
++                raise ValueError(f"{path.name}:{number}: {error}") from error
++
++
++def verify_inventory(root):
++    manifest, artifacts, remote = (read(root / name) for name in
++                                   ("manifest.json", "artifacts.json", "logs/remote.json"))
++    launch = read(root / "configs/launch.json")
++    rid = launch["id"]
++    require(rid in PRIMARY and root.parent.name == "experiments", "Expected R16 or R17 under experiments/")
++    require(manifest["status"] in {"complete", "completed", "verified", "success", "succeeded"},
++            "Manifest does not describe a completed round")
++    hashes = {}
++
++    def check(name, expected):
++        require(isinstance(name, str) and not re.search(r"[\\:]", name)
++                and all(s not in {"", ".", ".."} for s in name.split("/")), f"Invalid relative path {name!r}")
++        if name not in hashes:
++            path = root / name
++            require(path.resolve().is_relative_to(root) and path.is_file(), f"Missing or external file {name}")
++            with path.open("rb") as source:
++                hashes[name] = hashlib.file_digest(source, "sha256").hexdigest()
++        require(hashes[name] == expected, f"SHA-256 mismatch for {name}")
++
++    files = manifest["files"]
++    require(files and artifacts and remote["files"], "One or more inventories are empty")
++    on_disk = {p.relative_to(root).as_posix() for p in root.rglob("*") if p.is_file()}
++    require(on_disk - {"manifest.json", "artifacts.json"} <= files.keys(), "Local files missing from manifest")
++    for name, item in files.items():
++        check(name, item["sha256"])
++        require(type(item["bytes"]) is int and (root / name).stat().st_size == item["bytes"], f"Size mismatch {name}")
++    for name, digest in artifacts.items():
++        check(name, digest)
++    for name, digest in remote["files"].items():
++        check(name, digest)
++    for name in (COHORT, PREDICTIONS, METRICS):
++        require(name in remote["files"], f"Remote inventory omits {name}")
++    if rid == "R17":
++        require("cohort.jsonl.gz" in launch["cohort_anchors"], "Missing shared development cohort commitment")
++        for name, digest in launch["cohort_anchors"].items():
++            check(f"data/cohort/{name}", digest)
++
++    rel = root.relative_to(root.parents[1]).as_posix()
++    events = [e for e in records(root.parents[1] / "experiment_registry.jsonl")
++              if e.get("id") == rid or e.get("path") == rel]
++    require([e["event"] for e in events] == ["start", "end"], f"Invalid registry event sequence for {rid}")
++    start, end = events
++    require(all(e["path"] == rel and e["id"] == rid for e in events), "Registry path or id mismatch")
++    require(datetime.fromisoformat(start["utc"]) <= datetime.fromisoformat(end["utc"]), "Registry time order")
++    check("manifest.json", end["manifest_sha256"])
++    check("artifacts.json", end["artifact_manifest_sha256"])
++    require(end["code"] == 0 and read(root / "logs/exit.json")["exit_code"] == 0, "Unsuccessful exit")
++    return rid, {"local_files": len(files), "artifacts": len(artifacts), "remote_files": len(remote["files"])}
++
++
++def read_cohort(path):
++    grouped = defaultdict(dict)
++    indices = {}
++    for row in records(path):
++        graph, view = row["graph_id"], row["view"]
++        require(view not in grouped[graph], f"Repeated cohort key {(graph, view)}")
++        index = row["graph_index"]
++        require(indices.setdefault(index, graph) == graph, f"Graph index collision at {index}")
++        nodes = tuple(tuple(edge) for edge in row["nodes"])
++        require(len(nodes) == len(set(nodes)) == 12 and all(len(edge) == 3 for edge in nodes), f"Invalid graph {graph}")
++        q = row["question"]
++        require(isinstance(q, list) and row["stratum"] in STRATA, f"Invalid input fields on {graph}")
++        words = set(q)
++        anchor, = words & {t for head, _, tail in nodes for t in (head, tail)}
++        require(row["anchor"] == anchor, f"Anchor mismatch on {graph}")
++        ordered = sorted(range(12), key=lambda i: (-len(words & set(nodes[i])), -(nodes[i][0] == anchor), i))[:2]
++        require(ordered == row["candidates"], f"Ordered shortlist mismatch on {graph}/{view}")
++        gold = row["gold"]
++        require(type(gold) is int and 0 <= gold < 12 and nodes[gold][:2] == (anchor, row["first_relation"]),
++                f"Gold/role mismatch on {graph}/{view}")
++        relations = {edge[1] for edge in nodes} & words
++        require(len(relations) == 2 and next(t for t in q if t in relations) == row["first_mentioned"],
++                f"Lexical-order baseline mismatch on {graph}/{view}")
++        second, = relations - {row["first_relation"]}
++        valid = [i for i, (start, relation, bridge) in enumerate(nodes)
++                 if (start, relation) == (anchor, row["first_relation"])
++                 for h, r, tail in nodes if h == bridge and r == second and len({start, bridge, tail}) == 3]
++        require(valid == [gold], f"Nonunique or erroneous path label on {graph}/{view}")
++        grouped[graph][view] = row
++    strata = Counter()
++    position_counts = Counter()
++    people_sets = set()
++    for graph, views in grouped.items():
++        original = views["original"]
++        strata[original["stratum"]] += 1
++        position_counts[original["gold"]] += 1
++        people = frozenset(t for h, _, v in original["nodes"] for t in (h, v))
++        require(people not in people_sets and len(people) == 6, f"Invalid or repeated personnel set on {graph}")
++        people_sets.add(people)
++        expected = BASE_VIEWS | (QUARTET if original["stratum"] == "relation_order" else set())
++        require(set(views) == expected, f"Incomplete or unexpected view panel on {graph}")
++        for view, row in views.items():
++            require(all(row[k] == original[k] for k in ("nodes", "stratum", "candidates", "graph_index")),
++                    f"Graph or ordered candidates changed on {graph}/{view}")
++        require(original["gold"] == views["paraphrase"]["gold"] == views["unseen_template"]["gold"],
++                f"Semantic drift on {graph}")
++        if QUARTET <= views.keys():
++            require(views["q0"]["gold"] == views["q2"]["gold"] and views["q1"]["gold"] == views["q3"]["gold"]
++                    and views["q0"]["gold"] != views["q1"]["gold"], f"Invalid reversal quartet on {graph}")
++    require(strata == dict.fromkeys(STRATA, 200) and len(indices) == len(grouped), "Invalid graph or stratum counts")
++    require(position_counts == dict.fromkeys(range(12), 50), "Unbalanced original gold positions")
++    return grouped
++
++
++def check_predictions(path, cohort, variant):
++    seen = set()
++    per_graph = defaultdict(list)
++    aliases = {"learned", "sharp_role", "uniform"}
++    baseline_rows = {}
++    primary_controls = {}
++    for r in records(path):
++        graph, view, seed = r["graph_id"], r["view"], r["seed"]
++        key = (graph, view, seed)
++        arm = r["variant"]
++        if arm not in aliases:
++            continue
++        row = cohort[graph][view]
++        require(seed in SEEDS and all(r[k] == row[k] for k in
++                ("graph_index", "stratum", "first_relation", "first_mentioned", "gold", "candidates")),
++                f"Prediction graph alignment {key}")
++        if arm == "uniform":
++            require(key not in baseline_rows, f"Repeated uniform control {key}")
++            scores = r["logits"]
++            require(len(scores) == 2 and all(math.isfinite(x) for x in scores)
++                    and row["candidates"][int(scores[1] > scores[0])] == r["predicted"],
++                    f"Uniform logits do not reconstruct the recorded choice {key}")
++            baseline_rows[key] = r["predicted"]
++        if arm != variant:
++            continue
++        require(key not in seen, f"Repeated primary prediction {key}")
++        seen.add(key)
++        candidates, gold = row["candidates"], row["gold"]
++        require(r["covered"] == (gold in candidates) and r["predicted"] in candidates and r["uniform_predicted"] in candidates,
++                f"Invalid candidate choices {key}")
++        logits = r["logits"]
++        require(len(logits) == 2 and all(math.isfinite(x) for x in logits)
++                and candidates[int(logits[1] > logits[0])] == r["predicted"], f"Score/decision mismatch {key}")
++        labels, masses = r["relation_names"], r["relation_masses"]
++        require(len(masses) == len(labels) == 2 and all(math.isfinite(m) and 0 <= m <= 1.000001 for m in masses)
++                and len(set(labels)) == 2 and row["first_relation"] in labels, f"Invalid H1 masses {key}")
++        role = None if masses[0] == masses[1] else labels[int(masses[1] > masses[0])]
++        hit = 0.5 if role is None else float(role == row["first_relation"])
++        require(r["selected_relation"] == role and r["h1_hit"] == hit, f"H1 role/readout mismatch {key}")
++        primary_controls[key] = r["uniform_predicted"]
++        if view != "unseen_template":
++            per_graph[graph].append([hit, float(row["first_mentioned"] == row["first_relation"]),
++                                     float(r["predicted"] == gold), float(r["uniform_predicted"] == gold)])
++    require(len(seen) == sum(map(len, cohort.values())) * len(SEEDS), "Primary graph/view/seed panel is incomplete")
++    require(baseline_rows == primary_controls, "Uniform arm and primary's recorded baseline differ")
++    return per_graph
++
++
++def statistics(per_graph, cohort):
++    rng = np.random.default_rng(2026112417)
++    samples = np.zeros((10000, 2), dtype=float)
++    point = np.zeros(4, dtype=float)
++    for stratum in sorted(STRATA):
++        matrix = np.array([np.mean(per_graph[g], axis=0) for g in sorted(cohort)
++                           if cohort[g]["original"]["stratum"] == stratum])
++        point += matrix.mean(axis=0) / len(STRATA)
++        differences = matrix[:, (0, 2)] - matrix[:, (1, 3)]
++        for start in range(0, len(samples), 100):
++            draw = rng.integers(len(matrix), size=(100, len(matrix)))
++            samples[start:start+100] += differences[draw].mean(axis=1) / len(STRATA)
++    lower = np.sort(samples, axis=0)[499]
++    return {
++        "h1": {"accuracy": point[0], "baseline": point[1], "delta": point[0]-point[1],
++               "lcb": lower[0], "pass": bool(point[0] >= .8 and lower[0] > 0)},
++        "h2": {"accuracy": point[2], "baseline": point[3], "delta": point[2]-point[3],
++               "lcb": lower[1], "pass": bool(point[2]-point[3] >= .02-1e-12 and lower[1] > 0)},
++    }
++
++
++def compare_metrics(result, primary, variant):
++    require(primary["variant"] == variant, "Wrong primary variant in reported metrics")
++    fields = {"h1": ("h1_accuracy", "first_mentioned_accuracy", "h1_delta", "h1_lcb95", "h1_pass"),
++              "h2": ("h2_accuracy", "uniform_accuracy", "h2_delta", "h2_lcb95", "h2_pass")}
++    for hypothesis, names in fields.items():
++        expected = result[hypothesis]
++        for key, name in zip(("accuracy", "baseline", "delta", "lcb", "pass"), names, strict=True):
++            actual = primary[name]
++            if key == "pass":
++                require(type(actual) is bool and actual == expected[key], f"Gate mismatch for {name}")
++            else:
++                # The locked PCG64 stream and graph order should reproduce the specified quantile.
++                # Allow for numerical summation order across NumPy/BLAS builds only.
++                require(math.isclose(actual, expected[key], abs_tol=1e-8, rel_tol=0),
++                        f"Metric mismatch for {name}: archived={actual}, recomputed={expected[key]}")
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("round_dir", type=Path, help="Absolute path to a closed development round")
++    args = parser.parse_args()
++    require(args.round_dir.is_absolute(), "Supply the absolute path to the closed round")
++    root = args.round_dir.resolve(strict=True)
++    rid, inventory = verify_inventory(root)
++    variant = PRIMARY[rid]
++    cohort = read_cohort(root / COHORT)
++    outcomes = check_predictions(root / PREDICTIONS, cohort, variant)
++    result = statistics(outcomes, cohort)
++    compare_metrics(result, read(root / METRICS)["primary"], variant)
++    print(json.dumps({"verified": True, "round": rid, "primary_variant": variant, "graphs": len(cohort),
++                      "eligible_quartets": sum("q0" in rows for rows in cohort.values()),
++                      "seed_count": len(SEEDS), "inventory": inventory, "primary": result},
++                     ensure_ascii=False, allow_nan=False, indent=2))
++
++
++if __name__ == "__main__":
++    try:
++        main()
++    except (ValueError, KeyError, OSError, TypeError) as error:
++        print(f"Verification failed: {error}", file=sys.stderr)
++        raise SystemExit(1)
+--- /dev/null
++++ b/r3_shared_weight_validation.py
+@@ -0,0 +1,369 @@
++"""Replay a frozen H1/H2 version and its controls on a supplied development-only cohort."""
++
++from __future__ import annotations
++
++import argparse
++from collections import Counter
++from datetime import datetime, timezone
++import gzip
++import hashlib
++import json
++from pathlib import Path
++import platform
++import shutil
++import sys
++import traceback
++
++import torch
++
++
++SEEDS = (1701, 2701, 3701)
++RELATIONS = sorted(("拜访", "联系", "协助", "邀请", "推荐", "提醒", "指导", "跟随"))
++VERSIONS = {"original": "learned", "r12": "sharp_role"}
++STRATA = {"role_reversal", "relation_order", "competing_chain"}
++VIEWS = {"original", "paraphrase", "unseen_template", "q0", "q1", "q2", "q3"}
++TOLERANCE = 2e-5
++WEIGHTS = ("a3cf4167344c14eb0d0e281e9e43ce379289fe40157e39de9a230074c211fa59",
++           "1d3a0e23cdb417f229a7231cec039b8d9b7ec803c08b539a4f38ce4fc6f183a9",
++           "9217b8edda35fad73650fbe8bdf354e26df0a4f0f8530b6549d62773f93f670e")
++PROBES = ("e3ea1d8e7c43620bc661880eff3f5b5447da9f5819fc0b13ec42856e8dd64bfd",
++          "a1bc12ee4b806c7ac4b6b345c131ffe264b93feef8497015bc4ffe9faf01b50e",
++          "6c44e08bfeba8f0bd6db4e061bb7cb5131ba57292bbc877a0b0fa07047bfaeec")
++GROUPS = ("37ee3fcc9da697e3a419631ef41f3348470043c994ab6b270ed03326d0c51355",
++          "ad101a3b8533e9cf738da41806913dea738acedcf895b572ad664bee681fb027",
++          "561a5fe7d04d8511d9a78271721b7318c7d5a3ac3ec8816c59c32276e81ee036")
++SHARP = ("98f1c920d07cb74a4409c4aaab32c8f21069e6e8cfcbefc8a5344dcd25a2e33d",
++         "3e1653c209aee3161b1431fb7029d1b9464c25195c2136cafd0e9ab107012dd7",
++         "2bd1a3da698ed71c9d816843c75cfd3d3a9299a11e5d743faed421f039f792e8")
++CUE_STATES = ("5b5483916092e5d1e0949ac597e523a12c6d9385b3d8aa518986550f60cd000e",
++              "86ee5be6bdf6f2efcb4e17cbbb30d8e5833d311a5e38ecf2dd411ef90fa5e48d",
++              "145306da24c5ac3f39fa57fbd6b1078c2d5c61d66d63139d83e752b7cd141c13")
++
++
++def require(ok, message):
++    if not ok:
++        raise ValueError(message)
++
++
++def sha(path):
++    with path.open("rb") as stream:
++        return hashlib.file_digest(stream, "sha256").hexdigest()
++
++
++def json_file(path, value):
++    temp = path.with_name(path.name + ".partial")
++    temp.write_text(json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False) + "\n", encoding="utf8")
++    temp.replace(path)
++
++
++def event(out, name, **details):
++    entry = dict(utc=datetime.now(timezone.utc).isoformat(), event=name, **details)
++    with (out / "events.jsonl").open("a", encoding="utf8") as stream:
++        stream.write(json.dumps(entry, ensure_ascii=False) + "\n")
++    print(json.dumps(entry, ensure_ascii=False), flush=True)
++
++
++def check_file(path, expected, receipt):
++    digest = sha(path)
++    require(digest == expected, f"Frozen file digest mismatch: {path}")
++    receipt[str(path)] = digest
++    return path
++
++
++def vector(x):
++    v = torch.tensor(x, dtype=torch.float32)
++    require(v.shape == (64,) and v.isfinite().all(), "Expected a finite frozen 64-vector")
++    return v
++
++
++def load_state(args, seed, receipt):
++    i = SEEDS.index(seed)
++    exp = args.r3 / "experiments"
++
++    def load(path, expected):
++        return json.loads(check_file(path, expected, receipt).read_bytes())
++
++    prior = load(args.inputs / f"prior/runs/本地开发-01/w-{seed}.json", WEIGHTS[i])
++    probe = load(exp / f"03-R03/results/parameters-{seed}.json", PROBES[i])
++    group = load(exp / f"06-R06/results/parameters-{seed}.json", GROUPS[i])
++    require(prior["seed"] == seed and prior["w"] == probe["w"] == group["w"], "Original weight alias mismatch")
++    for history, expected in [(prior["training"], 8000), (group["histories"]["one"], 5992),
++                              (group["histories"]["four"], 5992)]:
++        require([r["epoch"] for r in history] == list(range(1, 13)) and
++                all(r["examples"] == expected for r in history), "Frozen training budget mismatch")
++    st = dict(w=vector(prior["w"]), probes=probe["probes"], one=vector(group["one"]), four=vector(group["four"]))
++    if args.version == "r12":
++        ck = load(exp / f"10-R12/results/checkpoint-{seed}.json", SHARP[i])
++        r08 = load(exp / f"08-R08/results/parameters-{seed}.json", CUE_STATES[i])
++        require((ck["model"], ck["decoder"], ck["seed"]) == ("sharp_role", "max-relation-mass-uniform-v1", seed)
++                and ck["w"] == r08["weights"]["cue_role"] and list(ck["relations"]) == RELATIONS,
++                "R12 checkpoint/lexicon mismatch")
++        st.update(ck=ck, role_w=vector(ck["w"]), random_label_w=vector(r08["weights"]["cue_random_role"]))
++    return st
++
++
++def load_cohort(path):
++    read = gzip.open if path.suffix == ".gz" else open
++    with read(path, "rt", encoding="utf8") as stream:
++        rows = [json.loads(line) for line in stream]
++    keys = {(r["graph_id"], r["view"]) for r in rows}
++    require(rows and len(rows) == len(keys), "Repeated graph/view key")
++    allowed = {(v,k) for v in VIEWS for k in STRATA}
++    valid = set(RELATIONS)
++    for r in rows:
++        require((r["view"], r["stratum"]) in allowed and len(r["nodes"]) == 12
++                and len(set(map(tuple,r["nodes"]))) == 12 and len(set(r["candidates"])) == len(r["candidates"]) == 2
++                and all(type(j) is int and 0 <= j < 12 for j in [r["gold"], *r["candidates"]]),
++                f"Malformed development row {r['graph_id']}/{r['view']}")
++        mentioned = [t for t in r["question"] if t in valid]
++        require(len(set(mentioned)) == 2 and r["first_mentioned"] == mentioned[0]
++                and r["first_relation"] in mentioned and r["nodes"][r["gold"]][1] == r["first_relation"],
++                "Invalid relation labels")
++    return rows
++
++
++def uniform_log(mask):
++    return torch.zeros_like(mask, dtype=torch.float32).masked_fill(~mask, -torch.inf).log_softmax(-1)
++
++
++def masks_for(docs, width):
++    pairs = [sorted(set(d.question).intersection(RELATIONS)) for d in docs]
++    masks = torch.zeros(len(docs), 2, width, dtype=torch.bool)
++    for i, (d, pair) in enumerate(zip(docs, pairs, strict=True)):
++        for j, t in enumerate(d.question):
++            if t in pair:
++                masks[i,pair.index(t),j] = True
++    return pairs, masks
++
++
++def norm_matched_random(w, seed):
++    v = torch.randn(w.shape, generator=torch.Generator().manual_seed(seed + 442))
++    return v * (w.norm() / v.norm())
++
++
++def permute_restricted(logp, mask, docs, seed):
++    changed = logp.clone()
++    for i, d in enumerate(docs):
++        positions = mask[i].nonzero().flatten()
++        key = f"{seed}|{d.doc_id}|{' '.join(d.question)}".encode("utf8")
++        rng = torch.Generator().manual_seed(int.from_bytes(hashlib.sha256(key).digest()[:8], "little"))
++        changed[i, positions] = logp[i, positions[torch.randperm(len(positions), generator=rng)]]
++    return changed
++
++
++def masses(logp, masks):
++    return (logp.exp().double()[:, None, :] * masks).sum(-1)
++
++
++def hard_from_log(logp, masks):
++    group = logp[:,None,:].masked_fill(~masks, -torch.inf).logsumexp(-1)
++    return uniform_log(masks[torch.arange(len(logp)), group.argmax(1)])
++
++
++@torch.inference_mode()
++def score_batch(version, bundle, st, docs, seed, model, core, probe, sharp):
++    require(all(d.gold is None for d in docs), "Labels in inference document")
++    f = model.extract(bundle, docs, batch_size=64 if version == "original" else 128)
++    pairs, masks = masks_for(docs, f.mask.shape[1])
++    mentioned = masks.any(1)
++    first_positions = torch.tensor([pair.index(next(t for t in d.question if t in pair))
++                                    for pair,d in zip(pairs,docs,strict=True)])
++    first_p = uniform_log(masks[torch.arange(len(docs)),first_positions])
++    uniform = uniform_log(f.mask)
++    mention_uniform = uniform_log(mentioned)
++    # (first-hop logits, question-only relation masses, effective H2 weights)
++    arms = {}
++
++    def weighted(name, h1_weights, h2_weights=None, base=None, amplitude=None):
++        actual = h1_weights if h2_weights is None else h2_weights
++        arms[name] = (core.apply_logp(f,actual,base,amplitude), masses(h1_weights,masks), actual)
++
++    weighted("uniform", uniform)
++    weighted("uniform_mentions", mention_uniform)
++    weighted("first_mentioned", first_p)
++    arms.update(first=(None,None,None), pool=(f.pooled,None,None), direction=(f.base,None,None), old=(f.old,None,None))
++    one_base, one_amp = core.one_direction(bundle,docs,f)
++    weighted("one", core.weights(f,st["one"]), base=one_base, amplitude=one_amp)
++    weighted("four", core.weights(f,st["four"]))
++    representations = probe.representation(bundle,f)
++    name_index = torch.tensor([[RELATIONS.index(t) for t in pair] for pair in pairs])
++    for tag, matrix in st["probes"].items():
++        mode = tag.split("_random_labels")[0]
++        read = representations[mode]
++        projected = torch.cat([read,torch.ones(len(read),1)], dim=1) @ torch.tensor(matrix,dtype=torch.float32)
++        # Here the two values are conditional probe probabilities, separate from the H1 token-mass endpoint.
++        pair_probability = projected.gather(1,name_index).double().softmax(-1)
++        name = "probe_" + mode.removeprefix("read_") + ("_shuffled_labels" if tag.endswith("random_labels") else "")
++        arms[name] = (None,pair_probability,None)
++    if version == "original":
++        learned = core.weights(f, st["w"])
++        weighted("learned", learned)
++        weighted("random", core.weights(f, norm_matched_random(st["w"], seed)))
++        weighted("shuffled", core.shuffled_logp(learned, f.mask, docs, seed))
++        canonical = model.score(f, st["w"])
++        zero_score = model.score(f, torch.zeros(64))
++        require((zero_score - arms["uniform"][0]).abs().max() <= TOLERANCE, "Uniform formula mismatch")
++        require((canonical - arms["learned"][0]).abs().max() <= TOLERANCE, "Original formula mismatch")
++        # Use the exact original factorization on both sides of the primary comparison.
++        arms["learned"] = (canonical, arms["learned"][1], learned)
++        arms["uniform"] = (zero_score, arms["uniform"][1], uniform)
++        primary_p = learned
++    else:
++        valid, x, classes, names = sharp.features(docs,f.mask.shape[1],st["ck"])
++        require(names == pairs and torch.equal(classes,masks) and torch.equal(valid,mentioned), "R12 token support mismatch")
++        soft, hard, role_choice, _ = sharp.decode(x,valid,classes,st["role_w"])
++        weighted("sharp_role",soft,hard)
++        weighted("soft_role",soft)
++        weighted("uniform_mentions_hard",mention_uniform,hard_from_log(mention_uniform,masks))
++        for name, w in [("random",norm_matched_random(st["role_w"],seed)), ("random_role_labels",st["random_label_w"])]:
++            random_soft, random_hard, _, _ = sharp.decode(x,valid,classes,w)
++            weighted(name,random_soft,random_hard)
++        shuffled = permute_restricted(soft,valid,docs,seed)
++        weighted("shuffled",shuffled,hard_from_log(shuffled,masks))
++        effective_choice = [p.index(d.question[int(j)]) for p,d,j in
++                            zip(pairs,docs,hard.argmax(-1),strict=True)]
++        require(role_choice.tolist() == effective_choice, "Hard relation decoder inconsistent with its weights")
++        require(torch.equal(sharp.rank(f,hard),arms["sharp_role"][0]), "R12 H2 implementation mismatch")
++        primary_p = soft
++    for name, (s, hm, _) in arms.items():
++        if s is not None:
++            require(s.isfinite().all(), f"Nonfinite logits in {name}")
++        if hm is not None:
++            require(hm.isfinite().all(), f"Nonfinite H1 readout in {name}")
++    closed = ~f.active
++    for name in (VERSIONS[version],"uniform","uniform_mentions","random","shuffled","old"):
++        require(torch.equal(arms[name][0][closed], f.base[closed]), f"Closed gate discrepancy in {name}")
++    return arms, pairs, f.active.tolist(), primary_p
++
++
++def save_rows(stream, version, rows, docs, seed, arm_data):
++    arms, pairs, gates, primary_logp = arm_data
++    hits = Counter()
++    for i,(d,r) in enumerate(zip(docs,rows,strict=True)):
++        def selected(name):
++            return d.candidates[int(arms[name][0][i].argmax())]
++
++        common = dict(version=version, graph_id=r["graph_id"], graph_index=r["graph_index"], stratum=r["stratum"],
++                      view=r["view"], seed=seed, gold=r["gold"], candidates=list(d.candidates), covered=r["gold"] in d.candidates,
++                      gate=gates[i], first_relation=r["first_relation"], first_mentioned=r["first_mentioned"],
++                      relation_names=pairs[i], uniform_predicted=selected("uniform"), first_predicted=d.candidates[0],
++                      pool_predicted=selected("pool"))
++        for name,(s,hm,eff) in arms.items():
++            values = hm[i].tolist() if hm is not None else None
++            read = None
++            h1_hit = None
++            if values is not None:
++                if values[0] != values[1]:
++                    read = pairs[i][int(values[1] > values[0])]
++                h1_hit = .5 if read is None else float(read == r["first_relation"])
++            predicted = selected(name) if s is not None else (d.candidates[0] if name == "first" else None)
++            record = dict(**common, variant=name, relation_masses=values, selected_relation=read, h1_hit=h1_hit,
++                          h1_readout_kind="probe_probability" if name.startswith("probe_") else (
++                              "summed_token_weight" if hm is not None else None),
++                          logits=s[i].tolist() if s is not None else None, predicted=predicted)
++            if name == VERSIONS[version]:
++                record.update(question_weights=primary_logp[i,:len(d.question)].exp().tolist(),
++                              effective_h2_weights=eff[i,:len(d.question)].exp().tolist())
++                hits["primary_rows"] += 1
++                hits["primary_hits"] += int(predicted == r["gold"])
++            stream.write(json.dumps(record,ensure_ascii=False,separators=(",",":"),allow_nan=False) + "\n")
++            hits["prediction_rows"] += 1
++    return hits
++
++
++def main(a):
++    a.r3 = a.r3.resolve()
++    a.inputs = a.inputs.resolve()
++    event(a.out,"start",version=a.version)
++    files = {}
++    check_file(a.inputs / "prior/code/model.py","f85636ffa19443880e48d953c7d552af3d6bda5238c60ad424f445202c2c2b0f",files)
++    check_file(a.inputs / "prior/实验协议.json","22c42d26fe59b8bc2a16c13ed5b5a7a9b737263b3dc02431d2f21a6e432904ce",files)
++    probe_src = a.r3 / "experiments/03-R03/snapshot/src"
++    check_file(probe_src / "mech_core.py","8a2ae2cf12883285ca2c42499210ba406cb5bdbe598964f6c192d4d5859f1795",files)
++    check_file(probe_src / "mech_probe.py","514a3bd1d7c586ae6c70e296efc588439a6f00ce4330f41be6e72dd3aff3ac23",files)
++    sys.path[:0] = [str(probe_src),str(a.inputs/"prior/code")]
++    import mech_core as core
++    import mech_probe as probe
++    import model
++
++    sharp = None
++    if a.version == "r12":
++        src = a.r3 / "experiments/10-R12/snapshot/src"
++        check_file(src/"sharp_core.py","f56c15184956476784b4922b453d4898178412e4c709f0f5dc632ab5dba86c54",files)
++        check_file(src/"role_core.py","713909ab7c417c2b7f950938e291498c51651adfef3922a169067749a509ab8f",files)
++        sys.path.insert(0,str(src))
++        import sharp_core as sharp
++    rows = load_cohort(a.cohort)
++    data_hash = sha(a.cohort)
++    code_hash = sha(Path(__file__))
++    event(a.out,"inputs_verified",cohort_sha256=data_hash,rows=len(rows),graphs=len({r["graph_id"] for r in rows}))
++    receipts = []
++    for seed in SEEDS:
++        event(a.out,"seed_started",seed=seed)
++        seed_files = {}
++        st = load_state(a,seed,seed_files)
++        bundle = model.load_bundle(a.inputs/"b13",seed)
++        for kind in ("serial","pooled"):
++            folder = bundle.evaluator.checkpoint_dir(a.inputs/"b13/inputs/server-run",kind,seed)
++            check_file(folder/"best.pt",bundle.evaluator.CHECKPOINTS[kind][seed],seed_files)
++        output = a.out/f"predictions-{seed}.jsonl.gz"
++        temp = a.out/f"predictions-{seed}.partial.gz"
++        collected = Counter()
++        with gzip.open(temp,"wt",encoding="utf8") as stream:
++            for start in range(0,len(rows),128):
++                batch = rows[start:start+128]
++                docs = [bundle.trainer.Example(r["graph_id"],r["stratum"],tuple(r["question"]),tuple(map(tuple,r["nodes"])),
++                                              tuple(r["candidates"]),None) for r in batch]
++                reranked = bundle.evaluator.shortlist(docs,"direction")
++                require(all(d.candidates == e.candidates for d,e in zip(docs,reranked,strict=True)),
++                        "Supplied candidates differ from historical direction shortlist")
++                calculated = score_batch(a.version,bundle,st,docs,seed,model,core,probe,sharp)
++                collected.update(save_rows(stream,a.version,batch,docs,seed,calculated))
++        temp.replace(output)
++        receipt = dict(version=a.version,seed=seed,cohort_sha256=data_hash,script_sha256=code_hash,
++                       frozen_files_sha256=seed_files,counts=collected,predictions_sha256=sha(output))
++        json_file(a.out/f"receipt-{seed}.json",receipt)
++        receipts.append(receipt)
++        event(a.out,"seed_saved",seed=seed,**collected)
++    combined = a.out/"predictions.jsonl.gz"
++    pending = a.out/"combined.partial.gz"
++    # Gzip supports concatenated members and preserves exact successful per-seed streams.
++    with pending.open("wb") as dst:
++        for seed in SEEDS:
++            with (a.out/f"predictions-{seed}.jsonl.gz").open("rb") as src:
++                shutil.copyfileobj(src,dst)
++    pending.replace(combined)
++    metadata = dict(version=a.version,primary_variant=VERSIONS[a.version],seeds=SEEDS,
++                    cohort_sha256=data_hash,source_sha256=files,script_sha256=code_hash,receipts=receipts,
++                    predictions_sha256=sha(combined),historic_training_unchanged=True,new_training_updates=0,
++                    primary_uniform="All valid question positions, identical candidate scorer and H2 gate.",
++                    restricted_uniform="uniform_mentions assigns equal weight to each visible relation-token occurrence.",
++                    r12_h1="Sum soft question-only relation masses before hard decoding. Exact ties receive half credit.",
++                    r12_h2="Choose highest mass relation, Unicode lexical tie break, uniform weight on its mentions.",
++                    original_h1="Softmax of frozen h_j dot w over every valid token; sum by mentioned relation.",
++                    original_h2="Frozen direction plus gated weighted relation logmeanexp; archived L2 disabled.",
++                    random_controls="Random normal vector with learned norm. Original shuffles over all valid positions; R12 shuffles only relation-mention positions and redecodes with its frozen hard policy.",
++                    matched_groups="one/four are paired 64-parameter rankers trained on identical filtered rows and 5,992 eligible slots/epoch for 12 epochs. They are a separate controlled comparison.",
++                    probe_groups="Same 9,007 training graphs and ridge-1 readout. One vector versus 16 coordinates from each of four readouts gives 64 dimensions for both. Random-label controls share the original training-label permutation.",
++                    labels="Used only for cohort checks and post-inference hit counting. Supplied feature-only Example.gold is None.",
++                    views=dict(Counter(r["view"] for r in rows)),python=platform.python_version(),torch=str(torch.__version__))
++    json_file(a.out/"inference-receipt.json",metadata)
++    event(a.out,"complete",predictions_sha256=metadata["predictions_sha256"])
++
++
++if __name__ == "__main__":
++    sys.dont_write_bytecode = True
++    p = argparse.ArgumentParser(description=__doc__)
++    p.add_argument("--version",choices=VERSIONS,required=True)
++    for label in ("r3","inputs","cohort","out"):
++        p.add_argument("--"+label,type=Path,required=True)
++    args = p.parse_args()
++    if args.out.exists() and (not args.out.is_dir() or any(args.out.iterdir())):
++        p.error("--out requires a new or empty directory")
++    args.out.mkdir(parents=True,exist_ok=True)
++    try:
++        main(args)
++    except Exception:
++        json_file(args.out/"failure.json",{"status":"incomplete","traceback":traceback.format_exc()})
++        event(args.out,"failed")
++        raise

@@ -1,0 +1,18 @@
+{
+  "exit_code": 0,
+  "utc": "2026-11-24T11:10:18.751081+00:00",
+  "wall_seconds": 17.683,
+  "command": [
+    "/data/miniconda/envs/torch/bin/python",
+    "-B",
+    "/data/spiderweb-r3-supplement-R3-0015_Tie_20261124-1910/r3_content_tie_audit.py",
+    "--r3",
+    "/data/spiderweb-r3-20261124-1740/R3",
+    "--inputs",
+    "/data/spiderweb-r3-20261124-1740/inputs",
+    "--r14",
+    "/data/spiderweb-r3-supplement-R3-0014_Order_20261124-1903/results",
+    "--out",
+    "/data/spiderweb-r3-supplement-R3-0015_Tie_20261124-1910/results"
+  ]
+}

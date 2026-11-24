@@ -1,0 +1,16 @@
+{
+  "exit_code": 0,
+  "utc": "2026-11-24T11:05:50.215836+00:00",
+  "wall_seconds": 15.054,
+  "command": [
+    "/data/miniconda/envs/torch/bin/python",
+    "-B",
+    "/data/spiderweb-r3-supplement-R3-0014_Order_20261124-1903/r3_dev_order_audit.py",
+    "--r3",
+    "/data/spiderweb-r3-20261124-1740/R3",
+    "--inputs",
+    "/data/spiderweb-r3-20261124-1740/inputs",
+    "--out",
+    "/data/spiderweb-r3-supplement-R3-0014_Order_20261124-1903/results"
+  ]
+}

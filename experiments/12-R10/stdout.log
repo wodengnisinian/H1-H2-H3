@@ -1,0 +1,9 @@
+{"time_utc":"2026-11-24T10:01:02.706710+00:00","event":"start","config_sha256":"dc78cacd272c1efe460b81e00fbee6195025c268c18ff0e91516f30c69a2f84b","code_sha256":"e60019470e0c5bc100d8b483658ce901dd11dd1367cdf3ead1764acab837aeef","torch":"2.10.0+cu128","numpy":"1.26.4","device":"cpu"}
+{"time_utc":"2026-11-24T10:01:03.638361+00:00","event":"validated","questions":{"train":3840,"dev":512,"seen_pair_test":1152,"challenge":1280,"challenge_second":1280}}
+{"time_utc":"2026-11-24T10:01:04.693111+00:00","event":"checkpoint","model":"onehop","seed":1701,"sha256":"5554c2b087adf6c645aa41fbb1bd3505510c8b6f234de1b5e9e1b94ddb7a1984"}
+{"time_utc":"2026-11-24T10:01:05.739120+00:00","event":"checkpoint","model":"twohop","seed":1701,"sha256":"b3372361010571fd02738e8b944283013ce37c1285f2af8acbb078f47219d36c"}
+{"time_utc":"2026-11-24T10:01:06.662922+00:00","event":"checkpoint","model":"onehop","seed":2701,"sha256":"10b43d84ce4aa669dcb245e1b9aefe59c90aff77e7ce602db36207df5ad872c6"}
+{"time_utc":"2026-11-24T10:01:07.716442+00:00","event":"checkpoint","model":"twohop","seed":2701,"sha256":"26b376d4191034c2e00c77d912dc34154a04318e8b1a0aba04dea179c5ae4f61"}
+{"time_utc":"2026-11-24T10:01:08.638856+00:00","event":"checkpoint","model":"onehop","seed":3701,"sha256":"dec5bcb01918d69b735b1be1c76db4b7a640b3c089611f0485305ef4c54b2e94"}
+{"time_utc":"2026-11-24T10:01:09.680053+00:00","event":"checkpoint","model":"twohop","seed":3701,"sha256":"4728044516365bdeffc4addbaff5874f703355b618120bd03232318ffc00c917"}
+{"time_utc":"2026-11-24T10:01:10.086330+00:00","event":"complete","challenge_pass":true}

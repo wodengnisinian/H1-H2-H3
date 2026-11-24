@@ -1,0 +1,390 @@
+{
+  "dev": {
+    "split": "dev",
+    "per_seed_top1": {
+      "1701": {
+        "first": 0.25,
+        "onehop": 0.5,
+        "twohop": 1.0,
+        "symbolic": 1.0
+      },
+      "2701": {
+        "first": 0.25,
+        "onehop": 0.5,
+        "twohop": 1.0,
+        "symbolic": 1.0
+      },
+      "3701": {
+        "first": 0.25,
+        "onehop": 0.5,
+        "twohop": 1.0,
+        "symbolic": 1.0
+      }
+    },
+    "questions_per_seed": 512,
+    "error_judgments": {
+      "first": 1152,
+      "onehop": 768
+    },
+    "methods": {
+      "first": {
+        "top1": 0.25,
+        "four_question_accuracy": 0.0,
+        "semantic_swap_both_correct": 0.0,
+        "both_clause_orders_correct": 0.25,
+        "both_counterfactual_twins_correct": 0.0,
+        "by_view": {
+          "AB-normal": 0.2578125,
+          "BA-normal": 0.2421875,
+          "AB-reordered": 0.2578125,
+          "BA-reordered": 0.2421875
+        }
+      },
+      "onehop": {
+        "top1": 0.5,
+        "four_question_accuracy": 0.28125,
+        "semantic_swap_both_correct": 0.28125,
+        "both_clause_orders_correct": 0.5,
+        "both_counterfactual_twins_correct": 0.0,
+        "by_view": {
+          "AB-normal": 0.5,
+          "BA-normal": 0.5,
+          "AB-reordered": 0.5,
+          "BA-reordered": 0.5
+        }
+      },
+      "twohop": {
+        "top1": 1.0,
+        "four_question_accuracy": 1.0,
+        "semantic_swap_both_correct": 1.0,
+        "both_clause_orders_correct": 1.0,
+        "both_counterfactual_twins_correct": 1.0,
+        "by_view": {
+          "AB-normal": 1.0,
+          "BA-normal": 1.0,
+          "AB-reordered": 1.0,
+          "BA-reordered": 1.0
+        }
+      },
+      "symbolic": {
+        "top1": 1.0,
+        "four_question_accuracy": 1.0,
+        "semantic_swap_both_correct": 1.0,
+        "both_clause_orders_correct": 1.0,
+        "both_counterfactual_twins_correct": 1.0,
+        "by_view": {
+          "AB-normal": 1.0,
+          "BA-normal": 1.0,
+          "AB-reordered": 1.0,
+          "BA-reordered": 1.0
+        }
+      }
+    },
+    "gain_vs_onehop": {
+      "estimate_pp": 50.0,
+      "two_sided_95_ci_pp": [
+        50.0,
+        50.0
+      ],
+      "replicates": 10000,
+      "twin_groups": 64,
+      "resampling_unit": "counterfactual twin graph group, stratified by unordered relation pair"
+    },
+    "bounds": {
+      "uniform_candidate_expected": 0.25,
+      "any_first_only_upper": 0.5,
+      "full_graph_symbolic": 1.0
+    },
+    "meets_preregistered_challenge_rule": null
+  },
+  "seen_pair_test": {
+    "split": "seen_pair_test",
+    "per_seed_top1": {
+      "1701": {
+        "first": 0.25,
+        "onehop": 0.5,
+        "twohop": 1.0,
+        "symbolic": 1.0
+      },
+      "2701": {
+        "first": 0.25,
+        "onehop": 0.5,
+        "twohop": 1.0,
+        "symbolic": 1.0
+      },
+      "3701": {
+        "first": 0.25,
+        "onehop": 0.5,
+        "twohop": 1.0,
+        "symbolic": 1.0
+      }
+    },
+    "questions_per_seed": 1152,
+    "error_judgments": {
+      "first": 2592,
+      "onehop": 1728
+    },
+    "methods": {
+      "first": {
+        "top1": 0.25,
+        "four_question_accuracy": 0.0,
+        "semantic_swap_both_correct": 0.0,
+        "both_clause_orders_correct": 0.25,
+        "both_counterfactual_twins_correct": 0.0,
+        "by_view": {
+          "AB-normal": 0.28125,
+          "BA-normal": 0.21875,
+          "AB-reordered": 0.28125,
+          "BA-reordered": 0.21875
+        }
+      },
+      "onehop": {
+        "top1": 0.5,
+        "four_question_accuracy": 0.24305555555555555,
+        "semantic_swap_both_correct": 0.24305555555555555,
+        "both_clause_orders_correct": 0.5,
+        "both_counterfactual_twins_correct": 0.0,
+        "by_view": {
+          "AB-normal": 0.5,
+          "BA-normal": 0.5,
+          "AB-reordered": 0.5,
+          "BA-reordered": 0.5
+        }
+      },
+      "twohop": {
+        "top1": 1.0,
+        "four_question_accuracy": 1.0,
+        "semantic_swap_both_correct": 1.0,
+        "both_clause_orders_correct": 1.0,
+        "both_counterfactual_twins_correct": 1.0,
+        "by_view": {
+          "AB-normal": 1.0,
+          "BA-normal": 1.0,
+          "AB-reordered": 1.0,
+          "BA-reordered": 1.0
+        }
+      },
+      "symbolic": {
+        "top1": 1.0,
+        "four_question_accuracy": 1.0,
+        "semantic_swap_both_correct": 1.0,
+        "both_clause_orders_correct": 1.0,
+        "both_counterfactual_twins_correct": 1.0,
+        "by_view": {
+          "AB-normal": 1.0,
+          "BA-normal": 1.0,
+          "AB-reordered": 1.0,
+          "BA-reordered": 1.0
+        }
+      }
+    },
+    "gain_vs_onehop": {
+      "estimate_pp": 50.0,
+      "two_sided_95_ci_pp": [
+        50.0,
+        50.0
+      ],
+      "replicates": 10000,
+      "twin_groups": 144,
+      "resampling_unit": "counterfactual twin graph group, stratified by unordered relation pair"
+    },
+    "bounds": {
+      "uniform_candidate_expected": 0.25,
+      "any_first_only_upper": 0.5,
+      "full_graph_symbolic": 1.0
+    },
+    "meets_preregistered_challenge_rule": null
+  },
+  "challenge": {
+    "split": "challenge",
+    "per_seed_top1": {
+      "1701": {
+        "first": 0.25,
+        "onehop": 0.5,
+        "twohop": 1.0,
+        "symbolic": 1.0
+      },
+      "2701": {
+        "first": 0.25,
+        "onehop": 0.5,
+        "twohop": 1.0,
+        "symbolic": 1.0
+      },
+      "3701": {
+        "first": 0.25,
+        "onehop": 0.5,
+        "twohop": 1.0,
+        "symbolic": 1.0
+      }
+    },
+    "questions_per_seed": 1280,
+    "error_judgments": {
+      "first": 2880,
+      "onehop": 1920
+    },
+    "methods": {
+      "first": {
+        "top1": 0.25,
+        "four_question_accuracy": 0.0,
+        "semantic_swap_both_correct": 0.0,
+        "both_clause_orders_correct": 0.25,
+        "both_counterfactual_twins_correct": 0.0,
+        "by_view": {
+          "AB-normal": 0.24375,
+          "BA-normal": 0.25625,
+          "AB-reordered": 0.24375,
+          "BA-reordered": 0.25625
+        }
+      },
+      "onehop": {
+        "top1": 0.5,
+        "four_question_accuracy": 0.278125,
+        "semantic_swap_both_correct": 0.278125,
+        "both_clause_orders_correct": 0.5,
+        "both_counterfactual_twins_correct": 0.0,
+        "by_view": {
+          "AB-normal": 0.5,
+          "BA-normal": 0.5,
+          "AB-reordered": 0.5,
+          "BA-reordered": 0.5
+        }
+      },
+      "twohop": {
+        "top1": 1.0,
+        "four_question_accuracy": 1.0,
+        "semantic_swap_both_correct": 1.0,
+        "both_clause_orders_correct": 1.0,
+        "both_counterfactual_twins_correct": 1.0,
+        "by_view": {
+          "AB-normal": 1.0,
+          "BA-normal": 1.0,
+          "AB-reordered": 1.0,
+          "BA-reordered": 1.0
+        }
+      },
+      "symbolic": {
+        "top1": 1.0,
+        "four_question_accuracy": 1.0,
+        "semantic_swap_both_correct": 1.0,
+        "both_clause_orders_correct": 1.0,
+        "both_counterfactual_twins_correct": 1.0,
+        "by_view": {
+          "AB-normal": 1.0,
+          "BA-normal": 1.0,
+          "AB-reordered": 1.0,
+          "BA-reordered": 1.0
+        }
+      }
+    },
+    "gain_vs_onehop": {
+      "estimate_pp": 50.0,
+      "two_sided_95_ci_pp": [
+        50.0,
+        50.0
+      ],
+      "replicates": 10000,
+      "twin_groups": 160,
+      "resampling_unit": "counterfactual twin graph group, stratified by unordered relation pair"
+    },
+    "bounds": {
+      "uniform_candidate_expected": 0.25,
+      "any_first_only_upper": 0.5,
+      "full_graph_symbolic": 1.0
+    },
+    "meets_preregistered_challenge_rule": true,
+    "second_relation_only": {
+      "first": {
+        "per_seed": [
+          {
+            "seed": 1701,
+            "both_correct": 0.0,
+            "alternate_top1": 0.25,
+            "changed_prediction": 0.0
+          },
+          {
+            "seed": 2701,
+            "both_correct": 0.0,
+            "alternate_top1": 0.25,
+            "changed_prediction": 0.0
+          },
+          {
+            "seed": 3701,
+            "both_correct": 0.0,
+            "alternate_top1": 0.25,
+            "changed_prediction": 0.0
+          }
+        ],
+        "both_correct": 0.0
+      },
+      "onehop": {
+        "per_seed": [
+          {
+            "seed": 1701,
+            "both_correct": 0.0,
+            "alternate_top1": 0.5,
+            "changed_prediction": 0.0
+          },
+          {
+            "seed": 2701,
+            "both_correct": 0.0,
+            "alternate_top1": 0.5,
+            "changed_prediction": 0.0
+          },
+          {
+            "seed": 3701,
+            "both_correct": 0.0,
+            "alternate_top1": 0.5,
+            "changed_prediction": 0.0
+          }
+        ],
+        "both_correct": 0.0
+      },
+      "twohop": {
+        "per_seed": [
+          {
+            "seed": 1701,
+            "both_correct": 1.0,
+            "alternate_top1": 1.0,
+            "changed_prediction": 1.0
+          },
+          {
+            "seed": 2701,
+            "both_correct": 1.0,
+            "alternate_top1": 1.0,
+            "changed_prediction": 1.0
+          },
+          {
+            "seed": 3701,
+            "both_correct": 1.0,
+            "alternate_top1": 1.0,
+            "changed_prediction": 1.0
+          }
+        ],
+        "both_correct": 1.0
+      },
+      "symbolic": {
+        "per_seed": [
+          {
+            "seed": 1701,
+            "both_correct": 1.0,
+            "alternate_top1": 1.0,
+            "changed_prediction": 1.0
+          },
+          {
+            "seed": 2701,
+            "both_correct": 1.0,
+            "alternate_top1": 1.0,
+            "changed_prediction": 1.0
+          },
+          {
+            "seed": 3701,
+            "both_correct": 1.0,
+            "alternate_top1": 1.0,
+            "changed_prediction": 1.0
+          }
+        ],
+        "both_correct": 1.0
+      }
+    }
+  }
+}

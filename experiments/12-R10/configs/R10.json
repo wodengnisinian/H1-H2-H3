@@ -1,0 +1,20 @@
+{
+  "id": "R10",
+  "hypothesis": "当候选同起点、同关系时，读取后继边有助于首跳选择；移除后继信息使配对孪生图不可区分。",
+  "criteria": "按 challenge.json 预设的准确率、四问、仅换第二关系的双对率和按孪生组重抽的区间同时判定。四候选的独立挑战不参与经典 H3 模型选择。",
+  "argv": [
+    "src/challenge.py",
+    "--config",
+    "configs/challenge.json",
+    "--out",
+    "{out}",
+    "--device",
+    "cpu"
+  ],
+  "sources": [
+    "src/challenge.py",
+    "configs/challenge.json"
+  ],
+  "receipt": "scores.json",
+  "after": "单独解释真正两跳的必要输入，按照 H3 与资源状态决定续研或归档"
+}

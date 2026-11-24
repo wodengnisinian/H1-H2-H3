@@ -1,0 +1,25 @@
+{
+  "path_base": "R3",
+  "registered_sources": [
+    {
+      "path": "experiments/12-R10/snapshot/src/challenge.py",
+      "sha256": "e60019470e0c5bc100d8b483658ce901dd11dd1367cdf3ead1764acab837aeef",
+      "bytes": 25649
+    },
+    {
+      "path": "experiments/12-R10/snapshot/run_loop.py",
+      "sha256": "96198e0b5031a22026e8d1ebbce81fd7db370ff5e5bfc9cfe2d5a7cd8c08db51",
+      "bytes": 7248
+    }
+  ],
+  "changes": {
+    "path": "analysis/diffs/12-R10.patch",
+    "sha256": "6c0b42b8b7a1fc2b0849331651d4f84c74b7a57d1f06dd29fd2bf9ac60fc8b16",
+    "bytes": 30128
+  },
+  "runtime_dependencies": {
+    "path": "logs/environment.json",
+    "sha256": "a081136648d5aa686556da339538cb3233194e414bb2ab458a85a1f22138ca52",
+    "bytes": 669
+  }
+}

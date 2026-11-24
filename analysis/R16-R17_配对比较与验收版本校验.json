@@ -1,0 +1,98 @@
+{
+  "utc": "2026-11-24T11:46:12.361339+00:00",
+  "development_protocol_sha256": "7c753bbb696a18324ea045c0a55baff9e830e72038f52bc01df3cd14a1ece2c6",
+  "same_dev_cohort": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad",
+  "development_graph_paired_R12_minus_original": {
+    "h1_accuracy": {
+      "delta": 0.2984259259259259,
+      "lower_one_sided": 0.2877777777777777,
+      "ci95": [
+        0.2856481481481481,
+        0.3111111111111111
+      ]
+    },
+    "h2_accuracy": {
+      "delta": 0.19240740740740733,
+      "lower_one_sided": 0.18314814814814812,
+      "ci95": [
+        0.1812962962962962,
+        0.2035185185185185
+      ]
+    }
+  },
+  "formal_scope": "existing R09 historical H3, no second opening; R16 and R17 development checks postdate formal R09",
+  "formal_version_freeze_links": {
+    "R3/experiments/10-R12/results/checkpoint-1701.json": "98f1c920d07cb74a4409c4aaab32c8f21069e6e8cfcbefc8a5344dcd25a2e33d",
+    "R3/experiments/10-R12/results/checkpoint-2701.json": "3e1653c209aee3161b1431fb7029d1b9464c25195c2136cafd0e9ab107012dd7",
+    "R3/experiments/10-R12/results/checkpoint-3701.json": "2bd1a3da698ed71c9d816843c75cfd3d3a9299a11e5d743faed421f039f792e8",
+    "R3/src/sharp_core.py": "f56c15184956476784b4922b453d4898178412e4c709f0f5dc632ab5dba86c54",
+    "R3/src/role_core.py": "713909ab7c417c2b7f950938e291498c51651adfef3922a169067749a509ab8f",
+    "inputs/prior/code/model.py": "f85636ffa19443880e48d953c7d552af3d6bda5238c60ad424f445202c2c2b0f",
+    "inputs/b13/冻结清单.json": "12eedcf17da956ed9bea234e412dd93a3d6f21c11ea5d102f12a8770ab26e485"
+  },
+  "formal_model": "sharp_core",
+  "formal_openings": 1,
+  "formal_opened_utc": "2026-11-24T10:00:55.555629+00:00",
+  "historical_metrics_sha256": "0cf697198d2866bf9d3de90478f68960a5006bc428a7016aa153bc998b834b63",
+  "historic_h3_passed": true,
+  "verification": {
+    "R16": {
+      "verified": true,
+      "round": "R16",
+      "primary_variant": "learned",
+      "graphs": 600,
+      "eligible_quartets": 200,
+      "seed_count": 3,
+      "inventory": {
+        "local_files": 43,
+        "artifacts": 43,
+        "remote_files": 29
+      },
+      "primary": {
+        "h1": {
+          "accuracy": 0.7015740740740742,
+          "baseline": 0.5,
+          "delta": 0.20157407407407424,
+          "lcb": 0.180925925925926,
+          "pass": false
+        },
+        "h2": {
+          "accuracy": 0.7220370370370374,
+          "baseline": 0.6916666666666672,
+          "delta": 0.03037037037037016,
+          "lcb": 0.024351851851851833,
+          "pass": true
+        }
+      }
+    },
+    "R17": {
+      "verified": true,
+      "round": "R17",
+      "primary_variant": "sharp_role",
+      "graphs": 600,
+      "eligible_quartets": 200,
+      "seed_count": 3,
+      "inventory": {
+        "local_files": 43,
+        "artifacts": 43,
+        "remote_files": 29
+      },
+      "primary": {
+        "h1": {
+          "accuracy": 1.0,
+          "baseline": 0.5,
+          "delta": 0.5,
+          "lcb": 0.48000000000000004,
+          "pass": true
+        },
+        "h2": {
+          "accuracy": 0.9144444444444448,
+          "baseline": 0.6916666666666672,
+          "delta": 0.22277777777777763,
+          "lcb": 0.21324074074074068,
+          "pass": true
+        }
+      }
+    }
+  }
+}

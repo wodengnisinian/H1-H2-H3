@@ -1,0 +1,25 @@
+{
+  "path_base": "R3",
+  "registered_sources": [
+    {
+      "path": "experiments/01-R01/snapshot/src/input_audit.py",
+      "sha256": "fb894f0c23029096acee886b6bfdde9648ecd1db23cdfef9ddc29045b63bb40b",
+      "bytes": 2963
+    },
+    {
+      "path": "experiments/01-R01/snapshot/run_loop.py",
+      "sha256": "96198e0b5031a22026e8d1ebbce81fd7db370ff5e5bfc9cfe2d5a7cd8c08db51",
+      "bytes": 7248
+    }
+  ],
+  "changes": {
+    "path": "analysis/diffs/01-R01.patch",
+    "sha256": "81c6f6e781c22364aa736f6127f0c074158f1509d5932210fce87e002ee8df97",
+    "bytes": 13215
+  },
+  "runtime_dependencies": {
+    "path": "logs/environment.json",
+    "sha256": "a081136648d5aa686556da339538cb3233194e414bb2ab458a85a1f22138ca52",
+    "bytes": 669
+  }
+}

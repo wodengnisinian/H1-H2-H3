@@ -1,0 +1,84 @@
+{
+  "path_base": "R3",
+  "execution_logs": [
+    {
+      "path": "experiments/02-R02/stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "experiments/02-R02/resources.json",
+      "sha256": "aafec19b866daeec0178265b28b7e284187d2518eb5614bf7e555325ce9f13be",
+      "bytes": 265
+    },
+    {
+      "path": "experiments/02-R02/results/timeline.jsonl",
+      "sha256": "f45960e4c0715fd5d44d19a7c044dc343ae4df482d455e355b480ae02381b1cf",
+      "bytes": 3204
+    },
+    {
+      "path": "experiments/02-R02/results/B13-recorded-seals.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "experiments/02-R02/results/B13-frozen-inference.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "experiments/02-R02/results/B13-layers.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "experiments/02-R02/results/B13-reverse.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "experiments/02-R02/results/B13-margins.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "experiments/02-R02/results/B13-components.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "experiments/02-R02/results/B13-quartets.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "experiments/02-R02/results/prior-verifier.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  ],
+  "archived_environment_and_resource_limits": {
+    "path": "logs/environment.json",
+    "sha256": "a081136648d5aa686556da339538cb3233194e414bb2ab458a85a1f22138ca52",
+    "bytes": 669
+  },
+  "registry": {
+    "path": "logs/恢复校验/云端原始轮次登记.jsonl",
+    "bytes": 43598,
+    "sha256": "ac651f9f45c34ee642aecfdb57a2c770c2ed0d6a974707636578642a85294403"
+  },
+  "start_utc": "2026-11-24T09:44:02.522161+00:00",
+  "end_utc": "2026-11-24T09:45:05.977816+00:00",
+  "command": [
+    "/data/miniconda/envs/torch/bin/python",
+    "-B",
+    "src/history_audit.py",
+    "--archive",
+    "/data/spiderweb-r3-20261124-1740/inputs/b13",
+    "--prior",
+    "/data/spiderweb-r3-20261124-1740/inputs/prior",
+    "--out",
+    "/data/spiderweb-r3-20261124-1740/R3/experiments/02-R02/results"
+  ],
+  "exit_code": 0
+}

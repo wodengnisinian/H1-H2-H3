@@ -1,0 +1,446 @@
+{
+  "experiment": "Frozen R12 development order perturbation",
+  "split": "fresh",
+  "variant": "original",
+  "graphs": 600,
+  "graphs_per_stratum": 200,
+  "graph_seeds": 1800,
+  "seeds": [
+    1701,
+    2701,
+    3701
+  ],
+  "views": [
+    "identity",
+    "candidate_reverse",
+    "fact_reverse"
+  ],
+  "formal_or_training_runs": 0,
+  "identity_archive_rows_verified": 1800,
+  "accuracies": [
+    {
+      "stratum": "all",
+      "view": "identity",
+      "method": "first",
+      "graphs": 600,
+      "decisions": 1800,
+      "correct": 1191,
+      "top1": 0.6616666666666666,
+      "changed_predictions": 0,
+      "corrected": 0,
+      "broken": 0,
+      "score_ties": null,
+      "near_ties": null,
+      "role_mass_ties": null
+    },
+    {
+      "stratum": "all",
+      "view": "identity",
+      "method": "pool",
+      "graphs": 600,
+      "decisions": 1800,
+      "correct": 1134,
+      "top1": 0.63,
+      "changed_predictions": 0,
+      "corrected": 0,
+      "broken": 0,
+      "score_ties": 0,
+      "near_ties": 0,
+      "role_mass_ties": null
+    },
+    {
+      "stratum": "all",
+      "view": "identity",
+      "method": "sharp_role",
+      "graphs": 600,
+      "decisions": 1800,
+      "correct": 1545,
+      "top1": 0.8583333333333333,
+      "changed_predictions": 0,
+      "corrected": 0,
+      "broken": 0,
+      "score_ties": 0,
+      "near_ties": 0,
+      "role_mass_ties": 0
+    },
+    {
+      "stratum": "all",
+      "view": "candidate_reverse",
+      "method": "first",
+      "graphs": 600,
+      "decisions": 1800,
+      "correct": 609,
+      "top1": 0.3383333333333333,
+      "changed_predictions": 1800,
+      "corrected": 609,
+      "broken": 1191,
+      "score_ties": null,
+      "near_ties": null,
+      "role_mass_ties": null
+    },
+    {
+      "stratum": "all",
+      "view": "candidate_reverse",
+      "method": "pool",
+      "graphs": 600,
+      "decisions": 1800,
+      "correct": 1134,
+      "top1": 0.63,
+      "changed_predictions": 0,
+      "corrected": 0,
+      "broken": 0,
+      "score_ties": 0,
+      "near_ties": 0,
+      "role_mass_ties": null
+    },
+    {
+      "stratum": "all",
+      "view": "candidate_reverse",
+      "method": "sharp_role",
+      "graphs": 600,
+      "decisions": 1800,
+      "correct": 1545,
+      "top1": 0.8583333333333333,
+      "changed_predictions": 0,
+      "corrected": 0,
+      "broken": 0,
+      "score_ties": 0,
+      "near_ties": 0,
+      "role_mass_ties": 0
+    },
+    {
+      "stratum": "all",
+      "view": "fact_reverse",
+      "method": "first",
+      "graphs": 600,
+      "decisions": 1800,
+      "correct": 1209,
+      "top1": 0.6716666666666666,
+      "changed_predictions": 1200,
+      "corrected": 609,
+      "broken": 591,
+      "score_ties": null,
+      "near_ties": null,
+      "role_mass_ties": null
+    },
+    {
+      "stratum": "all",
+      "view": "fact_reverse",
+      "method": "pool",
+      "graphs": 600,
+      "decisions": 1800,
+      "correct": 1141,
+      "top1": 0.6338888888888888,
+      "changed_predictions": 102,
+      "corrected": 29,
+      "broken": 22,
+      "score_ties": 0,
+      "near_ties": 1,
+      "role_mass_ties": null
+    },
+    {
+      "stratum": "all",
+      "view": "fact_reverse",
+      "method": "sharp_role",
+      "graphs": 600,
+      "decisions": 1800,
+      "correct": 1561,
+      "top1": 0.8672222222222222,
+      "changed_predictions": 81,
+      "corrected": 31,
+      "broken": 15,
+      "score_ties": 0,
+      "near_ties": 0,
+      "role_mass_ties": 0
+    }
+  ],
+  "retrieval": [
+    {
+      "stratum": "all",
+      "view": "identity",
+      "graphs": 600,
+      "covered": 600,
+      "changed_sets": 0,
+      "changed_ordered_pairs": 0,
+      "first_rank_ties": 400,
+      "cutoff_ties": 99,
+      "coverage_gained": 0,
+      "coverage_lost": 0
+    },
+    {
+      "stratum": "all",
+      "view": "candidate_reverse",
+      "graphs": 600,
+      "covered": 600,
+      "changed_sets": 0,
+      "changed_ordered_pairs": 600,
+      "first_rank_ties": 400,
+      "cutoff_ties": 99,
+      "coverage_gained": 0,
+      "coverage_lost": 0
+    },
+    {
+      "stratum": "all",
+      "view": "fact_reverse",
+      "graphs": 600,
+      "covered": 600,
+      "changed_sets": 99,
+      "changed_ordered_pairs": 499,
+      "first_rank_ties": 400,
+      "cutoff_ties": 99,
+      "coverage_gained": 0,
+      "coverage_lost": 0
+    }
+  ],
+  "paired_contrasts": [
+    {
+      "stratum": "all",
+      "view": "identity",
+      "method": "coverage",
+      "reference": "identity_coverage",
+      "delta": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "view": "identity",
+      "method": "first",
+      "reference": "identity_first",
+      "delta": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "view": "identity",
+      "method": "pool",
+      "reference": "identity_pool",
+      "delta": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "view": "identity",
+      "method": "sharp_role",
+      "reference": "identity_sharp_role",
+      "delta": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "view": "identity",
+      "method": "sharp_role",
+      "reference": "identity_first",
+      "delta": 0.19666666666666663,
+      "low95": 0.15944444444444447,
+      "high95": 0.23388888888888895
+    },
+    {
+      "stratum": "all",
+      "view": "identity",
+      "method": "sharp_role",
+      "reference": "identity_pool",
+      "delta": 0.22833333333333347,
+      "low95": 0.20611111111111116,
+      "high95": 0.2494444444444445
+    },
+    {
+      "stratum": "all",
+      "view": "candidate_reverse",
+      "method": "coverage",
+      "reference": "identity_coverage",
+      "delta": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "view": "candidate_reverse",
+      "method": "first",
+      "reference": "identity_first",
+      "delta": -0.3233333333333333,
+      "low95": -0.38666666666666666,
+      "high95": -0.25666666666666665
+    },
+    {
+      "stratum": "all",
+      "view": "candidate_reverse",
+      "method": "pool",
+      "reference": "identity_pool",
+      "delta": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "view": "candidate_reverse",
+      "method": "sharp_role",
+      "reference": "identity_sharp_role",
+      "delta": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "view": "candidate_reverse",
+      "method": "sharp_role",
+      "reference": "candidate_reverse_first",
+      "delta": 0.5200000000000001,
+      "low95": 0.4822222222222223,
+      "high95": 0.5572222222222222
+    },
+    {
+      "stratum": "all",
+      "view": "candidate_reverse",
+      "method": "sharp_role",
+      "reference": "candidate_reverse_pool",
+      "delta": 0.22833333333333347,
+      "low95": 0.20611111111111116,
+      "high95": 0.2494444444444445
+    },
+    {
+      "stratum": "all",
+      "view": "fact_reverse",
+      "method": "coverage",
+      "reference": "identity_coverage",
+      "delta": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "view": "fact_reverse",
+      "method": "first",
+      "reference": "identity_first",
+      "delta": 0.010000000000000002,
+      "low95": -0.05333333333333334,
+      "high95": 0.07666666666666666
+    },
+    {
+      "stratum": "all",
+      "view": "fact_reverse",
+      "method": "pool",
+      "reference": "identity_pool",
+      "delta": 0.0038888888888888883,
+      "low95": -0.0044444444444444444,
+      "high95": 0.012777777777777777
+    },
+    {
+      "stratum": "all",
+      "view": "fact_reverse",
+      "method": "sharp_role",
+      "reference": "identity_sharp_role",
+      "delta": 0.008888888888888889,
+      "low95": 0.001666666666666666,
+      "high95": 0.016666666666666663
+    },
+    {
+      "stratum": "all",
+      "view": "fact_reverse",
+      "method": "sharp_role",
+      "reference": "fact_reverse_first",
+      "delta": 0.19555555555555568,
+      "low95": 0.15833333333333333,
+      "high95": 0.23277777777777775
+    },
+    {
+      "stratum": "all",
+      "view": "fact_reverse",
+      "method": "sharp_role",
+      "reference": "fact_reverse_pool",
+      "delta": 0.23333333333333348,
+      "low95": 0.2116666666666667,
+      "high95": 0.25555555555555554
+    }
+  ],
+  "tie_policy": "Argmax selects first candidate on exact equality; near-tie is abs(logit gap) <= 4e-5.",
+  "fact_ids": "Original zero-based positions. fact_reverse maps each new index j to 11-j.",
+  "perturbations": {
+    "candidate_reverse": "Reverse the fixed two candidates after retrieval.",
+    "fact_reverse": "Reverse all twelve fact rows, then rerun direction retrieval."
+  },
+  "bootstrap": {
+    "draws": 10000,
+    "seed": 619482,
+    "interval": "two-sided 95% percentile; inverse empirical CDF",
+    "unit": "graph; seeds averaged within graph and strata equally weighted",
+    "unit_of_delta": "accuracy proportion difference; multiply by 100 for percentage points"
+  },
+  "parity": {
+    "1701": {
+      "archive_max_logit_error": {
+        "pool": 0.0,
+        "sharp_role": 0.0
+      },
+      "candidate_swap_max_logit_error": {
+        "pool": 0.0,
+        "sharp_role": 0.0
+      },
+      "candidate_swap_rows_over_tolerance": {
+        "pool": 0,
+        "sharp_role": 0
+      }
+    },
+    "2701": {
+      "archive_max_logit_error": {
+        "pool": 0.0,
+        "sharp_role": 0.0
+      },
+      "candidate_swap_max_logit_error": {
+        "pool": 0.0,
+        "sharp_role": 0.0
+      },
+      "candidate_swap_rows_over_tolerance": {
+        "pool": 0,
+        "sharp_role": 0
+      }
+    },
+    "3701": {
+      "archive_max_logit_error": {
+        "pool": 0.0,
+        "sharp_role": 0.0
+      },
+      "candidate_swap_max_logit_error": {
+        "pool": 0.0,
+        "sharp_role": 0.0
+      },
+      "candidate_swap_rows_over_tolerance": {
+        "pool": 0,
+        "sharp_role": 0
+      }
+    }
+  },
+  "logit_tolerance": 2e-05,
+  "input_sha256": {
+    "prior/code/model.py": "f85636ffa19443880e48d953c7d552af3d6bda5238c60ad424f445202c2c2b0f",
+    "b13/inputs/b12-code/tie_rank.py": "41c5b4b19b67be9ffe6a5735a15275ba152921466244771585d2bc324e4c64f9",
+    "b13/inputs/b12-code/evaluate.py": "68c64cf602d16f6477011fe4092677775a178a3a7c5b32b0da057443b38b0501"
+  },
+  "r12_sha256": {
+    "results/development-inputs.jsonl.gz": "2d5c74c095109fb1819dc5c3f14e7397de89058af8364c2434736d611fae7cc3",
+    "results/predictions-1701.jsonl.gz": "e605acf796e46ab58fb20b02c5e40bf2917a7ad30b5f2c9f5a00a86364184dfe",
+    "results/predictions-2701.jsonl.gz": "da2480ac1ef50020c574ac5b3651fb981c2f9516f47ea0d149d839d1ee48b514",
+    "results/predictions-3701.jsonl.gz": "cc74876737b2c20a2dfdb718f51e6208051e172d4b31cdb0fd531e19d8627d66",
+    "results/checkpoint-1701.json": "98f1c920d07cb74a4409c4aaab32c8f21069e6e8cfcbefc8a5344dcd25a2e33d",
+    "results/checkpoint-2701.json": "3e1653c209aee3161b1431fb7029d1b9464c25195c2136cafd0e9ab107012dd7",
+    "results/checkpoint-3701.json": "2bd1a3da698ed71c9d816843c75cfd3d3a9299a11e5d743faed421f039f792e8",
+    "results/configuration.json": "16f61d90c5acd601108cf4c0bb5d26e992ae66428d24fb12cf74c7f6e2a5736e",
+    "snapshot/src/sharp_core.py": "f56c15184956476784b4922b453d4898178412e4c709f0f5dc632ab5dba86c54",
+    "snapshot/src/role_core.py": "713909ab7c417c2b7f950938e291498c51651adfef3922a169067749a509ab8f"
+  },
+  "script_sha256": "affd20a5d4d1b1404d4e630e7eba8d8e03528825bd9dc7b3c049beee027e76f4",
+  "outputs_sha256": {
+    "accuracy.csv": "e9eebee605e6a9cd83b44ab144d823e1dff00581386ce3fa4b67838ddcf6a9c5",
+    "per_seed.csv": "2a950410e9188a776d600ad73c4bad6443efe72e1e3c6a4a6091d45ecfc0f69f",
+    "retrieval.csv": "769d4de157c74f2f46096d6f6705576c40c6fa8c46786d4217f45d1e29a89ef6",
+    "paired_contrasts.csv": "caed461ad6d37a5052f475a726b73cde55bdca0a1719fa1f5fa01301e405a620",
+    "graphs.jsonl.gz": "662ec7465b6d07379407af94e6d9989bd6cf58c45c3dc615c55f41876a3087d8",
+    "predictions.jsonl.gz": "9730975898a6ce19b9759f860555c57ef89a726b4bee14df3465bc2fab5c46df"
+  },
+  "python": "3.12.13",
+  "torch": "2.10.0+cu128",
+  "numpy": "1.26.4"
+}

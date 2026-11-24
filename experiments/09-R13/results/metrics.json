@@ -1,0 +1,62 @@
+{
+  "hypothesis": "R08 deterministic repeat",
+  "matched_files": {
+    "checkpoint-1701.json": {
+      "sha256": "e5582ee18680e332bf88bd2c6299bed9dd804c94902c81f6434e89cc9c183597",
+      "identical": true
+    },
+    "checkpoint-2701.json": {
+      "sha256": "cbe17056718d8f12dd8c63b3cbccc32c9c819237cb0c4f232842ed4466cd0a78",
+      "identical": true
+    },
+    "checkpoint-3701.json": {
+      "sha256": "daa6fac643c00f3a8cf5ee9b9bcbda5fc1ad5ad3197c0ade48151d9c99a3f1e9",
+      "identical": true
+    },
+    "errors-1701.jsonl.gz": {
+      "sha256": "bae6363151d1a2a24d4b401569e39bc7728e88d75b83f09eb3fa07136d9434c8",
+      "identical": true
+    },
+    "errors-2701.jsonl.gz": {
+      "sha256": "58dec42e76e2df8d73878f919126770a3ea2ffc9f88ced6f244122096debd967",
+      "identical": true
+    },
+    "errors-3701.jsonl.gz": {
+      "sha256": "2025bd36e8a56ec2f5dd614aa603288c12d7ac41cc8c675d500602f2af0361fb",
+      "identical": true
+    },
+    "parameters-1701.json": {
+      "sha256": "5b5483916092e5d1e0949ac597e523a12c6d9385b3d8aa518986550f60cd000e",
+      "identical": true
+    },
+    "parameters-2701.json": {
+      "sha256": "86ee5be6bdf6f2efcb4e17cbbb30d8e5833d311a5e38ecf2dd411ef90fa5e48d",
+      "identical": true
+    },
+    "parameters-3701.json": {
+      "sha256": "145306da24c5ac3f39fa57fbd6b1078c2d5c61d66d63139d83e752b7cd141c13",
+      "identical": true
+    },
+    "predictions-1701.jsonl.gz": {
+      "sha256": "479ed348ca291fad2e91fc0372c5ad72803e48b43cf9066c49f0e8bea7af1018",
+      "identical": true
+    },
+    "predictions-2701.jsonl.gz": {
+      "sha256": "72ee926d0709a4021fddeffda30a187dca59ac41c109d61bc5a946a19468590d",
+      "identical": true
+    },
+    "predictions-3701.jsonl.gz": {
+      "sha256": "7376a9595548204d4022ba620fd35367ecea7a056efd633cd745d992ab684861",
+      "identical": true
+    }
+  },
+  "matched_metrics": {
+    "aggregate": true,
+    "h1": true,
+    "per_seed": true,
+    "objective_intervals": true,
+    "paired_intervals": true,
+    "criterion_met": true
+  },
+  "reproduced": true
+}

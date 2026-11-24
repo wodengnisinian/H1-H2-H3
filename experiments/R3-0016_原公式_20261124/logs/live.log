@@ -1,0 +1,11 @@
+Verified frozen dependency files 188
+Stage 1 r3_shared_cohort.py
+{"graphs": 600, "rows": 2600, "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad"}
+Stage 2 r3_shared_weight_validation.py
+{"utc": "2026-11-24T11:40:59.791197+00:00", "event": "start", "version": "original"}
+{"utc": "2026-11-24T11:40:59.881012+00:00", "event": "inputs_verified", "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad", "rows": 2600, "graphs": 600}
+{"utc": "2026-11-24T11:40:59.881228+00:00", "event": "seed_started", "seed": 1701}
+{"utc": "2026-11-24T11:41:06.973774+00:00", "event": "seed_saved", "seed": 1701, "prediction_rows": 41600, "primary_rows": 2600, "primary_hits": 1687}
+{"utc": "2026-11-24T11:41:06.973973+00:00", "event": "seed_started", "seed": 2701}
+{"utc": "2026-11-24T11:41:13.137047+00:00", "event": "seed_saved", "seed": 2701, "prediction_rows": 41600, "primary_rows": 2600, "primary_hits": 1735}
+{"utc": "2026-11-24T11:41:13.137174+00:00", "event": "seed_started", "seed": 3701}

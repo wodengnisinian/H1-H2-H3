@@ -1,0 +1,50 @@
+{
+  "path_base": "R3",
+  "registered_sources": [
+    {
+      "path": "experiments/02-R02/snapshot/src/history_audit.py",
+      "sha256": "16330abe926701856dbbc2fd66a53132e6d0a5f99a680acd43f057f4ac4addf8",
+      "bytes": 12168
+    },
+    {
+      "path": "experiments/02-R02/snapshot/src/legacy/第13项关系换序复核.py",
+      "sha256": "3e7b35ac69bfa9b36f5eb329c23969711561d67d791b8f29f84a35b34eac8b2c",
+      "bytes": 6938
+    },
+    {
+      "path": "experiments/02-R02/snapshot/src/legacy/第13项响应分差复核.py",
+      "sha256": "8b807ed3395282e7a0b42ab3f423adc9bc6acfd6b5f1379b25c97a3b334c44a3",
+      "bytes": 5950
+    },
+    {
+      "path": "experiments/02-R02/snapshot/src/legacy/第13项语义与分句顺序复核.py",
+      "sha256": "a3112258c08f23c500d677286bf1e8a8ec5beaf1bcfb91d561fe47790221e6b2",
+      "bytes": 4816
+    },
+    {
+      "path": "experiments/02-R02/snapshot/src/legacy/第13项逐层复核.py",
+      "sha256": "6ef184d20086a067a83ef4e76ca275aa30a1bd691f0786a63b572301bea8da49",
+      "bytes": 4918
+    },
+    {
+      "path": "experiments/02-R02/snapshot/src/legacy/第13项首层分项复核.py",
+      "sha256": "0199db5ae34d95a684a54583106a160cc803698327c3f1abf6384acb68201e84",
+      "bytes": 6230
+    },
+    {
+      "path": "experiments/02-R02/snapshot/run_loop.py",
+      "sha256": "96198e0b5031a22026e8d1ebbce81fd7db370ff5e5bfc9cfe2d5a7cd8c08db51",
+      "bytes": 7248
+    }
+  ],
+  "changes": {
+    "path": "analysis/diffs/02-R02.patch",
+    "sha256": "9c2fe09b3566a23420eaadb459343201db969dd02f99e9146bada1b6d64b9527",
+    "bytes": 42978
+  },
+  "runtime_dependencies": {
+    "path": "logs/environment.json",
+    "sha256": "a081136648d5aa686556da339538cb3233194e414bb2ab458a85a1f22138ca52",
+    "bytes": 669
+  }
+}

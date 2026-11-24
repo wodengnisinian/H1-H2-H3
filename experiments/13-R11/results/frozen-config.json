@@ -1,0 +1,40 @@
+{
+  "round": "R11",
+  "schema_version": 1,
+  "title": "方案采纳状态的成对反事实诊断",
+  "scope": "development diagnostic only; no optimization or independent acceptance",
+  "source": {
+    "file": "development-inputs.jsonl.gz",
+    "split": "template",
+    "variant": "original",
+    "kind": "relation_order",
+    "expected_graphs": 100
+  },
+  "seeds": [
+    1701,
+    2701,
+    3701
+  ],
+  "states": [
+    "已采用",
+    "已放弃"
+  ],
+  "question": "从 {anchor} 出发 。 {state0} 的 方案 ： 先 {a} ， 再 {b} 。 {state1} 的 方案 ： 先 {b} ， 再 {a} 。 请 按 实际 采用 的 方案 给出 第一步 的 记录 。",
+  "pair_orientation": "sha256(scope-v1|graph_id) first byte parity",
+  "criterion": {
+    "input": "Every pair has identical facts, ordered shortlist, token multiset, and human-readable opposite feasible plans. Swap only the two status tokens. Gold must flip.",
+    "reference": "Explicit status-reading rule must solve both views for every graph; a fixed candidate has exactly 50% question accuracy and zero double-correct.",
+    "collision": "For a given deterministic scorer, if both views expose identical head inputs including H2, the within-pair accuracy upper bound is 1/2 and both-correct is 0. Test the predicted equal logits numerically and discrete predictions exactly. For other pairs report a loose upper bound of 1.",
+    "scope_behavior": "Predeclared positive evidence for choosing the adopted plan requires graph-pair both-correct >=0.80 and one-sided 95% graph-bootstrap lower bound of both-correct advantage over direct-first >0. Check each of the three seeds. This is an exploratory stress-test threshold.",
+    "no_model_selection": true
+  },
+  "bootstrap": {
+    "unit": "graph",
+    "replicates": 10000,
+    "rng": "NumPy PCG64",
+    "seed": 6112411,
+    "lower_rank": 500
+  },
+  "ties": "first in the fixed source shortlist",
+  "inference": "frozen B13 CPU; no gradients or retraining"
+}

@@ -1,0 +1,29 @@
+{
+  "event": "start",
+  "id": "R16",
+  "path": "experiments/R3-0016_原公式_20261124",
+  "utc": "2026-11-24T11:40:49.664832+00:00",
+  "command": [
+    "/data/miniconda/envs/torch/bin/python",
+    "-B",
+    "-u",
+    "/data/spiderweb-shared-protocol-20261124-r16/code/r3_shared_steps.py"
+  ],
+  "source_sha256": {
+    "code/prepare_shared_round.py": "fed081b90fb49fb5af96109ac38c84c736ecdaf2cb74e23ccf6ec36fd789f266",
+    "code/r3_shared_cohort.py": "e83f0678d2ba7cc8e7a8a3f3ff75dec80b9c83a681acba65376f9ee7e93f2f2d",
+    "code/r3_shared_stats.py": "04a993dbf70a23a940c7bc8b49b0fbc1340292e0000c6fecc74ad7175dde6aae",
+    "code/r3_shared_steps.py": "77e6e4702a175a5df9cc8e3622475d402933aa3ed4939dc9a02863c405cce699",
+    "code/r3_shared_verify.py": "d22b9e52b2348c1bc035cf3c7085d96ed3ebb710e473b56047d4dfb623c2690b",
+    "code/r3_shared_weight_validation.py": "935c22a287e26921502ee4f7a5f3ac02b057f8753aa989a8c4f05b28de48a023",
+    "code/seal_shared_round.py": "3df01695b27479272cad4c96367a8d71958ba6846bd92103d7d14e42f20a3a39",
+    "code/shared_cloud_run.py": "ed8cc57d3a053efa0783ca2b676c94fdb749af492b11e75caa9f41be5db05268",
+    "configs/frozen-dependencies.json": "63061cfd0fea04d4c03449b575e903d2417d09075ad59efe1927a01c69eb69fd",
+    "configs/launch.json": "09b1c41e8ac7a1f71361a0bdbfa7fe8d3d52ce1efc9404e70f2b0e0caa103a34",
+    "configs/protocol.json": "02746156a286a78363f492a71eaece00ecd16642e3c9862d62699df7a1381f5f"
+  },
+  "protocol_sha256": "02746156a286a78363f492a71eaece00ecd16642e3c9862d62699df7a1381f5f",
+  "input_manifest_sha256": "63061cfd0fea04d4c03449b575e903d2417d09075ad59efe1927a01c69eb69fd",
+  "phase": "development",
+  "max_seconds": 900
+}

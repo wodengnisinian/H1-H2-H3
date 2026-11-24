@@ -1,0 +1,45 @@
+{
+  "path_base": "R3",
+  "registered_sources": [
+    {
+      "path": "experiments/05-R05/snapshot/src/mech_core.py",
+      "sha256": "8a2ae2cf12883285ca2c42499210ba406cb5bdbe598964f6c192d4d5859f1795",
+      "bytes": 5486
+    },
+    {
+      "path": "experiments/05-R05/snapshot/src/mech_data.py",
+      "sha256": "82bd90f8af14bf8422506fbac63437586e85ac8d8cd7cedd09a06a4f4737f8c7",
+      "bytes": 6052
+    },
+    {
+      "path": "experiments/05-R05/snapshot/src/mech_metrics.py",
+      "sha256": "ffbf7261adae5583b0ba39d62c22a72d60cfd8dd85de7c5b207938a6f98672b5",
+      "bytes": 3458
+    },
+    {
+      "path": "experiments/05-R05/snapshot/src/mech_probe.py",
+      "sha256": "514a3bd1d7c586ae6c70e296efc588439a6f00ce4330f41be6e72dd3aff3ac23",
+      "bytes": 2147
+    },
+    {
+      "path": "experiments/05-R05/snapshot/src/mech_run.py",
+      "sha256": "ebb7b9690b66eb10f8d1f25ee1031cd6137383a1758d6d941f367913cbe0f485",
+      "bytes": 16315
+    },
+    {
+      "path": "experiments/05-R05/snapshot/run_loop.py",
+      "sha256": "96198e0b5031a22026e8d1ebbce81fd7db370ff5e5bfc9cfe2d5a7cd8c08db51",
+      "bytes": 7248
+    }
+  ],
+  "changes": {
+    "path": "analysis/diffs/05-R05.patch",
+    "sha256": "71c12fa2fb12a07c4e3a7e154cd0a02148c928ceee22de2986ccf279ad22371f",
+    "bytes": 900
+  },
+  "runtime_dependencies": {
+    "path": "logs/environment.json",
+    "sha256": "a081136648d5aa686556da339538cb3233194e414bb2ab458a85a1f22138ca52",
+    "bytes": 669
+  }
+}

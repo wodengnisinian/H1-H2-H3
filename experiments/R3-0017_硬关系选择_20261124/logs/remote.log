@@ -1,0 +1,13 @@
+Verified frozen dependency files 188
+Stage 1 r3_shared_weight_validation.py
+{"utc": "2026-11-24T11:44:10.808394+00:00", "event": "start", "version": "r12"}
+{"utc": "2026-11-24T11:44:10.899569+00:00", "event": "inputs_verified", "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad", "rows": 2600, "graphs": 600}
+{"utc": "2026-11-24T11:44:10.899773+00:00", "event": "seed_started", "seed": 1701}
+{"utc": "2026-11-24T11:44:17.532304+00:00", "event": "seed_saved", "seed": 1701, "prediction_rows": 49400, "primary_rows": 2600, "primary_hits": 2376}
+{"utc": "2026-11-24T11:44:17.532469+00:00", "event": "seed_started", "seed": 2701}
+{"utc": "2026-11-24T11:44:23.015094+00:00", "event": "seed_saved", "seed": 2701, "prediction_rows": 49400, "primary_rows": 2600, "primary_hits": 2367}
+{"utc": "2026-11-24T11:44:23.015229+00:00", "event": "seed_started", "seed": 3701}
+{"utc": "2026-11-24T11:44:28.494879+00:00", "event": "seed_saved", "seed": 3701, "prediction_rows": 49400, "primary_rows": 2600, "primary_hits": 2243}
+{"utc": "2026-11-24T11:44:28.513055+00:00", "event": "complete", "predictions_sha256": "bf4c2d79cffbe606c27a77d0d4ffc0199bb3ee09bdd40c4ba54fbf10f1fa7575"}
+Stage 2 r3_shared_stats.py
+{"variant": "sharp_role", "h1_accuracy": 1.0, "first_mentioned_accuracy": 0.4999999999999999, "h1_delta": 0.5, "h2_accuracy": 0.9144444444444466, "uniform_accuracy": 0.691666666666667, "h2_delta": 0.22277777777777757, "direct_accuracy": 0.6549999999999999, "pool_accuracy": 0.7077777777777766, "h2_minus_direct": 0.2594444444444445, "h2_minus_pool": 0.2066666666666666, "coverage": 1.0, "h1_lcb95": 0.48000000000000004, "h1_ci95": [0.4766666666666666, 0.5238888888888887], "h2_lcb95": 0.21324074074074065, "h2_ci95": [0.21120370370370364, 0.23444444444444434], "h2_minus_direct_lcb95": 0.23768518518518506, "h2_minus_direct_ci95": [0.23361111111111105, 0.2852777777777777], "h2_minus_pool_lcb95": 0.19611111111111107, "h2_minus_pool_ci95": [0.19398148148148148, 0.21944444444444441], "h1_pass": true, "h2_pass": true}

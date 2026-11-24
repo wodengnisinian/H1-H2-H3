@@ -1,0 +1,50 @@
+{
+  "id": "R16",
+  "version": "original",
+  "reference": "/data/spiderweb-r3-20261124-1740/R3",
+  "py": "/data/miniconda/envs/torch/bin/python",
+  "remote": "/data/spiderweb-shared-protocol-20261124-r16",
+  "first_run": "/data/spiderweb-shared-protocol-20261124-r16",
+  "steps": [
+    [
+      "{py}",
+      "-B",
+      "-u",
+      "{code}/r3_shared_cohort.py",
+      "--r3",
+      "{r3}",
+      "--inputs",
+      "{inputs}",
+      "--out",
+      "{cohortdir}"
+    ],
+    [
+      "{py}",
+      "-B",
+      "-u",
+      "{code}/r3_shared_weight_validation.py",
+      "--version",
+      "original",
+      "--r3",
+      "{r3}",
+      "--inputs",
+      "{inputs}",
+      "--cohort",
+      "{cohort}",
+      "--out",
+      "{scoredir}"
+    ],
+    [
+      "{py}",
+      "-B",
+      "-u",
+      "{code}/r3_shared_stats.py",
+      "--cohort",
+      "{cohort}",
+      "--predictions",
+      "{pred}",
+      "--out",
+      "{stats}"
+    ]
+  ]
+}

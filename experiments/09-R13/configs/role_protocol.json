@@ -1,0 +1,38 @@
+{
+  "id": "R08",
+  "seeds": [
+    1701,
+    2701,
+    3701
+  ],
+  "version": "r08-previous-markers-v1",
+  "hypothesis": "R03 showed weak role readout and R04 found room between current accuracy and the correct-relation oracle. Matching the training target to first-relation identification on a question-only role reader should transfer across wording and improve frozen H2 ranking.",
+  "prior_observations": "R03 fresh two-relation readout 52.78% vs randomized control 51.56%, new combinations 52.11% vs 49.78%; R04 correct-relation oracle 85.83% fresh, 255 of 637 direction errors outside the attainable interval.",
+  "dataset": "Same four graph-disjoint development cohorts as R03–R07. All learned R08 heads use the same archived training originals after holding out seven of 28 unordered relation pairs. Frozen encoder and prior checkpoint were exposed to all 28. No development question trains a role classifier.",
+  "eligible_training": "Same G=1, gold-in-top-two training graphs in the same shuffled minibatch order, no augmented wording, final epoch only.",
+  "epochs": 12,
+  "batch": 128,
+  "lr": 0.003,
+  "feature_batch": 128,
+  "challenge_per_stratum": 100,
+  "challenge_seed": 11242026,
+  "bootstrap_draws": 10000,
+  "bootstrap_seed": 619482,
+  "primary": "cue_role",
+  "params": 64,
+  "h1": "V derived from all training graph relation strings. M_j=1 iff question token j belongs to V. For each j and each of 8 fixed lexical marker classes use nearest preceding marker. Code its token distance in [1,2],[3,5],[6,10],[11,∞), separately within/across punctuation; feature is 1 or 0.5 respectively. t_j=w^T phi_j; p_j=M_j exp(t_j)/sum_k M_k exp(t_k). No candidate identity, gold, template identifier or raw token index enters t.",
+  "h2": "B_i=logsumexp(log p_j + r_ij), z_i=z_i0+GγB_i unchanged. With the mask, ratios exp(B_A-B_B) are weighted averages of exp(r_Aj-r_Bj) over j in M. This restricts or preserves the allowed interval. Closed gates and missed candidates cannot be repaired by H1.",
+  "objective": "Identical architecture and 64 trainable parameters for cue_candidate (two-candidate NLL) and cue_role (negative log mass of gold first relation occurrences). For L_role, dL/dt_j=p_j-1_{j in gold_relation} p_j/sum_gold p. For L_candidate, dB_i/dt_j=softmax(t+r_i)_j-p_j; the candidate-gradient vanishes with a closed gate and is scaled by the frozen relation scores. These objectives can yield different H1 even under identical ranking architecture.",
+  "controls": [
+    "first and independently trained pooled",
+    "direction",
+    "archived learned full-word H1",
+    "hidden_all_CE (full valid mask) -> hidden_rel_CE (only relation terms) -> cue_candidate (64 handcrafted context dimensions replace 64 frozen hidden coordinates) -> cue_role (loss alone changes)",
+    "cue_random_role (permute gold surface-order labels among eligible training graphs, preserve frequencies)",
+    "surface_first and surface_last assign all mass to first- or last-mentioned relation; no labels",
+    "rel_uniform (equal mass on relation positions)"
+  ],
+  "primary_comparison": "cue_role versus cue_candidate on fresh primary original ranking and relation identification. Both strict improvements constitute support for the training-objective hypothesis. Evaluate new combinations, withheld wording, swap responses, full quartet and original/paraphrase stability separately.",
+  "development_gate": "Only cue_role, and only if R07 did not already qualify. Fresh original >=+0.05 against both first and pooled; fresh paraphrase strictly positive vs both; fresh quartet > direct and >= pool. Three prespecified seeds required. Preserve existing one formal opening for the entire study.",
+  "limitations": "This role reader explicitly uses a learned-from-train relation vocabulary and hand-grouped Chinese temporal words. A success tests that representation and objective on controlled graphs; it cannot establish that the archived H1 learned unrestricted language or two-hop reasoning."
+}

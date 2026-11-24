@@ -1,0 +1,92 @@
+{
+  "status": "completed",
+  "finished_utc": "2026-11-24T09:45:05+00:00",
+  "elapsed_s": 62.956,
+  "environment": {
+    "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39",
+    "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]",
+    "torch": "2.10.0+cu128",
+    "numpy": "1.26.4",
+    "historical_device": "cpu"
+  },
+  "steps": [
+    {
+      "stage": "B13-recorded-seals",
+      "duration_seconds": 0.107,
+      "returncode": 0,
+      "stdout_sha256": "665d2c2a167a7fc08a4aeb8797447772bcea61a5526e103a046b0c6f6759e663"
+    },
+    {
+      "stage": "B13-frozen-inference",
+      "duration_seconds": 9.829,
+      "returncode": 0,
+      "stdout_sha256": "5fe0684bc317b00de30b03725144920b0d6682cb60b95d3bb4b198ca52580e21"
+    },
+    {
+      "stage": "B13-layers",
+      "duration_seconds": 9.543,
+      "returncode": 0,
+      "stdout_sha256": "299b44363b0673a8bf8460e343e30aa1865b373a0c6cfee7474e97be5be1b4a4"
+    },
+    {
+      "stage": "B13-reverse",
+      "duration_seconds": 8.351,
+      "returncode": 0,
+      "stdout_sha256": "ba222379f20aef57cf69e324acb28dcc1cc5bcda576ba3dbbfe5d78a71fab79d"
+    },
+    {
+      "stage": "B13-margins",
+      "duration_seconds": 9.935,
+      "returncode": 0,
+      "stdout_sha256": "12ec38fb6634c47c212d312e51293fdc437c249629e712111b0403b49942f242"
+    },
+    {
+      "stage": "B13-components",
+      "duration_seconds": 6.4,
+      "returncode": 0,
+      "stdout_sha256": "29cd95dd04e77dec4c1036926fb48a0d18421a4a062e30423d77d3644603ac15"
+    },
+    {
+      "stage": "B13-quartets",
+      "duration_seconds": 11.078,
+      "returncode": 0,
+      "stdout_sha256": "18e63b746bc6f0d3974c64994b6edb4fe530d919ca83edc372fe08be09dd4e59"
+    },
+    {
+      "stage": "prior-verifier",
+      "duration_seconds": 4.051,
+      "returncode": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "outputs_sha256": {
+    "B13-components.json": "29cd95dd04e77dec4c1036926fb48a0d18421a4a062e30423d77d3644603ac15",
+    "B13-components.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "B13-frozen-inference.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "B13-frozen-inference.txt": "5fe0684bc317b00de30b03725144920b0d6682cb60b95d3bb4b198ca52580e21",
+    "B13-layers.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "B13-layers.txt": "299b44363b0673a8bf8460e343e30aa1865b373a0c6cfee7474e97be5be1b4a4",
+    "B13-margins.json": "12ec38fb6634c47c212d312e51293fdc437c249629e712111b0403b49942f242",
+    "B13-margins.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "B13-original-by-graph.jsonl": "503d0a8c63e9d604cabd81c85e7e2cf782051c487f7b4c2d2c7a54093452d12f",
+    "B13-predictions/direct.jsonl": "6335c006da01096b398f51ad0ac3634e5c04429c86f7e7b03bc3932b9b3e836a",
+    "B13-predictions/pooled-1701.jsonl": "553032a0130824860f37b43d0db1733f9459f24d199028954722cc6590ef7569",
+    "B13-predictions/pooled-2701.jsonl": "3a61fcc06b5acc82182ef4cf7180e3f969f50628bb538fea25d46079d19ac457",
+    "B13-predictions/pooled-3701.jsonl": "c2057d6f5d70be8138b80ffd48f9707f01d729eaf02a0655b426b984efe606d0",
+    "B13-predictions/prediction-seal.json": "53f7822dd96acad817307066a765edecfe9f8cb5b3840afd2b617bf0603354ab",
+    "B13-predictions/serial-1701.jsonl": "0b0157f0ddaf5be94c8371635508a1ff333090790454efb31be82b63c0b176b5",
+    "B13-predictions/serial-2701.jsonl": "6be9dc0f106d56143da4f7a0c61d4acdaa101eb9778f533dcb8475c06029ee29",
+    "B13-predictions/serial-3701.jsonl": "a103b18ccab467c0c488788f0303c8cc117dd305c7a8e5347a3e6e73ec8d7710",
+    "B13-primary.json": "30dd56070c684fcf0991b0ec21fc95d337799e1ce43174cfcff02c7b6004dc01",
+    "B13-quartets.json": "18e63b746bc6f0d3974c64994b6edb4fe530d919ca83edc372fe08be09dd4e59",
+    "B13-quartets.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "B13-recorded-seals.json": "665d2c2a167a7fc08a4aeb8797447772bcea61a5526e103a046b0c6f6759e663",
+    "B13-recorded-seals.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "B13-reverse.json": "ba222379f20aef57cf69e324acb28dcc1cc5bcda576ba3dbbfe5d78a71fab79d",
+    "B13-reverse.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "input-manifest.json": "fdcc44ab91d33e31c709554c26be670df5a58440ca0f212680cd86a091b7ff9f",
+    "prior-development.json": "5521287b722c2c776359b8e74eb7a37e8ef140cc32a7d9a0d05daa119667edb2",
+    "prior-verifier.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "prior-verifier.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

@@ -1,0 +1,13 @@
+stratum,view,graphs,covered,changed_sets,changed_ordered_pairs,first_rank_ties,cutoff_ties,coverage_gained,coverage_lost
+all,identity,600,600,0,0,400,99,0,0
+all,candidate_reverse,600,600,0,600,400,99,0,0
+all,fact_reverse,600,600,99,499,400,99,0,0
+relation_order,identity,200,200,0,0,200,0,0,0
+relation_order,candidate_reverse,200,200,0,200,200,0,0,0
+relation_order,fact_reverse,200,200,0,200,200,0,0,0
+role_reversal,identity,200,200,0,0,200,0,0,0
+role_reversal,candidate_reverse,200,200,0,200,200,0,0,0
+role_reversal,fact_reverse,200,200,0,200,200,0,0,0
+competing_chain,identity,200,200,0,0,0,99,0,0
+competing_chain,candidate_reverse,200,200,0,200,0,99,0,0
+competing_chain,fact_reverse,200,200,99,99,0,99,0,0

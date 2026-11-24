@@ -1,0 +1,42 @@
+{
+  "reference": "/data/spiderweb-r3-20261124-1740/R3",
+  "py": "/data/miniconda/envs/torch/bin/python",
+  "document_sha256": "ba8a5ae0466e91ab5bace5e590ec4015d426778d45e79bc6c37d2ecf67eee003",
+  "budget": {
+    "max_attempts": 20,
+    "max_elapsed_hours": 8,
+    "since": "2026-11-24T17:38:00+08:00",
+    "extra_cost_cny": 0,
+    "formal_openings_used": 1,
+    "formal_openings_max": 1
+  },
+  "models": [
+    "strict_paper_shared_64",
+    "R12_sharp_role_preexisting"
+  ],
+  "seeds": [
+    1701,
+    2701,
+    3701
+  ],
+  "development": {
+    "cohort": "new development only; never a second independent H3; 600 fresh graphs, 200/stratum, unique personnel sets, generator index in [60000000,65000000), past exposed graph sets screened, exclude formal domain by range",
+    "primary": "original and paraphrase on each graph plus q0/q1/q2/q3 on each reversible graph, average all available primary views and 3 seeds within each graph; mean graphs per stratum then equal 3 strata",
+    "auxiliary": "original alone, and 600 previously unseen-template views outside primary. Reversal both correct, quartet, paraphrase decision agreement, coverage, per seed, gate groups",
+    "rng": 2026112416,
+    "bootstrap": "PCG64(2026112417); joint paired stratified graph resampling 10000, one-sided lower sorted order 500 one based",
+    "h1": "Sum shared token probabilities over every mention of each of the two question relation types; select max, award 0.5 on exact equality. Lexical baseline = first mentioned relation, not the first candidate. Pass overall accuracy >=0.80 AND lower95(candidate minus lexical) >0.",
+    "h2": "Paper H2 with original frozen gate and candidate order: primary Top1 minus uniform weighting of all nonpadding question tokens, gain >=0.02 AND lower95>0. Gold outside top2 counts as a miss; equal candidate score chooses first. Additional relation-mask uniform for R12 is diagnostic.",
+    "h3": "Historical once-only R09, R12 checkpoint and historical baselines only. No drawing new H3 or altering freeze retrospectively. New H1/H2 criteria are prospective on the new development cohorts and postdate formal R09."
+  },
+  "stop": "Stop if remaining 20-round/8-hour budget reached, assumptions structurally refuted and documented, or a fixed eligible version passes both H1/H2 and its historical H3 can be identified. If new H3 is required for a new version or ordering, record absence and exhausted opening. Never rescore independent raw samples for development.",
+  "id": "R16",
+  "version": "original",
+  "utc": "2026-11-24T11:40:43.042107+00:00",
+  "hypothesis": "论文原始共享词权重在一组全新开发图上同时达到 H1 和 H2 的预置门槛。",
+  "controls": [
+    "first-mentioned relation, uniform/random/learned/shuffled token mass; matched archived 1/4 groups and random-label probe as separate diagnostics",
+    "same shortlist: direction, original first layer, uniform all non-padding tokens, learned, shuffled, random, independent pool, direct first; open/closed gate subgroups"
+  ],
+  "checkpoint_policy": "Reuse original trained checkpoint per seed matched to historical inputs, with stored training configuration and loss records where available. No model selection or fitting to this new cohort."
+}

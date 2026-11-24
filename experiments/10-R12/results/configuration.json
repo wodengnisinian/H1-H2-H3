@@ -1,0 +1,76 @@
+{
+  "utc": "2026-11-24T09:57:52.151398+00:00",
+  "protocol": {
+    "id": "R12",
+    "version": "max-relation-mass-uniform-v1",
+    "seeds": [
+      1701,
+      2701,
+      3701
+    ],
+    "feature_batch": 128,
+    "challenge_seed": 11242026,
+    "challenge_per_stratum": 100,
+    "bootstrap_draws": 10000,
+    "bootstrap_seed": 619482,
+    "change": "Inference-only hard relation selection. No new fits, no threshold or temperature search. The R08 supervised cue scorer, question relation lexicon, all H2 components, data and ordered candidates are frozen.",
+    "evidence": "On the 600-graph R08 development cohort the supervised relation reader correctly selected its first relation in 100% of decisions, while soft-weight H2 original accuracy was 70.78%; R04's correct-relation ideal scored 85.83%. This comparison separates relation selection from dilution of its H2 correction.",
+    "hypothesis": "On fresh originals changing only soft support to the hard selected relation raises paired top1 accuracy; this test also requires that the prespecified 95% one-sided paired lower bound over soft is above zero. The primary candidate and formal gate are separate from this mechanism test.",
+    "formula": "For relation v let I_v be its token positions, T_v=LSE_{j in I_v}(t_j) and P_v=exp(T_v)/sum_u exp(T_u). Select argmax_v T_v; exact ties resolved by Unicode lexical order. p*_j=1/|I_v*| for positions of the chosen relation, 0 otherwise. H2 then adds G*gamma*(LSE_{j in I_v*}(r_ij)-log|I_v*|). When both relation terms occur once this reduces to the selected position's r_ij.",
+    "limit": "If T has a unique maximizer, soften at relation level as q_lambda(j)=softmax(lambda*T)_{v(j)}/|I_{v(j)}|, whose lambda→infinity limit equals p*. A tie under that smooth rule yields shared mass across tied relations; the explicit lexical convention is a further selection. Exponentiating original token logits instead converges to the token-level maximizers, so in general does not yield uniform weights across all mentions of a chosen repeated relation.",
+    "controls": [
+      "soft_role (same frozen R08 parameters)",
+      "sharp_random_role from R08 matched random-label head",
+      "sharp_first and sharp_last (first/last distinct relation in surface order)",
+      "direction, pool, direct",
+      "label-informed correct-relation uniform weight, diagnostic-only"
+    ],
+    "subgroups": "Report correct relation, gate open/closed, first relation mentioned earlier/later, fixed soft winner confidence bins [0.5,.7),[.7,.9),[.9,.99),[.99,1]. Each contains paired correctness change, correct-minus-other logit margin and graph counts. Raw rows retain both relation masses, scores, corrections and cases.",
+    "primary": "sharp_role",
+    "development_gate": "Use the study-wide fixed gate with all 3 seeds. On fresh originals gain ≥0.05 vs both direct and independently trained pool, fresh paraphrase >0 vs each, fresh quartet >direct and >=pool. Only sharp_role is eligible if the formal cohort is still unopened.",
+    "expected_identity": "When the predicted relation equals the gold relation, hard-selected scores equal the diagnostic label-based oracle with the same set of target positions. Closed-gate scores remain directional for every weight choice. Check both equalities numerically and retain errors independently of conclusion."
+  },
+  "protocol_sha256": "64f919f8bf3020eb0254425222cf9899f01d41616d83689da02f5f504dc35b67",
+  "seed": [
+    1701,
+    2701,
+    3701
+  ],
+  "argv": [
+    "src/sharp_run.py",
+    "--b13",
+    "/data/spiderweb-r3-20261124-1740/inputs/b13",
+    "--prior",
+    "/data/spiderweb-r3-20261124-1740/inputs/prior",
+    "--candidate",
+    "/data/spiderweb-r3-20261124-1740/R3/experiments/08-R08/results",
+    "--out",
+    "/data/spiderweb-r3-20261124-1740/R3/experiments/10-R12/results"
+  ],
+  "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]",
+  "torch": "2.10.0+cu128",
+  "numpy": "1.26.4",
+  "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39",
+  "r08_data_and_weights_sha256": {
+    "metrics.json": "c641037873019a8690ad754a4f0d8572e40a81412dc0343038f28b278c699363",
+    "configuration.json": "1f37d7ed2f84b7a3b4769bfce15aefe682d5de3de6f269bb67fb6ff505d621fe",
+    "dataset.json": "2a57b223a51e27acfbcc573c162fb6f499abc79b0dc70c19b205ea728d2900a4",
+    "development-inputs.jsonl.gz": "2d5c74c095109fb1819dc5c3f14e7397de89058af8364c2434736d611fae7cc3",
+    "events.jsonl": "640ce69f249238dc69cc910bc1d0fc722dfd120f543a76f8d726ef7388670919",
+    "parameters-1701.json": "5b5483916092e5d1e0949ac597e523a12c6d9385b3d8aa518986550f60cd000e",
+    "checkpoint-1701.json": "e5582ee18680e332bf88bd2c6299bed9dd804c94902c81f6434e89cc9c183597",
+    "predictions-1701.jsonl.gz": "803c8031ed7c42c50c5a6412dd0d4fb6dde4cdb71d537988b0d8665844b938a6",
+    "parameters-2701.json": "86ee5be6bdf6f2efcb4e17cbbb30d8e5833d311a5e38ecf2dd411ef90fa5e48d",
+    "checkpoint-2701.json": "cbe17056718d8f12dd8c63b3cbccc32c9c819237cb0c4f232842ed4466cd0a78",
+    "predictions-2701.jsonl.gz": "ca694dc7e3b25916b7643caef38642bd3d59aaba5b7338fb0e24dbb4eb63ba66",
+    "parameters-3701.json": "145306da24c5ac3f39fa57fbd6b1078c2d5c61d66d63139d83e752b7cd141c13",
+    "checkpoint-3701.json": "daa6fac643c00f3a8cf5ee9b9bcbda5fc1ad5ad3197c0ade48151d9c99a3f1e9",
+    "predictions-3701.jsonl.gz": "f46a3c3c4b53b02e25f3850d4eb5c8ae3f72902c1807ee28496a9abeec200630"
+  },
+  "new_training_updates": 0,
+  "source_sha256": {
+    "sharp_run.py": "58ecee6a641031e950606e69efb25447271552136f37aa648230ac4c18eb69c1",
+    "sharp_core.py": "f56c15184956476784b4922b453d4898178412e4c709f0f5dc632ab5dba86c54",
+    "model.py": "f85636ffa19443880e48d953c7d552af3d6bda5238c60ad424f445202c2c2b0f"
+  }
+}

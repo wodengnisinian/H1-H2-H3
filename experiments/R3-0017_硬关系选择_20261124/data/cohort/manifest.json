@@ -1,0 +1,145 @@
+{
+  "scope": "New development cohort for R16 and R17",
+  "generator_sha256": "c6d8eaa5081868946bc24969ddeed4450d6685ae9bd782a3cdb70dd43717b46f",
+  "graph_rng_seed": 2026112416,
+  "index_range_half_open": [
+    60000000,
+    65000000
+  ],
+  "formal_index_lower": 70000000,
+  "model_seeds": [
+    1701,
+    2701,
+    3701
+  ],
+  "archived_personnel_sets": 18000,
+  "archived_template_signatures": 48,
+  "historical_sources": {
+    "/data/spiderweb-r3-20261124-1740/inputs/b16/inputs/b15/inputs/b14/inputs/server-run/data/train.jsonl": {
+      "sha256": "e3eada4ea77d212ac29daf227ea842fe62e9e542c3d0b30874824bf3c20c0327",
+      "rows": 12000,
+      "personnel_sets": 12000
+    },
+    "/data/spiderweb-r3-20261124-1740/inputs/b16/inputs/b15/inputs/b14/inputs/server-run/data/dev.jsonl": {
+      "sha256": "c6e569b0f1bea757c9d447d5df4bdccfc8e74358f85761d9f77d1416b5377071",
+      "rows": 1800,
+      "personnel_sets": 1800
+    },
+    "/data/spiderweb-r3-20261124-1740/inputs/b13/cohort/features.jsonl": {
+      "sha256": "b49a3323c58e702d2562588e3ca823f604b90803b071614260611e84f399f44c",
+      "rows": 3000,
+      "personnel_sets": 3000
+    },
+    "/data/spiderweb-r3-20261124-1740/R3/experiments/03-R03/results/development-inputs.jsonl.gz": {
+      "sha256": "a8fa3d5a333bafde108aa8bf0d38238c38868daa4cfa1107eea2ca89d933dfda",
+      "rows": 10000,
+      "personnel_sets": 3000
+    },
+    "/data/spiderweb-r3-20261124-1740/R3/experiments/04-R04/results/development-inputs.jsonl.gz": {
+      "sha256": "871f738c652c39d2b3e5aa19feabb0cfe143d6885d07bda6b923d9a2244c5833",
+      "rows": 10000,
+      "personnel_sets": 3000
+    },
+    "/data/spiderweb-r3-20261124-1740/R3/experiments/05-R05/results/development-inputs.jsonl.gz": {
+      "sha256": "6c07c4fde399673dc78bd77f8792e96141ad6aff88219d085611f8a47a01998f",
+      "rows": 10000,
+      "personnel_sets": 3000
+    },
+    "/data/spiderweb-r3-20261124-1740/R3/experiments/06-R06/results/development-inputs.jsonl.gz": {
+      "sha256": "1ce0daa139534ef7bc4a29d7ff405e2441ac796c609b80d46afb3b1b19990632",
+      "rows": 10000,
+      "personnel_sets": 3000
+    },
+    "/data/spiderweb-r3-20261124-1740/R3/experiments/07-R07/results/development-inputs.jsonl.gz": {
+      "sha256": "e0874ff72e05b859156d7f45dc1318f115cbd2100c7bcb3ffeee628fb1d770d3",
+      "rows": 10000,
+      "personnel_sets": 3000
+    },
+    "/data/spiderweb-r3-20261124-1740/R3/experiments/08-R08/results/development-inputs.jsonl.gz": {
+      "sha256": "2d5c74c095109fb1819dc5c3f14e7397de89058af8364c2434736d611fae7cc3",
+      "rows": 10000,
+      "personnel_sets": 3000
+    },
+    "/data/spiderweb-r3-20261124-1740/R3/experiments/09-R13/results/training/development-inputs.jsonl.gz": {
+      "sha256": "e9c7625150da352ad580dd9d697a85b9745f624300905195b28be76c96e41a12",
+      "rows": 10000,
+      "personnel_sets": 3000
+    },
+    "/data/spiderweb-r3-20261124-1740/R3/experiments/10-R12/results/development-inputs.jsonl.gz": {
+      "sha256": "2d5c74c095109fb1819dc5c3f14e7397de89058af8364c2434736d611fae7cc3",
+      "rows": 10000,
+      "personnel_sets": 3000
+    },
+    "/data/spiderweb-r3-20261124-1740/inputs/b16/inputs/b15/inputs/b14/inputs/server-run/data/train-clause-views.jsonl": {
+      "sha256": "a8f08e22d33df00caf99d39e83e881b6dfdc2dcbeb2d67eef5f39c6f1ede1fa5",
+      "rows": 1840
+    },
+    "/data/spiderweb-r3-20261124-1740/R3/experiments/13-R11/results/inputs.jsonl": {
+      "sha256": "d2aa652a133cb666d3be37e40769990d1966a08884bcf2dccda335dfbe2bc1c8"
+    }
+  },
+  "archive_personnel_overlap": 0,
+  "rejected_draws": 0,
+  "graphs": 600,
+  "questions": 2600,
+  "quartet_graphs": 200,
+  "graph_id_sha256": "acc80eb22bc5dd2cd962c2f81f58003ff9ad1aae160b188ce05b94c36291fdc0",
+  "personnel_set_sha256": "6f6253b994886eb3e881e57eb796502608ed4b428f2db78d8c07efb5d26b4cea",
+  "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad",
+  "per_stratum": 200,
+  "templates": {
+    "original": [
+      "从 {anchor} 出发 ， 首先 按 {first} 关系 找 一人 。 第二 段 沿 {second} 关系 追踪 。 第一步 对应 哪条 记录 ？",
+      "请 确定 第一步 的 记录 。 以 {anchor} 为 起点 ， 开头 一段 追踪 {first} 关系 。 随后 按 {second} 关系 找 一人 。",
+      "第二 段 按 {second} 关系 找 一人 。 此前 从 {anchor} 开始 ， 沿 {first} 关系 追踪 。 应 先 使用 哪条 记录 ？",
+      "请 给出 开头 一段 对应 的 记录 。 最后 一段 追踪 {second} 关系 。 第一步 以 {anchor} 为 起点 ， 按 {first} 关系 找 一人 。"
+    ],
+    "paraphrase": [
+      "从 {anchor} 开始 ， 第一步 追踪 {first} 关系 。 最后 一段 追踪 {second} 关系 。 哪条 记录 对应 开头 一段 ？",
+      "最后 一段 追踪 {second} 关系 。 从 {anchor} 开始 ， 第一步 追踪 {first} 关系 。 哪条 记录 对应 开头 一段 ？"
+    ],
+    "unseen_template": [
+      "请 确定 对应 第一步 的 记录 。 以 {anchor} 为 起点 ， 首先 按 {first} 关系 追踪 。 最后 一段 按 {second} 关系 找 一人 。",
+      "请 确定 对应 第一步 的 记录 。 最后 一段 按 {second} 关系 找 一人 。 以 {anchor} 为 起点 ， 首先 按 {first} 关系 追踪 。"
+    ],
+    "quartet": [
+      "从 {anchor} 出发 ， 开头 一段 沿 {first} 关系 找 一人 。 第二 段 按 {second} 关系 找 一人 。 哪条 记录 对应 第一步 ？",
+      "第二 段 按 {second} 关系 找 一人 。 从 {anchor} 出发 ， 开头 一段 沿 {first} 关系 找 一人 。 哪条 记录 对应 第一步 ？"
+    ]
+  },
+  "view_counts": {
+    "original": 600,
+    "paraphrase": 600,
+    "q0": 200,
+    "q1": 200,
+    "q2": 200,
+    "q3": 200,
+    "unseen_template": 600
+  },
+  "candidate_hits_per_view": {
+    "original": 600,
+    "paraphrase": 600,
+    "q0": 200,
+    "q1": 200,
+    "q2": 200,
+    "q3": 200,
+    "unseen_template": 600
+  },
+  "question_oov": 0,
+  "instruction_max_length": 128,
+  "graph_duplicate_check": "six-person sets; entities and relation vocabulary intentionally shared",
+  "primary_views": [
+    "original",
+    "paraphrase",
+    "q0",
+    "q1",
+    "q2",
+    "q3"
+  ],
+  "quartet_order": [
+    "AB/forward",
+    "BA/forward",
+    "AB/reordered",
+    "BA/reordered"
+  ]
+}

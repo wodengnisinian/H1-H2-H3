@@ -1,0 +1,363 @@
+{
+  "schema": 1,
+  "rounds": [
+    {
+      "id": "R01",
+      "path": "experiments/01-R01",
+      "registered_files": 9,
+      "artifact_seal": {
+        "path": "experiments/01-R01/artifacts.json",
+        "sha256": "751f67fd68e0983b49b5fea12e8500bc15bfdc6b52ef876996ec6571218d411d",
+        "bytes": 870
+      },
+      "verified_artifact_bytes": 25953,
+      "checks": [
+        "start/end",
+        "artifacts",
+        "source",
+        "protocol",
+        "inputs",
+        "checkpoints",
+        "report_links"
+      ],
+      "local_manifest": {
+        "path": "experiments/01-R01/manifest.json",
+        "bytes": 4222,
+        "sha256": "802d1de9ce9a92a2f0b024bd5236493db97f7f9b20015a2814ea266d167ca078"
+      }
+    },
+    {
+      "id": "R02",
+      "path": "experiments/02-R02",
+      "registered_files": 42,
+      "artifact_seal": {
+        "path": "experiments/02-R02/artifacts.json",
+        "sha256": "af0cd590b3b62240776e348b7da468d388081e3636414a69410e32e88d71671f",
+        "bytes": 4473
+      },
+      "verified_artifact_bytes": 3402763,
+      "checks": [
+        "start/end",
+        "artifacts",
+        "source",
+        "protocol",
+        "inputs",
+        "checkpoints",
+        "report_links"
+      ],
+      "local_manifest": {
+        "path": "experiments/02-R02/manifest.json",
+        "bytes": 12584,
+        "sha256": "f4e55221ef4fc92255785a397216de0e059756a38ec32b96f633eac6a08bf74f"
+      }
+    },
+    {
+      "id": "R03",
+      "path": "experiments/03-R03",
+      "registered_files": 26,
+      "artifact_seal": {
+        "path": "experiments/03-R03/artifacts.json",
+        "sha256": "2ad8c253cf29abffb3db48ec0631199526f3791c50d57209323534aba0907569",
+        "bytes": 2606
+      },
+      "verified_artifact_bytes": 5966723,
+      "checks": [
+        "start/end",
+        "artifacts",
+        "source",
+        "protocol",
+        "inputs",
+        "checkpoints",
+        "report_links"
+      ],
+      "local_manifest": {
+        "path": "experiments/03-R03/manifest.json",
+        "bytes": 8605,
+        "sha256": "887084501a2ad7da5e0dc421ba1151fb6c4c3a7b3899017067fe0a603497c80a"
+      }
+    },
+    {
+      "id": "R04",
+      "path": "experiments/04-R04",
+      "registered_files": 26,
+      "artifact_seal": {
+        "path": "experiments/04-R04/artifacts.json",
+        "sha256": "b2f2ea9cc436917a28ba5b95db8bf2933f3648afd2e72c828369cc12400abf05",
+        "bytes": 2606
+      },
+      "verified_artifact_bytes": 5325848,
+      "checks": [
+        "start/end",
+        "artifacts",
+        "source",
+        "protocol",
+        "inputs",
+        "checkpoints",
+        "report_links"
+      ],
+      "local_manifest": {
+        "path": "experiments/04-R04/manifest.json",
+        "bytes": 8602,
+        "sha256": "4d73b197993a223611a90edb507c82a94d9d8c8d89fd28c038e930e5b9ef41cc"
+      }
+    },
+    {
+      "id": "R05",
+      "path": "experiments/05-R05",
+      "registered_files": 26,
+      "artifact_seal": {
+        "path": "experiments/05-R05/artifacts.json",
+        "sha256": "a4560ef617b7b46816d6929dafac6803d2d90438825386bd5ef7ad243e349af5",
+        "bytes": 2606
+      },
+      "verified_artifact_bytes": 7164592,
+      "checks": [
+        "start/end",
+        "artifacts",
+        "source",
+        "protocol",
+        "inputs",
+        "checkpoints",
+        "report_links"
+      ],
+      "local_manifest": {
+        "path": "experiments/05-R05/manifest.json",
+        "bytes": 8603,
+        "sha256": "2652bff4180e8ec18c993f0eb122a160b9a21cee795093fddb1c307b88396266"
+      }
+    },
+    {
+      "id": "R06",
+      "path": "experiments/06-R06",
+      "registered_files": 26,
+      "artifact_seal": {
+        "path": "experiments/06-R06/artifacts.json",
+        "sha256": "b988011a6a4cbeac625dbe53742d3189a9f754bc42280461568243a47e42f94b",
+        "bytes": 2606
+      },
+      "verified_artifact_bytes": 5130800,
+      "checks": [
+        "start/end",
+        "artifacts",
+        "source",
+        "protocol",
+        "inputs",
+        "checkpoints",
+        "report_links"
+      ],
+      "local_manifest": {
+        "path": "experiments/06-R06/manifest.json",
+        "bytes": 8602,
+        "sha256": "0fbbd910e5f36bcc2225d657365e33f028d802cdc9d514c16ee848eb1b352952"
+      }
+    },
+    {
+      "id": "R07",
+      "path": "experiments/07-R07",
+      "registered_files": 29,
+      "artifact_seal": {
+        "path": "experiments/07-R07/artifacts.json",
+        "sha256": "b0f74789b36c010c78f92adf3c12a0a7103960dd0641ed901e16f73f170d0c38",
+        "bytes": 2912
+      },
+      "verified_artifact_bytes": 5647818,
+      "checks": [
+        "start/end",
+        "artifacts",
+        "source",
+        "protocol",
+        "inputs",
+        "checkpoints",
+        "report_links"
+      ],
+      "local_manifest": {
+        "path": "experiments/07-R07/manifest.json",
+        "bytes": 9244,
+        "sha256": "c57f07957eafeccfaa0c627ee3eeb04f1501e1c630b6171c04e2d3374f69714d"
+      }
+    },
+    {
+      "id": "R08",
+      "path": "experiments/08-R08",
+      "registered_files": 31,
+      "artifact_seal": {
+        "path": "experiments/08-R08/artifacts.json",
+        "sha256": "ac94841cc6d170b0d8d0bf716a6095d34929e838c0785eba6fe246cf27dff33d",
+        "bytes": 3109
+      },
+      "verified_artifact_bytes": 13210878,
+      "checks": [
+        "start/end",
+        "artifacts",
+        "source",
+        "protocol",
+        "inputs",
+        "checkpoints",
+        "report_links"
+      ],
+      "local_manifest": {
+        "path": "experiments/08-R08/manifest.json",
+        "bytes": 9945,
+        "sha256": "99d35b860f0ecc92e02f59bfc735f0f5f628369a39bd1599c3f4e287ad3f7892"
+      }
+    },
+    {
+      "id": "R13",
+      "path": "experiments/09-R13",
+      "registered_files": 33,
+      "artifact_seal": {
+        "path": "experiments/09-R13/artifacts.json",
+        "sha256": "e0d262f55ec0eb42e48057145771e725e1f3b1b60c7cf42e831a2f945a3055b1",
+        "bytes": 3455
+      },
+      "verified_artifact_bytes": 13214277,
+      "checks": [
+        "start/end",
+        "artifacts",
+        "source",
+        "protocol",
+        "inputs",
+        "checkpoints",
+        "report_links"
+      ],
+      "local_manifest": {
+        "path": "experiments/09-R13/manifest.json",
+        "bytes": 10799,
+        "sha256": "d2804a54f0610461787ff86adda4bc398db06b0cc5192c9df484a1690f10f154"
+      }
+    },
+    {
+      "id": "R12",
+      "path": "experiments/10-R12",
+      "registered_files": 30,
+      "artifact_seal": {
+        "path": "experiments/10-R12/artifacts.json",
+        "sha256": "eaca82b1c7163a7e3cf6c5e53f48fdf170b53e75e2d333bdadf42bb82a8fcc99",
+        "bytes": 3003
+      },
+      "verified_artifact_bytes": 8733627,
+      "checks": [
+        "start/end",
+        "artifacts",
+        "source",
+        "protocol",
+        "inputs",
+        "checkpoints",
+        "report_links"
+      ],
+      "local_manifest": {
+        "path": "experiments/10-R12/manifest.json",
+        "bytes": 10010,
+        "sha256": "90295121f27b69e42e746bb10df30ef60f3fdbe789d1e4f13e7b061088934351"
+      }
+    },
+    {
+      "id": "R09",
+      "path": "experiments/11-R09",
+      "registered_files": 24,
+      "artifact_seal": {
+        "path": "experiments/11-R09/artifacts.json",
+        "sha256": "79db4b4802f801b38c04083cbad24e5cbb4d0335a88c37be47d5ef2fcdcc7019",
+        "bytes": 2366
+      },
+      "verified_artifact_bytes": 59214279,
+      "checks": [
+        "start/end",
+        "artifacts",
+        "source",
+        "protocol",
+        "inputs",
+        "checkpoints",
+        "report_links"
+      ],
+      "local_manifest": {
+        "path": "experiments/11-R09/manifest.json",
+        "bytes": 8103,
+        "sha256": "faa47a07fb1d664409a333e71cccae70b64e79a5e651d4080e51f0c9886b2b14"
+      }
+    },
+    {
+      "id": "R10",
+      "path": "experiments/12-R10",
+      "registered_files": 37,
+      "artifact_seal": {
+        "path": "experiments/12-R10/artifacts.json",
+        "sha256": "8576381671d806a56f3fbc2438a35884226a468c6e3cd925e36500a3c18e4527",
+        "bytes": 3726
+      },
+      "verified_artifact_bytes": 14791552,
+      "checks": [
+        "start/end",
+        "artifacts",
+        "source",
+        "protocol",
+        "inputs",
+        "checkpoints",
+        "report_links"
+      ],
+      "local_manifest": {
+        "path": "experiments/12-R10/manifest.json",
+        "bytes": 10396,
+        "sha256": "9bd14636cea58000c12ee7fcef3f0f1ea0c0b8b012529f1255d04a1dbf5bffbf"
+      }
+    },
+    {
+      "id": "R11",
+      "path": "experiments/13-R11",
+      "registered_files": 25,
+      "artifact_seal": {
+        "path": "experiments/13-R11/artifacts.json",
+        "sha256": "65bdd2b244c2e5521cb40ade2ee287c5c59716c8be3e32126c6e9cc8dbbc1bf4",
+        "bytes": 2445
+      },
+      "verified_artifact_bytes": 1792165,
+      "checks": [
+        "start/end",
+        "artifacts",
+        "source",
+        "protocol",
+        "inputs",
+        "checkpoints",
+        "report_links"
+      ],
+      "local_manifest": {
+        "path": "experiments/13-R11/manifest.json",
+        "bytes": 8122,
+        "sha256": "2d447408506f0d016568264909edfd2af7d71850a8d3656b60991b1936be5efd"
+      }
+    }
+  ],
+  "input_archive": {
+    "path": "datasets/归档输入.zip",
+    "sha256": "72c84de654b7b84ecadf32147d3255dc96ed8dc2befccf5b93b976e34c8f19ce",
+    "bytes": 10390056
+  },
+  "verified_input_members": 85,
+  "verified_input_uncompressed_bytes": 36530965,
+  "registry": {
+    "path": "logs/恢复校验/云端原始轮次登记.jsonl",
+    "bytes": 43598,
+    "sha256": "ac651f9f45c34ee642aecfdb57a2c770c2ed0d6a974707636578642a85294403"
+  },
+  "input_manifest": {
+    "path": "datasets/inputs.json",
+    "sha256": "54d20d22a43daea1f6ea58f2cf38ce3d3f59a3fc8ab3cd20b56040332122052c",
+    "bytes": 14343
+  },
+  "original_transfer": {
+    "path": "logs/恢复校验/r3-closed-20261124.zip",
+    "sha256": "aefe15f906c4c2853e977d23b982a8b0c98da617c97317e0f49084fa70180f17",
+    "bytes": 82018254
+  },
+  "cloud_file_index": {
+    "path": "logs/恢复校验/remote_files.json",
+    "sha256": "5fb31d775f31ca33b8e8b6b88e5f864f41176c51a01a0d9585b04b3ab65e45e5",
+    "bytes": 79882
+  },
+  "environment": {
+    "path": "logs/environment.json",
+    "sha256": "a081136648d5aa686556da339538cb3233194e414bb2ab458a85a1f22138ca52",
+    "bytes": 669
+  },
+  "local_navigation_files": 209
+}

@@ -1,0 +1,27 @@
+--- /dev/null
++++ R04/configs/R04.json
+@@ -0,0 +1,24 @@
++{
++  "id": "R04",
++  "hypothesis": "The closed gate and per-token margin extrema impose an empirical ceiling on attainable first-hop accuracy.",
++  "criteria": "Before training a new head, compare reachable ceiling with max(first,pool)+5pp. Separate negative strict upper bounds, exact zero ties, uncovered candidates and open/closed gates. Label-informed oracle and mathematical ceiling are diagnostics.",
++  "argv": [
++    "src/mech_run.py",
++    "--round",
++    "geometry",
++    "--b13",
++    "{inputs}/b13",
++    "--b16",
++    "{inputs}/b16",
++    "--prior",
++    "{inputs}/prior",
++    "--out",
++    "{out}"
++  ],
++  "sources": [
++    "src/mech_*.py",
++    "configs/mech_protocol.json"
++  ],
++  "receipt": "metrics.json",
++  "after": "按本轮逐题结果和冻结判据评估下轮实验"
++}

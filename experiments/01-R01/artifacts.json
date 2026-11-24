@@ -1,0 +1,11 @@
+{
+  "preregistration.json": "d38bd6cee142fa2577aa84725102eb52f39000ed5f67ac35a08e643f69d1d0d3",
+  "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "resources.json": "832ade824cd1483ddb710210735039ee25a06634ed7f90b353d8bb95a97fadf2",
+  "snapshot/run_loop.py": "96198e0b5031a22026e8d1ebbce81fd7db370ff5e5bfc9cfe2d5a7cd8c08db51",
+  "results/input_digests.json": "e445644d63d7fd47b3dc2393976c00147d3ed89b0644e955d2a27a2d8f22c1ec",
+  "results/metrics.json": "16aea32d464898d99e580ec147d0a47d857323fd6530ba9550cbc85de4ff0e04",
+  "snapshot/src/input_audit.py": "fb894f0c23029096acee886b6bfdde9648ecd1db23cdfef9ddc29045b63bb40b",
+  "snapshot/configs/R01.json": "d38bd6cee142fa2577aa84725102eb52f39000ed5f67ac35a08e643f69d1d0d3",
+  "snapshot/configs/research_protocol.json": "2685817419c4c32724f294ebcde7df8f548e5937e7778a069d82ffbd28f0e610"
+}

@@ -1,0 +1,73 @@
+{
+  "protocol": {
+    "id": "R08",
+    "seeds": [
+      1701,
+      2701,
+      3701
+    ],
+    "version": "r08-previous-markers-v1",
+    "hypothesis": "R03 showed weak role readout and R04 found room between current accuracy and the correct-relation oracle. Matching the training target to first-relation identification on a question-only role reader should transfer across wording and improve frozen H2 ranking.",
+    "prior_observations": "R03 fresh two-relation readout 52.78% vs randomized control 51.56%, new combinations 52.11% vs 49.78%; R04 correct-relation oracle 85.83% fresh, 255 of 637 direction errors outside the attainable interval.",
+    "dataset": "Same four graph-disjoint development cohorts as R03–R07. All learned R08 heads use the same archived training originals after holding out seven of 28 unordered relation pairs. Frozen encoder and prior checkpoint were exposed to all 28. No development question trains a role classifier.",
+    "eligible_training": "Same G=1, gold-in-top-two training graphs in the same shuffled minibatch order, no augmented wording, final epoch only.",
+    "epochs": 12,
+    "batch": 128,
+    "lr": 0.003,
+    "feature_batch": 128,
+    "challenge_per_stratum": 100,
+    "challenge_seed": 11242026,
+    "bootstrap_draws": 10000,
+    "bootstrap_seed": 619482,
+    "primary": "cue_role",
+    "params": 64,
+    "h1": "V derived from all training graph relation strings. M_j=1 iff question token j belongs to V. For each j and each of 8 fixed lexical marker classes use nearest preceding marker. Code its token distance in [1,2],[3,5],[6,10],[11,∞), separately within/across punctuation; feature is 1 or 0.5 respectively. t_j=w^T phi_j; p_j=M_j exp(t_j)/sum_k M_k exp(t_k). No candidate identity, gold, template identifier or raw token index enters t.",
+    "h2": "B_i=logsumexp(log p_j + r_ij), z_i=z_i0+GγB_i unchanged. With the mask, ratios exp(B_A-B_B) are weighted averages of exp(r_Aj-r_Bj) over j in M. This restricts or preserves the allowed interval. Closed gates and missed candidates cannot be repaired by H1.",
+    "objective": "Identical architecture and 64 trainable parameters for cue_candidate (two-candidate NLL) and cue_role (negative log mass of gold first relation occurrences). For L_role, dL/dt_j=p_j-1_{j in gold_relation} p_j/sum_gold p. For L_candidate, dB_i/dt_j=softmax(t+r_i)_j-p_j; the candidate-gradient vanishes with a closed gate and is scaled by the frozen relation scores. These objectives can yield different H1 even under identical ranking architecture.",
+    "controls": [
+      "first and independently trained pooled",
+      "direction",
+      "archived learned full-word H1",
+      "hidden_all_CE (full valid mask) -> hidden_rel_CE (only relation terms) -> cue_candidate (64 handcrafted context dimensions replace 64 frozen hidden coordinates) -> cue_role (loss alone changes)",
+      "cue_random_role (permute gold surface-order labels among eligible training graphs, preserve frequencies)",
+      "surface_first and surface_last assign all mass to first- or last-mentioned relation; no labels",
+      "rel_uniform (equal mass on relation positions)"
+    ],
+    "primary_comparison": "cue_role versus cue_candidate on fresh primary original ranking and relation identification. Both strict improvements constitute support for the training-objective hypothesis. Evaluate new combinations, withheld wording, swap responses, full quartet and original/paraphrase stability separately.",
+    "development_gate": "Only cue_role, and only if R07 did not already qualify. Fresh original >=+0.05 against both first and pooled; fresh paraphrase strictly positive vs both; fresh quartet > direct and >= pool. Three prespecified seeds required. Preserve existing one formal opening for the entire study.",
+    "limitations": "This role reader explicitly uses a learned-from-train relation vocabulary and hand-grouped Chinese temporal words. A success tests that representation and objective on controlled graphs; it cannot establish that the archived H1 learned unrestricted language or two-hop reasoning."
+  },
+  "protocol_sha256": "a1572d5267397f5567f61c8a6859cd1f4da0734f2394fc2ac2e9fa154e0ac5aa",
+  "argv": [
+    "src/role_run.py",
+    "--b13",
+    "/data/spiderweb-r3-20261124-1740/inputs/b13",
+    "--b16",
+    "/data/spiderweb-r3-20261124-1740/inputs/b16",
+    "--prior",
+    "/data/spiderweb-r3-20261124-1740/inputs/prior",
+    "--out",
+    "/data/spiderweb-r3-20261124-1740/R3/experiments/08-R08/results"
+  ],
+  "utc": "2026-11-24T09:52:03.715446+00:00",
+  "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]",
+  "torch": "2.10.0+cu128",
+  "numpy": "1.26.4",
+  "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39",
+  "seeds": [
+    1701,
+    2701,
+    3701
+  ],
+  "source_sha256": {
+    "role_core.py": "713909ab7c417c2b7f950938e291498c51651adfef3922a169067749a509ab8f",
+    "role_run.py": "3e71c5a167116fc1bc191621c97d4ade056b4778383c7c435951ae87f3188c98",
+    "mech_core.py": "8a2ae2cf12883285ca2c42499210ba406cb5bdbe598964f6c192d4d5859f1795",
+    "mech_data.py": "82bd90f8af14bf8422506fbac63437586e85ac8d8cd7cedd09a06a4f4737f8c7",
+    "mech_metrics.py": "ffbf7261adae5583b0ba39d62c22a72d60cfd8dd85de7c5b207938a6f98672b5",
+    "mech_probe.py": "514a3bd1d7c586ae6c70e296efc588439a6f00ce4330f41be6e72dd3aff3ac23",
+    "mech_run.py": "ebb7b9690b66eb10f8d1f25ee1031cd6137383a1758d6d941f367913cbe0f485",
+    "model.py": "f85636ffa19443880e48d953c7d552af3d6bda5238c60ad424f445202c2c2b0f",
+    "data_views.py": "63e3a58286f0fc8af0908d794a27378f167e6c72d92eb4a424967345c380f8b9"
+  }
+}

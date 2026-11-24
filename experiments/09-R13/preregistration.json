@@ -1,0 +1,22 @@
+{
+  "id": "R13",
+  "hypothesis": "R08 在首步角色识别上取得的增益可在新进程从零初始化重新训练得到。",
+  "criteria": "复跑全部三个种子，核验12份检查点、参数、逐题预测和错误记录（压缩文件比较解压字节），并核对两个指标体系及配对区间。",
+  "argv": [
+    "src/replicate.py",
+    "--inputs",
+    "{inputs}",
+    "--candidate",
+    "{root}/experiments/08-R08/results",
+    "--out",
+    "{out}"
+  ],
+  "sources": [
+    "src/replicate.py",
+    "src/role_*.py",
+    "src/mech_*.py",
+    "configs/role_protocol.json"
+  ],
+  "receipt": "metrics.json",
+  "after": "据重复性证据决定能否将同一训练器用于下一阶段"
+}

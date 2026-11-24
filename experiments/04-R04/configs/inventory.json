@@ -1,0 +1,25 @@
+{
+  "path_base": "R3",
+  "registered_configurations": [
+    {
+      "path": "experiments/04-R04/preregistration.json",
+      "sha256": "d5acb13cfe0068ae0601787d48bb74da1f307abf7501160e97388eb61b6826f8",
+      "bytes": 776
+    },
+    {
+      "path": "experiments/04-R04/snapshot/configs/mech_protocol.json",
+      "sha256": "1eac45f68ceca3c796b916d8475a623698d5151e4dfcfd92b9b05f6937e1ea11",
+      "bytes": 4128
+    },
+    {
+      "path": "experiments/04-R04/snapshot/configs/R04.json",
+      "sha256": "d5acb13cfe0068ae0601787d48bb74da1f307abf7501160e97388eb61b6826f8",
+      "bytes": 776
+    },
+    {
+      "path": "experiments/04-R04/snapshot/configs/research_protocol.json",
+      "sha256": "2685817419c4c32724f294ebcde7df8f548e5937e7778a069d82ffbd28f0e610",
+      "bytes": 1937
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "at": "2026-11-24T11:47:45.055607+00:00",
+  "attempts": 17,
+  "registered_files": 564,
+  "checks": [
+    {
+      "id": "R01",
+      "registered_files": 9,
+      "registered_seal": "751f67fd68e0983b49b5fea12e8500bc15bfdc6b52ef876996ec6571218d411d",
+      "code": 0
+    },
+    {
+      "id": "R02",
+      "registered_files": 42,
+      "registered_seal": "af0cd590b3b62240776e348b7da468d388081e3636414a69410e32e88d71671f",
+      "code": 0
+    },
+    {
+      "id": "R03",
+      "registered_files": 26,
+      "registered_seal": "2ad8c253cf29abffb3db48ec0631199526f3791c50d57209323534aba0907569",
+      "code": 0
+    },
+    {
+      "id": "R04",
+      "registered_files": 26,
+      "registered_seal": "b2f2ea9cc436917a28ba5b95db8bf2933f3648afd2e72c828369cc12400abf05",
+      "code": 0
+    },
+    {
+      "id": "R05",
+      "registered_files": 26,
+      "registered_seal": "a4560ef617b7b46816d6929dafac6803d2d90438825386bd5ef7ad243e349af5",
+      "code": 0
+    },
+    {
+      "id": "R06",
+      "registered_files": 26,
+      "registered_seal": "b988011a6a4cbeac625dbe53742d3189a9f754bc42280461568243a47e42f94b",
+      "code": 0
+    },
+    {
+      "id": "R07",
+      "registered_files": 29,
+      "registered_seal": "b0f74789b36c010c78f92adf3c12a0a7103960dd0641ed901e16f73f170d0c38",
+      "code": 0
+    },
+    {
+      "id": "R08",
+      "registered_files": 31,
+      "registered_seal": "ac94841cc6d170b0d8d0bf716a6095d34929e838c0785eba6fe246cf27dff33d",
+      "code": 0
+    },
+    {
+      "id": "R13",
+      "registered_files": 33,
+      "registered_seal": "e0d262f55ec0eb42e48057145771e725e1f3b1b60c7cf42e831a2f945a3055b1",
+      "code": 0
+    },
+    {
+      "id": "R12",
+      "registered_files": 30,
+      "registered_seal": "eaca82b1c7163a7e3cf6c5e53f48fdf170b53e75e2d333bdadf42bb82a8fcc99",
+      "code": 0
+    },
+    {
+      "id": "R09",
+      "registered_files": 24,
+      "registered_seal": "79db4b4802f801b38c04083cbad24e5cbb4d0335a88c37be47d5ef2fcdcc7019",
+      "code": 0
+    },
+    {
+      "id": "R10",
+      "registered_files": 37,
+      "registered_seal": "8576381671d806a56f3fbc2438a35884226a468c6e3cd925e36500a3c18e4527",
+      "code": 0
+    },
+    {
+      "id": "R11",
+      "registered_files": 25,
+      "registered_seal": "65bdd2b244c2e5521cb40ade2ee287c5c59716c8be3e32126c6e9cc8dbbc1bf4",
+      "code": 0
+    },
+    {
+      "id": "R14",
+      "registered_files": 57,
+      "registered_seal": "4d9657241ac257b96c72e9e8079a62260239f65574cbc5e699952bc2c0e466ce",
+      "code": 0
+    },
+    {
+      "id": "R15",
+      "registered_files": 57,
+      "registered_seal": "02da395f12a31b5bb734c978964a46627a305c2f838f85a6a65c3c203d0e8793",
+      "code": 0
+    },
+    {
+      "id": "R16",
+      "registered_files": 43,
+      "registered_seal": "539d4870fa3dde44f78d8f80f8652d3e9ac82d46a39398c2a0f4b488302ef637",
+      "code": 0
+    },
+    {
+      "id": "R17",
+      "registered_files": 43,
+      "registered_seal": "7370ff3704c712cf602ab082b7b73b13f5e5bed48db7c675e90512985855c2c8",
+      "code": 0
+    }
+  ],
+  "new_rounds": [
+    "R16",
+    "R17"
+  ],
+  "new_protocol_sha256": "7c753bbb696a18324ea045c0a55baff9e830e72038f52bc01df3cd14a1ece2c6",
+  "objective_document_sha256": "ba8a5ae0466e91ab5bace5e590ec4015d426778d45e79bc6c37d2ecf67eee003",
+  "formal_openings_total": 1,
+  "new_formal_openings": 0,
+  "paired_verification_sha256": "7e7deb5015a7f681258a693a3f19f208acd6cdd4edabc5712386b75f5d5fbf81",
+  "report_sha256": "9edca760db258a662f4fd7028438d754cfb9cb5e58c73dc0f1082fdaa440a2b1"
+}

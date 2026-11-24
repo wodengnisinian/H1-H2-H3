@@ -1,0 +1,57 @@
+{
+  "graphs": 600,
+  "graph_seeds": 1800,
+  "strict": {
+    "source_index": {
+      "strict_joint": 101,
+      "prediction_only": 549
+    },
+    "content_sha256": {
+      "strict_joint": 600,
+      "prediction_only": 600
+    }
+  },
+  "correct": {
+    "source_index|original|first": 1191,
+    "source_index|original|pool": 1134,
+    "source_index|original|sharp_role": 1545,
+    "source_index|reversed|first": 1209,
+    "source_index|reversed|pool": 1141,
+    "source_index|reversed|sharp_role": 1561,
+    "source_index|shuffled|first": 1209,
+    "source_index|shuffled|pool": 1140,
+    "source_index|shuffled|sharp_role": 1550,
+    "content_sha256|original|first": 1218,
+    "content_sha256|original|pool": 1137,
+    "content_sha256|original|sharp_role": 1551,
+    "content_sha256|reversed|first": 1218,
+    "content_sha256|reversed|pool": 1137,
+    "content_sha256|reversed|sharp_role": 1551,
+    "content_sha256|shuffled|first": 1218,
+    "content_sha256|shuffled|pool": 1137,
+    "content_sha256|shuffled|sharp_role": 1551
+  },
+  "examples": {
+    "both_wrong": {
+      "graph_id": "4d86201f-3e70-56e4-a7b7-5f2b87b519ed",
+      "seed": 1701,
+      "gold": 5,
+      "before": 1,
+      "after": 11
+    },
+    "corrected": {
+      "graph_id": "fbb062ed-f24e-52a6-aa19-9f1af94b92f9",
+      "seed": 1701,
+      "gold": 9,
+      "before": 0,
+      "after": 9
+    },
+    "broken": {
+      "graph_id": "0d4672f4-f38d-5b4b-aa3c-b57a8d8db671",
+      "seed": 1701,
+      "gold": 7,
+      "before": 7,
+      "after": 10
+    }
+  }
+}

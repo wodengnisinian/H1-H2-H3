@@ -1,0 +1,1948 @@
+{
+  "primary_variant": "learned",
+  "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad",
+  "predictions_sha256": "a23a33f84b0ff4dd0d09f40c53b80025a5d8359e44295f5d52ffdbf95af133e9",
+  "scope": "Post hoc descriptive inspection of the fresh development predictions",
+  "units": {
+    "H1": "First relation in the ordered gold two-step path; exact mass ties receive half credit.",
+    "H2": "Exact agreement with the indexed gold first fact; uncovered examples count as misses.",
+    "actual": "Primary model's archived scores, using its natural gate.",
+    "forced_off": "Direction-base scores on the identical feature rows and ordered shortlist; setting G=0 in H2 removes its token correction exactly.",
+    "uniform": "Same graph, ordered shortlist, natural gate and frozen H2; uniform real-token weights.",
+    "counts": "Raw graph-view-seed decision totals. A reversible graph supplies six primary views, other graphs two.",
+    "graph_means": "Within each gate subgroup, average its available views within seed, then available seeds within graph, then graphs within stratum. Equal-three-stratum value requires a nonempty subgroup in all three strata.",
+    "comparisons": "Changes compare actual to each control on the same decision. Rescued = control wrong, actual correct; lost = control correct, actual wrong.",
+    "examples": "First qualifying primary decision by view order original/paraphrase/q0/q1/q2/q3, graph ID, seed. Missing examples have zero qualifying decisions."
+  },
+  "closed_gate_max_abs_logit_difference": 0.0,
+  "panels": {
+    "primary": {
+      "open": {
+        "all_seeds": {
+          "decisions": 4800,
+          "graphs": 400,
+          "graphs_per_stratum": {
+            "role_reversal": 200,
+            "relation_order": 200
+          },
+          "hits": {
+            "actual": 3253,
+            "forced_off": 3075,
+            "uniform": 2987
+          },
+          "raw_accuracy": {
+            "actual": 0.6777083333333334,
+            "forced_off": 0.640625,
+            "uniform": 0.6222916666666667
+          },
+          "first_relation_supervision": {
+            "fully_correct": 3484,
+            "wrong": 1316,
+            "ties": 0
+          },
+          "gold_in_ordered_shortlist": 4800,
+          "matched_choice_changes": {
+            "actual_vs_forced_off": {
+              "rescued": 354,
+              "lost": 176,
+              "different_errors": 0,
+              "unchanged_correct": 2899,
+              "unchanged_wrong": 1371
+            },
+            "actual_vs_uniform": {
+              "rescued": 398,
+              "lost": 132,
+              "different_errors": 0,
+              "unchanged_correct": 2855,
+              "unchanged_wrong": 1415
+            }
+          },
+          "graph_mean_by_stratum": {
+            "relation_order": {
+              "actual": 0.7044444444444444,
+              "forced_off": 0.6538888888888889,
+              "uniform": 0.6391666666666667
+            },
+            "role_reversal": {
+              "actual": 0.5975,
+              "forced_off": 0.6008333333333333,
+              "uniform": 0.5716666666666667
+            }
+          },
+          "equal_three_stratum_graph_mean": null
+        },
+        "per_seed": {
+          "1701": {
+            "decisions": 1600,
+            "graphs": 400,
+            "graphs_per_stratum": {
+              "role_reversal": 200,
+              "relation_order": 200
+            },
+            "hits": {
+              "actual": 1075,
+              "forced_off": 989,
+              "uniform": 946
+            },
+            "raw_accuracy": {
+              "actual": 0.671875,
+              "forced_off": 0.618125,
+              "uniform": 0.59125
+            },
+            "first_relation_supervision": {
+              "fully_correct": 1074,
+              "wrong": 526,
+              "ties": 0
+            },
+            "gold_in_ordered_shortlist": 1600,
+            "matched_choice_changes": {
+              "actual_vs_forced_off": {
+                "rescued": 121,
+                "lost": 35,
+                "different_errors": 0,
+                "unchanged_correct": 954,
+                "unchanged_wrong": 490
+              },
+              "actual_vs_uniform": {
+                "rescued": 163,
+                "lost": 34,
+                "different_errors": 0,
+                "unchanged_correct": 912,
+                "unchanged_wrong": 491
+              }
+            },
+            "graph_mean_by_stratum": {
+              "relation_order": {
+                "actual": 0.6991666666666667,
+                "forced_off": 0.6333333333333333,
+                "uniform": 0.6058333333333333
+              },
+              "role_reversal": {
+                "actual": 0.59,
+                "forced_off": 0.5725,
+                "uniform": 0.5475
+              }
+            },
+            "equal_three_stratum_graph_mean": null
+          },
+          "2701": {
+            "decisions": 1600,
+            "graphs": 400,
+            "graphs_per_stratum": {
+              "role_reversal": 200,
+              "relation_order": 200
+            },
+            "hits": {
+              "actual": 1091,
+              "forced_off": 1054,
+              "uniform": 1010
+            },
+            "raw_accuracy": {
+              "actual": 0.681875,
+              "forced_off": 0.65875,
+              "uniform": 0.63125
+            },
+            "first_relation_supervision": {
+              "fully_correct": 1213,
+              "wrong": 387,
+              "ties": 0
+            },
+            "gold_in_ordered_shortlist": 1600,
+            "matched_choice_changes": {
+              "actual_vs_forced_off": {
+                "rescued": 102,
+                "lost": 65,
+                "different_errors": 0,
+                "unchanged_correct": 989,
+                "unchanged_wrong": 444
+              },
+              "actual_vs_uniform": {
+                "rescued": 127,
+                "lost": 46,
+                "different_errors": 0,
+                "unchanged_correct": 964,
+                "unchanged_wrong": 463
+              }
+            },
+            "graph_mean_by_stratum": {
+              "relation_order": {
+                "actual": 0.7041666666666667,
+                "forced_off": 0.6758333333333333,
+                "uniform": 0.655
+              },
+              "role_reversal": {
+                "actual": 0.615,
+                "forced_off": 0.6075,
+                "uniform": 0.56
+              }
+            },
+            "equal_three_stratum_graph_mean": null
+          },
+          "3701": {
+            "decisions": 1600,
+            "graphs": 400,
+            "graphs_per_stratum": {
+              "role_reversal": 200,
+              "relation_order": 200
+            },
+            "hits": {
+              "actual": 1087,
+              "forced_off": 1032,
+              "uniform": 1031
+            },
+            "raw_accuracy": {
+              "actual": 0.679375,
+              "forced_off": 0.645,
+              "uniform": 0.644375
+            },
+            "first_relation_supervision": {
+              "fully_correct": 1197,
+              "wrong": 403,
+              "ties": 0
+            },
+            "gold_in_ordered_shortlist": 1600,
+            "matched_choice_changes": {
+              "actual_vs_forced_off": {
+                "rescued": 131,
+                "lost": 76,
+                "different_errors": 0,
+                "unchanged_correct": 956,
+                "unchanged_wrong": 437
+              },
+              "actual_vs_uniform": {
+                "rescued": 108,
+                "lost": 52,
+                "different_errors": 0,
+                "unchanged_correct": 979,
+                "unchanged_wrong": 461
+              }
+            },
+            "graph_mean_by_stratum": {
+              "relation_order": {
+                "actual": 0.71,
+                "forced_off": 0.6525,
+                "uniform": 0.6566666666666666
+              },
+              "role_reversal": {
+                "actual": 0.5875,
+                "forced_off": 0.6225,
+                "uniform": 0.6075
+              }
+            },
+            "equal_three_stratum_graph_mean": null
+          }
+        }
+      },
+      "closed": {
+        "all_seeds": {
+          "decisions": 1200,
+          "graphs": 200,
+          "graphs_per_stratum": {
+            "competing_chain": 200
+          },
+          "hits": {
+            "actual": 1037,
+            "forced_off": 1037,
+            "uniform": 1037
+          },
+          "raw_accuracy": {
+            "actual": 0.8641666666666666,
+            "forced_off": 0.8641666666666666,
+            "uniform": 0.8641666666666666
+          },
+          "first_relation_supervision": {
+            "fully_correct": 819,
+            "wrong": 381,
+            "ties": 0
+          },
+          "gold_in_ordered_shortlist": 1200,
+          "matched_choice_changes": {
+            "actual_vs_forced_off": {
+              "rescued": 0,
+              "lost": 0,
+              "different_errors": 0,
+              "unchanged_correct": 1037,
+              "unchanged_wrong": 163
+            },
+            "actual_vs_uniform": {
+              "rescued": 0,
+              "lost": 0,
+              "different_errors": 0,
+              "unchanged_correct": 1037,
+              "unchanged_wrong": 163
+            }
+          },
+          "graph_mean_by_stratum": {
+            "competing_chain": {
+              "actual": 0.8641666666666666,
+              "forced_off": 0.8641666666666666,
+              "uniform": 0.8641666666666666
+            }
+          },
+          "equal_three_stratum_graph_mean": null
+        },
+        "per_seed": {
+          "1701": {
+            "decisions": 400,
+            "graphs": 200,
+            "graphs_per_stratum": {
+              "competing_chain": 200
+            },
+            "hits": {
+              "actual": 349,
+              "forced_off": 349,
+              "uniform": 349
+            },
+            "raw_accuracy": {
+              "actual": 0.8725,
+              "forced_off": 0.8725,
+              "uniform": 0.8725
+            },
+            "first_relation_supervision": {
+              "fully_correct": 317,
+              "wrong": 83,
+              "ties": 0
+            },
+            "gold_in_ordered_shortlist": 400,
+            "matched_choice_changes": {
+              "actual_vs_forced_off": {
+                "rescued": 0,
+                "lost": 0,
+                "different_errors": 0,
+                "unchanged_correct": 349,
+                "unchanged_wrong": 51
+              },
+              "actual_vs_uniform": {
+                "rescued": 0,
+                "lost": 0,
+                "different_errors": 0,
+                "unchanged_correct": 349,
+                "unchanged_wrong": 51
+              }
+            },
+            "graph_mean_by_stratum": {
+              "competing_chain": {
+                "actual": 0.8725,
+                "forced_off": 0.8725,
+                "uniform": 0.8725
+              }
+            },
+            "equal_three_stratum_graph_mean": null
+          },
+          "2701": {
+            "decisions": 400,
+            "graphs": 200,
+            "graphs_per_stratum": {
+              "competing_chain": 200
+            },
+            "hits": {
+              "actual": 352,
+              "forced_off": 352,
+              "uniform": 352
+            },
+            "raw_accuracy": {
+              "actual": 0.88,
+              "forced_off": 0.88,
+              "uniform": 0.88
+            },
+            "first_relation_supervision": {
+              "fully_correct": 219,
+              "wrong": 181,
+              "ties": 0
+            },
+            "gold_in_ordered_shortlist": 400,
+            "matched_choice_changes": {
+              "actual_vs_forced_off": {
+                "rescued": 0,
+                "lost": 0,
+                "different_errors": 0,
+                "unchanged_correct": 352,
+                "unchanged_wrong": 48
+              },
+              "actual_vs_uniform": {
+                "rescued": 0,
+                "lost": 0,
+                "different_errors": 0,
+                "unchanged_correct": 352,
+                "unchanged_wrong": 48
+              }
+            },
+            "graph_mean_by_stratum": {
+              "competing_chain": {
+                "actual": 0.88,
+                "forced_off": 0.88,
+                "uniform": 0.88
+              }
+            },
+            "equal_three_stratum_graph_mean": null
+          },
+          "3701": {
+            "decisions": 400,
+            "graphs": 200,
+            "graphs_per_stratum": {
+              "competing_chain": 200
+            },
+            "hits": {
+              "actual": 336,
+              "forced_off": 336,
+              "uniform": 336
+            },
+            "raw_accuracy": {
+              "actual": 0.84,
+              "forced_off": 0.84,
+              "uniform": 0.84
+            },
+            "first_relation_supervision": {
+              "fully_correct": 283,
+              "wrong": 117,
+              "ties": 0
+            },
+            "gold_in_ordered_shortlist": 400,
+            "matched_choice_changes": {
+              "actual_vs_forced_off": {
+                "rescued": 0,
+                "lost": 0,
+                "different_errors": 0,
+                "unchanged_correct": 336,
+                "unchanged_wrong": 64
+              },
+              "actual_vs_uniform": {
+                "rescued": 0,
+                "lost": 0,
+                "different_errors": 0,
+                "unchanged_correct": 336,
+                "unchanged_wrong": 64
+              }
+            },
+            "graph_mean_by_stratum": {
+              "competing_chain": {
+                "actual": 0.84,
+                "forced_off": 0.84,
+                "uniform": 0.84
+              }
+            },
+            "equal_three_stratum_graph_mean": null
+          }
+        }
+      }
+    },
+    "original": {
+      "open": {
+        "all_seeds": {
+          "decisions": 1200,
+          "graphs": 400,
+          "graphs_per_stratum": {
+            "role_reversal": 200,
+            "relation_order": 200
+          },
+          "hits": {
+            "actual": 683,
+            "forced_off": 674,
+            "uniform": 631
+          },
+          "raw_accuracy": {
+            "actual": 0.5691666666666667,
+            "forced_off": 0.5616666666666666,
+            "uniform": 0.5258333333333334
+          },
+          "first_relation_supervision": {
+            "fully_correct": 729,
+            "wrong": 471,
+            "ties": 0
+          },
+          "gold_in_ordered_shortlist": 1200,
+          "matched_choice_changes": {
+            "actual_vs_forced_off": {
+              "rescued": 76,
+              "lost": 67,
+              "different_errors": 0,
+              "unchanged_correct": 607,
+              "unchanged_wrong": 450
+            },
+            "actual_vs_uniform": {
+              "rescued": 102,
+              "lost": 50,
+              "different_errors": 0,
+              "unchanged_correct": 581,
+              "unchanged_wrong": 467
+            }
+          },
+          "graph_mean_by_stratum": {
+            "relation_order": {
+              "actual": 0.5583333333333333,
+              "forced_off": 0.5499999999999999,
+              "uniform": 0.505
+            },
+            "role_reversal": {
+              "actual": 0.58,
+              "forced_off": 0.5733333333333334,
+              "uniform": 0.5466666666666666
+            }
+          },
+          "equal_three_stratum_graph_mean": null
+        },
+        "per_seed": {
+          "1701": {
+            "decisions": 400,
+            "graphs": 400,
+            "graphs_per_stratum": {
+              "role_reversal": 200,
+              "relation_order": 200
+            },
+            "hits": {
+              "actual": 236,
+              "forced_off": 221,
+              "uniform": 198
+            },
+            "raw_accuracy": {
+              "actual": 0.59,
+              "forced_off": 0.5525,
+              "uniform": 0.495
+            },
+            "first_relation_supervision": {
+              "fully_correct": 241,
+              "wrong": 159,
+              "ties": 0
+            },
+            "gold_in_ordered_shortlist": 400,
+            "matched_choice_changes": {
+              "actual_vs_forced_off": {
+                "rescued": 37,
+                "lost": 22,
+                "different_errors": 0,
+                "unchanged_correct": 199,
+                "unchanged_wrong": 142
+              },
+              "actual_vs_uniform": {
+                "rescued": 42,
+                "lost": 4,
+                "different_errors": 0,
+                "unchanged_correct": 194,
+                "unchanged_wrong": 160
+              }
+            },
+            "graph_mean_by_stratum": {
+              "relation_order": {
+                "actual": 0.575,
+                "forced_off": 0.54,
+                "uniform": 0.46
+              },
+              "role_reversal": {
+                "actual": 0.605,
+                "forced_off": 0.565,
+                "uniform": 0.53
+              }
+            },
+            "equal_three_stratum_graph_mean": null
+          },
+          "2701": {
+            "decisions": 400,
+            "graphs": 400,
+            "graphs_per_stratum": {
+              "role_reversal": 200,
+              "relation_order": 200
+            },
+            "hits": {
+              "actual": 218,
+              "forced_off": 217,
+              "uniform": 204
+            },
+            "raw_accuracy": {
+              "actual": 0.545,
+              "forced_off": 0.5425,
+              "uniform": 0.51
+            },
+            "first_relation_supervision": {
+              "fully_correct": 202,
+              "wrong": 198,
+              "ties": 0
+            },
+            "gold_in_ordered_shortlist": 400,
+            "matched_choice_changes": {
+              "actual_vs_forced_off": {
+                "rescued": 26,
+                "lost": 25,
+                "different_errors": 0,
+                "unchanged_correct": 192,
+                "unchanged_wrong": 157
+              },
+              "actual_vs_uniform": {
+                "rescued": 40,
+                "lost": 26,
+                "different_errors": 0,
+                "unchanged_correct": 178,
+                "unchanged_wrong": 156
+              }
+            },
+            "graph_mean_by_stratum": {
+              "relation_order": {
+                "actual": 0.515,
+                "forced_off": 0.515,
+                "uniform": 0.485
+              },
+              "role_reversal": {
+                "actual": 0.575,
+                "forced_off": 0.57,
+                "uniform": 0.535
+              }
+            },
+            "equal_three_stratum_graph_mean": null
+          },
+          "3701": {
+            "decisions": 400,
+            "graphs": 400,
+            "graphs_per_stratum": {
+              "role_reversal": 200,
+              "relation_order": 200
+            },
+            "hits": {
+              "actual": 229,
+              "forced_off": 236,
+              "uniform": 229
+            },
+            "raw_accuracy": {
+              "actual": 0.5725,
+              "forced_off": 0.59,
+              "uniform": 0.5725
+            },
+            "first_relation_supervision": {
+              "fully_correct": 286,
+              "wrong": 114,
+              "ties": 0
+            },
+            "gold_in_ordered_shortlist": 400,
+            "matched_choice_changes": {
+              "actual_vs_forced_off": {
+                "rescued": 13,
+                "lost": 20,
+                "different_errors": 0,
+                "unchanged_correct": 216,
+                "unchanged_wrong": 151
+              },
+              "actual_vs_uniform": {
+                "rescued": 20,
+                "lost": 20,
+                "different_errors": 0,
+                "unchanged_correct": 209,
+                "unchanged_wrong": 151
+              }
+            },
+            "graph_mean_by_stratum": {
+              "relation_order": {
+                "actual": 0.585,
+                "forced_off": 0.595,
+                "uniform": 0.57
+              },
+              "role_reversal": {
+                "actual": 0.56,
+                "forced_off": 0.585,
+                "uniform": 0.575
+              }
+            },
+            "equal_three_stratum_graph_mean": null
+          }
+        }
+      },
+      "closed": {
+        "all_seeds": {
+          "decisions": 600,
+          "graphs": 200,
+          "graphs_per_stratum": {
+            "competing_chain": 200
+          },
+          "hits": {
+            "actual": 480,
+            "forced_off": 480,
+            "uniform": 480
+          },
+          "raw_accuracy": {
+            "actual": 0.8,
+            "forced_off": 0.8,
+            "uniform": 0.8
+          },
+          "first_relation_supervision": {
+            "fully_correct": 348,
+            "wrong": 252,
+            "ties": 0
+          },
+          "gold_in_ordered_shortlist": 600,
+          "matched_choice_changes": {
+            "actual_vs_forced_off": {
+              "rescued": 0,
+              "lost": 0,
+              "different_errors": 0,
+              "unchanged_correct": 480,
+              "unchanged_wrong": 120
+            },
+            "actual_vs_uniform": {
+              "rescued": 0,
+              "lost": 0,
+              "different_errors": 0,
+              "unchanged_correct": 480,
+              "unchanged_wrong": 120
+            }
+          },
+          "graph_mean_by_stratum": {
+            "competing_chain": {
+              "actual": 0.7999999999999999,
+              "forced_off": 0.7999999999999999,
+              "uniform": 0.7999999999999999
+            }
+          },
+          "equal_three_stratum_graph_mean": null
+        },
+        "per_seed": {
+          "1701": {
+            "decisions": 200,
+            "graphs": 200,
+            "graphs_per_stratum": {
+              "competing_chain": 200
+            },
+            "hits": {
+              "actual": 167,
+              "forced_off": 167,
+              "uniform": 167
+            },
+            "raw_accuracy": {
+              "actual": 0.835,
+              "forced_off": 0.835,
+              "uniform": 0.835
+            },
+            "first_relation_supervision": {
+              "fully_correct": 120,
+              "wrong": 80,
+              "ties": 0
+            },
+            "gold_in_ordered_shortlist": 200,
+            "matched_choice_changes": {
+              "actual_vs_forced_off": {
+                "rescued": 0,
+                "lost": 0,
+                "different_errors": 0,
+                "unchanged_correct": 167,
+                "unchanged_wrong": 33
+              },
+              "actual_vs_uniform": {
+                "rescued": 0,
+                "lost": 0,
+                "different_errors": 0,
+                "unchanged_correct": 167,
+                "unchanged_wrong": 33
+              }
+            },
+            "graph_mean_by_stratum": {
+              "competing_chain": {
+                "actual": 0.835,
+                "forced_off": 0.835,
+                "uniform": 0.835
+              }
+            },
+            "equal_three_stratum_graph_mean": null
+          },
+          "2701": {
+            "decisions": 200,
+            "graphs": 200,
+            "graphs_per_stratum": {
+              "competing_chain": 200
+            },
+            "hits": {
+              "actual": 158,
+              "forced_off": 158,
+              "uniform": 158
+            },
+            "raw_accuracy": {
+              "actual": 0.79,
+              "forced_off": 0.79,
+              "uniform": 0.79
+            },
+            "first_relation_supervision": {
+              "fully_correct": 93,
+              "wrong": 107,
+              "ties": 0
+            },
+            "gold_in_ordered_shortlist": 200,
+            "matched_choice_changes": {
+              "actual_vs_forced_off": {
+                "rescued": 0,
+                "lost": 0,
+                "different_errors": 0,
+                "unchanged_correct": 158,
+                "unchanged_wrong": 42
+              },
+              "actual_vs_uniform": {
+                "rescued": 0,
+                "lost": 0,
+                "different_errors": 0,
+                "unchanged_correct": 158,
+                "unchanged_wrong": 42
+              }
+            },
+            "graph_mean_by_stratum": {
+              "competing_chain": {
+                "actual": 0.79,
+                "forced_off": 0.79,
+                "uniform": 0.79
+              }
+            },
+            "equal_three_stratum_graph_mean": null
+          },
+          "3701": {
+            "decisions": 200,
+            "graphs": 200,
+            "graphs_per_stratum": {
+              "competing_chain": 200
+            },
+            "hits": {
+              "actual": 155,
+              "forced_off": 155,
+              "uniform": 155
+            },
+            "raw_accuracy": {
+              "actual": 0.775,
+              "forced_off": 0.775,
+              "uniform": 0.775
+            },
+            "first_relation_supervision": {
+              "fully_correct": 135,
+              "wrong": 65,
+              "ties": 0
+            },
+            "gold_in_ordered_shortlist": 200,
+            "matched_choice_changes": {
+              "actual_vs_forced_off": {
+                "rescued": 0,
+                "lost": 0,
+                "different_errors": 0,
+                "unchanged_correct": 155,
+                "unchanged_wrong": 45
+              },
+              "actual_vs_uniform": {
+                "rescued": 0,
+                "lost": 0,
+                "different_errors": 0,
+                "unchanged_correct": 155,
+                "unchanged_wrong": 45
+              }
+            },
+            "graph_mean_by_stratum": {
+              "competing_chain": {
+                "actual": 0.775,
+                "forced_off": 0.775,
+                "uniform": 0.775
+              }
+            },
+            "equal_three_stratum_graph_mean": null
+          }
+        }
+      }
+    },
+    "unseen_template": {
+      "open": {
+        "all_seeds": {
+          "decisions": 1200,
+          "graphs": 400,
+          "graphs_per_stratum": {
+            "role_reversal": 200,
+            "relation_order": 200
+          },
+          "hits": {
+            "actual": 495,
+            "forced_off": 528,
+            "uniform": 523
+          },
+          "raw_accuracy": {
+            "actual": 0.4125,
+            "forced_off": 0.44,
+            "uniform": 0.43583333333333335
+          },
+          "first_relation_supervision": {
+            "fully_correct": 525,
+            "wrong": 675,
+            "ties": 0
+          },
+          "gold_in_ordered_shortlist": 1200,
+          "matched_choice_changes": {
+            "actual_vs_forced_off": {
+              "rescued": 44,
+              "lost": 77,
+              "different_errors": 0,
+              "unchanged_correct": 451,
+              "unchanged_wrong": 628
+            },
+            "actual_vs_uniform": {
+              "rescued": 39,
+              "lost": 67,
+              "different_errors": 0,
+              "unchanged_correct": 456,
+              "unchanged_wrong": 638
+            }
+          },
+          "graph_mean_by_stratum": {
+            "relation_order": {
+              "actual": 0.4033333333333333,
+              "forced_off": 0.4333333333333333,
+              "uniform": 0.42833333333333334
+            },
+            "role_reversal": {
+              "actual": 0.42166666666666663,
+              "forced_off": 0.44666666666666666,
+              "uniform": 0.4433333333333333
+            }
+          },
+          "equal_three_stratum_graph_mean": null
+        },
+        "per_seed": {
+          "1701": {
+            "decisions": 400,
+            "graphs": 400,
+            "graphs_per_stratum": {
+              "role_reversal": 200,
+              "relation_order": 200
+            },
+            "hits": {
+              "actual": 130,
+              "forced_off": 164,
+              "uniform": 156
+            },
+            "raw_accuracy": {
+              "actual": 0.325,
+              "forced_off": 0.41,
+              "uniform": 0.39
+            },
+            "first_relation_supervision": {
+              "fully_correct": 5,
+              "wrong": 395,
+              "ties": 0
+            },
+            "gold_in_ordered_shortlist": 400,
+            "matched_choice_changes": {
+              "actual_vs_forced_off": {
+                "rescued": 6,
+                "lost": 40,
+                "different_errors": 0,
+                "unchanged_correct": 124,
+                "unchanged_wrong": 230
+              },
+              "actual_vs_uniform": {
+                "rescued": 4,
+                "lost": 30,
+                "different_errors": 0,
+                "unchanged_correct": 126,
+                "unchanged_wrong": 240
+              }
+            },
+            "graph_mean_by_stratum": {
+              "relation_order": {
+                "actual": 0.31,
+                "forced_off": 0.385,
+                "uniform": 0.36
+              },
+              "role_reversal": {
+                "actual": 0.34,
+                "forced_off": 0.435,
+                "uniform": 0.42
+              }
+            },
+            "equal_three_stratum_graph_mean": null
+          },
+          "2701": {
+            "decisions": 400,
+            "graphs": 400,
+            "graphs_per_stratum": {
+              "role_reversal": 200,
+              "relation_order": 200
+            },
+            "hits": {
+              "actual": 146,
+              "forced_off": 169,
+              "uniform": 163
+            },
+            "raw_accuracy": {
+              "actual": 0.365,
+              "forced_off": 0.4225,
+              "uniform": 0.4075
+            },
+            "first_relation_supervision": {
+              "fully_correct": 120,
+              "wrong": 280,
+              "ties": 0
+            },
+            "gold_in_ordered_shortlist": 400,
+            "matched_choice_changes": {
+              "actual_vs_forced_off": {
+                "rescued": 12,
+                "lost": 35,
+                "different_errors": 0,
+                "unchanged_correct": 134,
+                "unchanged_wrong": 219
+              },
+              "actual_vs_uniform": {
+                "rescued": 15,
+                "lost": 32,
+                "different_errors": 0,
+                "unchanged_correct": 131,
+                "unchanged_wrong": 222
+              }
+            },
+            "graph_mean_by_stratum": {
+              "relation_order": {
+                "actual": 0.315,
+                "forced_off": 0.38,
+                "uniform": 0.37
+              },
+              "role_reversal": {
+                "actual": 0.415,
+                "forced_off": 0.465,
+                "uniform": 0.445
+              }
+            },
+            "equal_three_stratum_graph_mean": null
+          },
+          "3701": {
+            "decisions": 400,
+            "graphs": 400,
+            "graphs_per_stratum": {
+              "role_reversal": 200,
+              "relation_order": 200
+            },
+            "hits": {
+              "actual": 219,
+              "forced_off": 195,
+              "uniform": 204
+            },
+            "raw_accuracy": {
+              "actual": 0.5475,
+              "forced_off": 0.4875,
+              "uniform": 0.51
+            },
+            "first_relation_supervision": {
+              "fully_correct": 400,
+              "wrong": 0,
+              "ties": 0
+            },
+            "gold_in_ordered_shortlist": 400,
+            "matched_choice_changes": {
+              "actual_vs_forced_off": {
+                "rescued": 26,
+                "lost": 2,
+                "different_errors": 0,
+                "unchanged_correct": 193,
+                "unchanged_wrong": 179
+              },
+              "actual_vs_uniform": {
+                "rescued": 20,
+                "lost": 5,
+                "different_errors": 0,
+                "unchanged_correct": 199,
+                "unchanged_wrong": 176
+              }
+            },
+            "graph_mean_by_stratum": {
+              "relation_order": {
+                "actual": 0.585,
+                "forced_off": 0.535,
+                "uniform": 0.555
+              },
+              "role_reversal": {
+                "actual": 0.51,
+                "forced_off": 0.44,
+                "uniform": 0.465
+              }
+            },
+            "equal_three_stratum_graph_mean": null
+          }
+        }
+      },
+      "closed": {
+        "all_seeds": {
+          "decisions": 600,
+          "graphs": 200,
+          "graphs_per_stratum": {
+            "competing_chain": 200
+          },
+          "hits": {
+            "actual": 414,
+            "forced_off": 414,
+            "uniform": 414
+          },
+          "raw_accuracy": {
+            "actual": 0.69,
+            "forced_off": 0.69,
+            "uniform": 0.69
+          },
+          "first_relation_supervision": {
+            "fully_correct": 257,
+            "wrong": 343,
+            "ties": 0
+          },
+          "gold_in_ordered_shortlist": 600,
+          "matched_choice_changes": {
+            "actual_vs_forced_off": {
+              "rescued": 0,
+              "lost": 0,
+              "different_errors": 0,
+              "unchanged_correct": 414,
+              "unchanged_wrong": 186
+            },
+            "actual_vs_uniform": {
+              "rescued": 0,
+              "lost": 0,
+              "different_errors": 0,
+              "unchanged_correct": 414,
+              "unchanged_wrong": 186
+            }
+          },
+          "graph_mean_by_stratum": {
+            "competing_chain": {
+              "actual": 0.69,
+              "forced_off": 0.69,
+              "uniform": 0.69
+            }
+          },
+          "equal_three_stratum_graph_mean": null
+        },
+        "per_seed": {
+          "1701": {
+            "decisions": 200,
+            "graphs": 200,
+            "graphs_per_stratum": {
+              "competing_chain": 200
+            },
+            "hits": {
+              "actual": 133,
+              "forced_off": 133,
+              "uniform": 133
+            },
+            "raw_accuracy": {
+              "actual": 0.665,
+              "forced_off": 0.665,
+              "uniform": 0.665
+            },
+            "first_relation_supervision": {
+              "fully_correct": 2,
+              "wrong": 198,
+              "ties": 0
+            },
+            "gold_in_ordered_shortlist": 200,
+            "matched_choice_changes": {
+              "actual_vs_forced_off": {
+                "rescued": 0,
+                "lost": 0,
+                "different_errors": 0,
+                "unchanged_correct": 133,
+                "unchanged_wrong": 67
+              },
+              "actual_vs_uniform": {
+                "rescued": 0,
+                "lost": 0,
+                "different_errors": 0,
+                "unchanged_correct": 133,
+                "unchanged_wrong": 67
+              }
+            },
+            "graph_mean_by_stratum": {
+              "competing_chain": {
+                "actual": 0.665,
+                "forced_off": 0.665,
+                "uniform": 0.665
+              }
+            },
+            "equal_three_stratum_graph_mean": null
+          },
+          "2701": {
+            "decisions": 200,
+            "graphs": 200,
+            "graphs_per_stratum": {
+              "competing_chain": 200
+            },
+            "hits": {
+              "actual": 146,
+              "forced_off": 146,
+              "uniform": 146
+            },
+            "raw_accuracy": {
+              "actual": 0.73,
+              "forced_off": 0.73,
+              "uniform": 0.73
+            },
+            "first_relation_supervision": {
+              "fully_correct": 55,
+              "wrong": 145,
+              "ties": 0
+            },
+            "gold_in_ordered_shortlist": 200,
+            "matched_choice_changes": {
+              "actual_vs_forced_off": {
+                "rescued": 0,
+                "lost": 0,
+                "different_errors": 0,
+                "unchanged_correct": 146,
+                "unchanged_wrong": 54
+              },
+              "actual_vs_uniform": {
+                "rescued": 0,
+                "lost": 0,
+                "different_errors": 0,
+                "unchanged_correct": 146,
+                "unchanged_wrong": 54
+              }
+            },
+            "graph_mean_by_stratum": {
+              "competing_chain": {
+                "actual": 0.73,
+                "forced_off": 0.73,
+                "uniform": 0.73
+              }
+            },
+            "equal_three_stratum_graph_mean": null
+          },
+          "3701": {
+            "decisions": 200,
+            "graphs": 200,
+            "graphs_per_stratum": {
+              "competing_chain": 200
+            },
+            "hits": {
+              "actual": 135,
+              "forced_off": 135,
+              "uniform": 135
+            },
+            "raw_accuracy": {
+              "actual": 0.675,
+              "forced_off": 0.675,
+              "uniform": 0.675
+            },
+            "first_relation_supervision": {
+              "fully_correct": 200,
+              "wrong": 0,
+              "ties": 0
+            },
+            "gold_in_ordered_shortlist": 200,
+            "matched_choice_changes": {
+              "actual_vs_forced_off": {
+                "rescued": 0,
+                "lost": 0,
+                "different_errors": 0,
+                "unchanged_correct": 135,
+                "unchanged_wrong": 65
+              },
+              "actual_vs_uniform": {
+                "rescued": 0,
+                "lost": 0,
+                "different_errors": 0,
+                "unchanged_correct": 135,
+                "unchanged_wrong": 65
+              }
+            },
+            "graph_mean_by_stratum": {
+              "competing_chain": {
+                "actual": 0.675,
+                "forced_off": 0.675,
+                "uniform": 0.675
+              }
+            },
+            "equal_three_stratum_graph_mean": null
+          }
+        }
+      }
+    }
+  },
+  "examples": {
+    "h1_wrong": {
+      "eligible_decisions": 1697,
+      "example": {
+        "graph_id": "000ecd4c-ca85-5b73-a744-093a20257639",
+        "view": "original",
+        "seed": 2701,
+        "stratum": "role_reversal",
+        "gate": true,
+        "covered": true,
+        "h1_hit": 0.0,
+        "choice": {
+          "actual": 10,
+          "forced_off": 10,
+          "uniform": 10
+        },
+        "hit": {
+          "actual": false,
+          "forced_off": false,
+          "uniform": false
+        },
+        "question_tokens": [
+          "第二",
+          "段",
+          "按",
+          "协助",
+          "关系",
+          "找",
+          "一人",
+          "。",
+          "此前",
+          "从",
+          "唐言",
+          "开始",
+          "，",
+          "沿",
+          "提醒",
+          "关系",
+          "追踪",
+          "。",
+          "应",
+          "先",
+          "使用",
+          "哪条",
+          "记录",
+          "？"
+        ],
+        "question_text": "第二段按协助关系找一人。此前从唐言开始，沿提醒关系追踪。应先使用哪条记录？",
+        "gold_fact": 9,
+        "gold_first_relation": "提醒",
+        "first_mentioned": "协助",
+        "selected_relation": "协助",
+        "relation_names": [
+          "协助",
+          "提醒"
+        ],
+        "relation_masses": [
+          0.00045895003131590784,
+          0.0003795059456024319
+        ],
+        "indexed_candidates": [
+          {
+            "fact_index": 9,
+            "triple": [
+              "唐言",
+              "提醒",
+              "陈然"
+            ]
+          },
+          {
+            "fact_index": 10,
+            "triple": [
+              "唐言",
+              "协助",
+              "许言"
+            ]
+          }
+        ],
+        "gold_triple": [
+          "唐言",
+          "提醒",
+          "陈然"
+        ],
+        "logits": {
+          "actual": [
+            2.8136372566223145,
+            3.1875362396240234
+          ],
+          "forced_off": [
+            3.181436538696289,
+            3.976423740386963
+          ],
+          "uniform": [
+            3.735696792602539,
+            4.7427849769592285
+          ]
+        }
+      }
+    },
+    "h1_exact_tie": {
+      "eligible_decisions": 0,
+      "example": null
+    },
+    "h2_wrong": {
+      "eligible_decisions": 1710,
+      "example": {
+        "graph_id": "000ecd4c-ca85-5b73-a744-093a20257639",
+        "view": "original",
+        "seed": 2701,
+        "stratum": "role_reversal",
+        "gate": true,
+        "covered": true,
+        "h1_hit": 0.0,
+        "choice": {
+          "actual": 10,
+          "forced_off": 10,
+          "uniform": 10
+        },
+        "hit": {
+          "actual": false,
+          "forced_off": false,
+          "uniform": false
+        },
+        "question_tokens": [
+          "第二",
+          "段",
+          "按",
+          "协助",
+          "关系",
+          "找",
+          "一人",
+          "。",
+          "此前",
+          "从",
+          "唐言",
+          "开始",
+          "，",
+          "沿",
+          "提醒",
+          "关系",
+          "追踪",
+          "。",
+          "应",
+          "先",
+          "使用",
+          "哪条",
+          "记录",
+          "？"
+        ],
+        "question_text": "第二段按协助关系找一人。此前从唐言开始，沿提醒关系追踪。应先使用哪条记录？",
+        "gold_fact": 9,
+        "gold_first_relation": "提醒",
+        "first_mentioned": "协助",
+        "selected_relation": "协助",
+        "relation_names": [
+          "协助",
+          "提醒"
+        ],
+        "relation_masses": [
+          0.00045895003131590784,
+          0.0003795059456024319
+        ],
+        "indexed_candidates": [
+          {
+            "fact_index": 9,
+            "triple": [
+              "唐言",
+              "提醒",
+              "陈然"
+            ]
+          },
+          {
+            "fact_index": 10,
+            "triple": [
+              "唐言",
+              "协助",
+              "许言"
+            ]
+          }
+        ],
+        "gold_triple": [
+          "唐言",
+          "提醒",
+          "陈然"
+        ],
+        "logits": {
+          "actual": [
+            2.8136372566223145,
+            3.1875362396240234
+          ],
+          "forced_off": [
+            3.181436538696289,
+            3.976423740386963
+          ],
+          "uniform": [
+            3.735696792602539,
+            4.7427849769592285
+          ]
+        }
+      }
+    },
+    "h2_changed_from_direction": {
+      "eligible_decisions": 530,
+      "example": {
+        "graph_id": "031e69b8-877f-594f-a797-84b4bcf865fe",
+        "view": "original",
+        "seed": 1701,
+        "stratum": "relation_order",
+        "gate": true,
+        "covered": true,
+        "h1_hit": 0.0,
+        "choice": {
+          "actual": 11,
+          "forced_off": 10,
+          "uniform": 11
+        },
+        "hit": {
+          "actual": false,
+          "forced_off": true,
+          "uniform": false
+        },
+        "question_tokens": [
+          "请",
+          "确定",
+          "第一步",
+          "的",
+          "记录",
+          "。",
+          "以",
+          "顾宁",
+          "为",
+          "起点",
+          "，",
+          "开头",
+          "一段",
+          "追踪",
+          "推荐",
+          "关系",
+          "。",
+          "随后",
+          "按",
+          "联系",
+          "关系",
+          "找",
+          "一人",
+          "。"
+        ],
+        "question_text": "请确定第一步的记录。以顾宁为起点，开头一段追踪推荐关系。随后按联系关系找一人。",
+        "gold_fact": 10,
+        "gold_first_relation": "推荐",
+        "first_mentioned": "推荐",
+        "selected_relation": "联系",
+        "relation_names": [
+          "推荐",
+          "联系"
+        ],
+        "relation_masses": [
+          0.0038286070339381695,
+          0.07742638885974884
+        ],
+        "indexed_candidates": [
+          {
+            "fact_index": 10,
+            "triple": [
+              "顾宁",
+              "推荐",
+              "沈然"
+            ]
+          },
+          {
+            "fact_index": 11,
+            "triple": [
+              "顾宁",
+              "联系",
+              "罗舟"
+            ]
+          }
+        ],
+        "gold_triple": [
+          "顾宁",
+          "推荐",
+          "沈然"
+        ],
+        "logits": {
+          "actual": [
+            1.2449674606323242,
+            2.7635858058929443
+          ],
+          "forced_off": [
+            1.398761510848999,
+            0.8933812379837036
+          ],
+          "uniform": [
+            2.100621461868286,
+            2.4388175010681152
+          ]
+        }
+      }
+    },
+    "h2_recovered_from_direction": {
+      "eligible_decisions": 354,
+      "example": {
+        "graph_id": "04e96ba9-a1cb-508f-8546-f0fed7e60f07",
+        "view": "original",
+        "seed": 1701,
+        "stratum": "role_reversal",
+        "gate": true,
+        "covered": true,
+        "h1_hit": 1.0,
+        "choice": {
+          "actual": 9,
+          "forced_off": 0,
+          "uniform": 0
+        },
+        "hit": {
+          "actual": true,
+          "forced_off": false,
+          "uniform": false
+        },
+        "question_tokens": [
+          "请",
+          "给出",
+          "开头",
+          "一段",
+          "对应",
+          "的",
+          "记录",
+          "。",
+          "最后",
+          "一段",
+          "追踪",
+          "拜访",
+          "关系",
+          "。",
+          "第一步",
+          "以",
+          "罗然",
+          "为",
+          "起点",
+          "，",
+          "按",
+          "指导",
+          "关系",
+          "找",
+          "一人",
+          "。"
+        ],
+        "question_text": "请给出开头一段对应的记录。最后一段追踪拜访关系。第一步以罗然为起点，按指导关系找一人。",
+        "gold_fact": 9,
+        "gold_first_relation": "指导",
+        "first_mentioned": "拜访",
+        "selected_relation": "指导",
+        "relation_names": [
+          "拜访",
+          "指导"
+        ],
+        "relation_masses": [
+          0.001725354348309338,
+          0.025872495025396347
+        ],
+        "indexed_candidates": [
+          {
+            "fact_index": 0,
+            "triple": [
+              "罗然",
+              "拜访",
+              "罗宁"
+            ]
+          },
+          {
+            "fact_index": 9,
+            "triple": [
+              "罗然",
+              "指导",
+              "唐秋"
+            ]
+          }
+        ],
+        "gold_triple": [
+          "罗然",
+          "指导",
+          "唐秋"
+        ],
+        "logits": {
+          "actual": [
+            2.622004508972168,
+            2.7070276737213135
+          ],
+          "forced_off": [
+            3.1244354248046875,
+            2.69547700881958
+          ],
+          "uniform": [
+            4.041149616241455,
+            3.3902785778045654
+          ]
+        }
+      }
+    },
+    "h2_lost_from_direction": {
+      "eligible_decisions": 176,
+      "example": {
+        "graph_id": "031e69b8-877f-594f-a797-84b4bcf865fe",
+        "view": "original",
+        "seed": 1701,
+        "stratum": "relation_order",
+        "gate": true,
+        "covered": true,
+        "h1_hit": 0.0,
+        "choice": {
+          "actual": 11,
+          "forced_off": 10,
+          "uniform": 11
+        },
+        "hit": {
+          "actual": false,
+          "forced_off": true,
+          "uniform": false
+        },
+        "question_tokens": [
+          "请",
+          "确定",
+          "第一步",
+          "的",
+          "记录",
+          "。",
+          "以",
+          "顾宁",
+          "为",
+          "起点",
+          "，",
+          "开头",
+          "一段",
+          "追踪",
+          "推荐",
+          "关系",
+          "。",
+          "随后",
+          "按",
+          "联系",
+          "关系",
+          "找",
+          "一人",
+          "。"
+        ],
+        "question_text": "请确定第一步的记录。以顾宁为起点，开头一段追踪推荐关系。随后按联系关系找一人。",
+        "gold_fact": 10,
+        "gold_first_relation": "推荐",
+        "first_mentioned": "推荐",
+        "selected_relation": "联系",
+        "relation_names": [
+          "推荐",
+          "联系"
+        ],
+        "relation_masses": [
+          0.0038286070339381695,
+          0.07742638885974884
+        ],
+        "indexed_candidates": [
+          {
+            "fact_index": 10,
+            "triple": [
+              "顾宁",
+              "推荐",
+              "沈然"
+            ]
+          },
+          {
+            "fact_index": 11,
+            "triple": [
+              "顾宁",
+              "联系",
+              "罗舟"
+            ]
+          }
+        ],
+        "gold_triple": [
+          "顾宁",
+          "推荐",
+          "沈然"
+        ],
+        "logits": {
+          "actual": [
+            1.2449674606323242,
+            2.7635858058929443
+          ],
+          "forced_off": [
+            1.398761510848999,
+            0.8933812379837036
+          ],
+          "uniform": [
+            2.100621461868286,
+            2.4388175010681152
+          ]
+        }
+      }
+    },
+    "h2_changed_from_uniform": {
+      "eligible_decisions": 530,
+      "example": {
+        "graph_id": "0086dc5f-d0e9-584b-8a07-7371e17eaf2e",
+        "view": "original",
+        "seed": 3701,
+        "stratum": "role_reversal",
+        "gate": true,
+        "covered": true,
+        "h1_hit": 0.0,
+        "choice": {
+          "actual": 9,
+          "forced_off": 9,
+          "uniform": 3
+        },
+        "hit": {
+          "actual": true,
+          "forced_off": true,
+          "uniform": false
+        },
+        "question_tokens": [
+          "请",
+          "给出",
+          "开头",
+          "一段",
+          "对应",
+          "的",
+          "记录",
+          "。",
+          "最后",
+          "一段",
+          "追踪",
+          "联系",
+          "关系",
+          "。",
+          "第一步",
+          "以",
+          "罗舟",
+          "为",
+          "起点",
+          "，",
+          "按",
+          "协助",
+          "关系",
+          "找",
+          "一人",
+          "。"
+        ],
+        "question_text": "请给出开头一段对应的记录。最后一段追踪联系关系。第一步以罗舟为起点，按协助关系找一人。",
+        "gold_fact": 9,
+        "gold_first_relation": "协助",
+        "first_mentioned": "联系",
+        "selected_relation": "联系",
+        "relation_names": [
+          "协助",
+          "联系"
+        ],
+        "relation_masses": [
+          0.0036426507867872715,
+          0.004861900582909584
+        ],
+        "indexed_candidates": [
+          {
+            "fact_index": 3,
+            "triple": [
+              "罗舟",
+              "联系",
+              "顾秋"
+            ]
+          },
+          {
+            "fact_index": 9,
+            "triple": [
+              "罗舟",
+              "协助",
+              "林晴"
+            ]
+          }
+        ],
+        "gold_triple": [
+          "罗舟",
+          "协助",
+          "林晴"
+        ],
+        "logits": {
+          "actual": [
+            1.6608680486679077,
+            1.890316128730774
+          ],
+          "forced_off": [
+            2.3189239501953125,
+            2.3914783000946045
+          ],
+          "uniform": [
+            2.5852956771850586,
+            2.492189407348633
+          ]
+        }
+      }
+    },
+    "h2_wrong_closed_gate": {
+      "eligible_decisions": 163,
+      "example": {
+        "graph_id": "03e87f38-3a23-5bd4-b90b-60f3bb66b879",
+        "view": "original",
+        "seed": 3701,
+        "stratum": "competing_chain",
+        "gate": false,
+        "covered": true,
+        "h1_hit": 0.0,
+        "choice": {
+          "actual": 2,
+          "forced_off": 2,
+          "uniform": 2
+        },
+        "hit": {
+          "actual": false,
+          "forced_off": false,
+          "uniform": false
+        },
+        "question_tokens": [
+          "请",
+          "给出",
+          "开头",
+          "一段",
+          "对应",
+          "的",
+          "记录",
+          "。",
+          "最后",
+          "一段",
+          "追踪",
+          "邀请",
+          "关系",
+          "。",
+          "第一步",
+          "以",
+          "林然",
+          "为",
+          "起点",
+          "，",
+          "按",
+          "跟随",
+          "关系",
+          "找",
+          "一人",
+          "。"
+        ],
+        "question_text": "请给出开头一段对应的记录。最后一段追踪邀请关系。第一步以林然为起点，按跟随关系找一人。",
+        "gold_fact": 3,
+        "gold_first_relation": "跟随",
+        "first_mentioned": "邀请",
+        "selected_relation": "邀请",
+        "relation_names": [
+          "跟随",
+          "邀请"
+        ],
+        "relation_masses": [
+          0.000432777451351285,
+          0.03344157338142395
+        ],
+        "indexed_candidates": [
+          {
+            "fact_index": 3,
+            "triple": [
+              "林然",
+              "跟随",
+              "罗南"
+            ]
+          },
+          {
+            "fact_index": 2,
+            "triple": [
+              "林然",
+              "推荐",
+              "沈南"
+            ]
+          }
+        ],
+        "gold_triple": [
+          "林然",
+          "跟随",
+          "罗南"
+        ],
+        "logits": {
+          "actual": [
+            0.4695345461368561,
+            1.5909098386764526
+          ],
+          "forced_off": [
+            0.4695345461368561,
+            1.5909098386764526
+          ],
+          "uniform": [
+            0.4695345461368561,
+            1.5909098386764526
+          ]
+        }
+      }
+    }
+  }
+}

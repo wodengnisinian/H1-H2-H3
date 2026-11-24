@@ -1,0 +1,43 @@
+{
+  "path_base": "R3",
+  "produced": [
+    {
+      "path": "experiments/12-R10/results/onehop-1701.pt",
+      "sha256": "5554c2b087adf6c645aa41fbb1bd3505510c8b6f234de1b5e9e1b94ddb7a1984",
+      "bytes": 4165
+    },
+    {
+      "path": "experiments/12-R10/results/twohop-1701.pt",
+      "sha256": "b3372361010571fd02738e8b944283013ce37c1285f2af8acbb078f47219d36c",
+      "bytes": 4165
+    },
+    {
+      "path": "experiments/12-R10/results/onehop-2701.pt",
+      "sha256": "10b43d84ce4aa669dcb245e1b9aefe59c90aff77e7ce602db36207df5ad872c6",
+      "bytes": 4165
+    },
+    {
+      "path": "experiments/12-R10/results/twohop-2701.pt",
+      "sha256": "26b376d4191034c2e00c77d912dc34154a04318e8b1a0aba04dea179c5ae4f61",
+      "bytes": 4165
+    },
+    {
+      "path": "experiments/12-R10/results/onehop-3701.pt",
+      "sha256": "dec5bcb01918d69b735b1be1c76db4b7a640b3c089611f0485305ef4c54b2e94",
+      "bytes": 4165
+    },
+    {
+      "path": "experiments/12-R10/results/twohop-3701.pt",
+      "sha256": "4728044516365bdeffc4addbaff5874f703355b618120bd03232318ffc00c917",
+      "bytes": 4165
+    }
+  ],
+  "upstream_result_checkpoints": [],
+  "weights_available_within_declared_archive_prefixes": [],
+  "shared_archive_for_weights": {
+    "path": "datasets/归档输入.zip",
+    "sha256": "72c84de654b7b84ecadf32147d3255dc96ed8dc2befccf5b93b976e34c8f19ce",
+    "bytes": 10390056
+  },
+  "fitted_parameter_records": []
+}

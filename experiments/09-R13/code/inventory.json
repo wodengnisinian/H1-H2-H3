@@ -1,0 +1,60 @@
+{
+  "path_base": "R3",
+  "registered_sources": [
+    {
+      "path": "experiments/09-R13/snapshot/src/replicate.py",
+      "sha256": "12ee1225037a23bc23928c4e637b7edb92d4df7f013824c01a27718d443ef88c",
+      "bytes": 1615
+    },
+    {
+      "path": "experiments/09-R13/snapshot/src/role_core.py",
+      "sha256": "713909ab7c417c2b7f950938e291498c51651adfef3922a169067749a509ab8f",
+      "bytes": 4094
+    },
+    {
+      "path": "experiments/09-R13/snapshot/src/role_run.py",
+      "sha256": "3e71c5a167116fc1bc191621c97d4ade056b4778383c7c435951ae87f3188c98",
+      "bytes": 14088
+    },
+    {
+      "path": "experiments/09-R13/snapshot/src/mech_core.py",
+      "sha256": "8a2ae2cf12883285ca2c42499210ba406cb5bdbe598964f6c192d4d5859f1795",
+      "bytes": 5486
+    },
+    {
+      "path": "experiments/09-R13/snapshot/src/mech_data.py",
+      "sha256": "82bd90f8af14bf8422506fbac63437586e85ac8d8cd7cedd09a06a4f4737f8c7",
+      "bytes": 6052
+    },
+    {
+      "path": "experiments/09-R13/snapshot/src/mech_metrics.py",
+      "sha256": "ffbf7261adae5583b0ba39d62c22a72d60cfd8dd85de7c5b207938a6f98672b5",
+      "bytes": 3458
+    },
+    {
+      "path": "experiments/09-R13/snapshot/src/mech_probe.py",
+      "sha256": "514a3bd1d7c586ae6c70e296efc588439a6f00ce4330f41be6e72dd3aff3ac23",
+      "bytes": 2147
+    },
+    {
+      "path": "experiments/09-R13/snapshot/src/mech_run.py",
+      "sha256": "ebb7b9690b66eb10f8d1f25ee1031cd6137383a1758d6d941f367913cbe0f485",
+      "bytes": 16315
+    },
+    {
+      "path": "experiments/09-R13/snapshot/run_loop.py",
+      "sha256": "96198e0b5031a22026e8d1ebbce81fd7db370ff5e5bfc9cfe2d5a7cd8c08db51",
+      "bytes": 7248
+    }
+  ],
+  "changes": {
+    "path": "analysis/diffs/09-R13.patch",
+    "sha256": "c7c8a60feb05ef32ddc4b28bc67687a615feb5672d9b3e639ce8a66cd14fa8d7",
+    "bytes": 2478
+  },
+  "runtime_dependencies": {
+    "path": "logs/environment.json",
+    "sha256": "a081136648d5aa686556da339538cb3233194e414bb2ab458a85a1f22138ca52",
+    "bytes": 669
+  }
+}

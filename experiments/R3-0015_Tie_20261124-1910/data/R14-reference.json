@@ -1,0 +1,13 @@
+{
+  "local_path_relative_to_R3": "experiments/R3-0014_Order_20261124-1903",
+  "manifest_sha256": "ec9b72681de86eff285a7baa3b1e0c8b28a2c727421a734569fef71054f192a2",
+  "results": {
+    "results/graphs.jsonl.gz": "662ec7465b6d07379407af94e6d9989bd6cf58c45c3dc615c55f41876a3087d8",
+    "results/predictions.jsonl.gz": "9730975898a6ce19b9759f860555c57ef89a726b4bee14df3465bc2fab5c46df",
+    "results/accuracy.csv": "e9eebee605e6a9cd83b44ab144d823e1dff00581386ce3fa4b67838ddcf6a9c5",
+    "results/per_seed.csv": "2a950410e9188a776d600ad73c4bad6443efe72e1e3c6a4a6091d45ecfc0f69f",
+    "results/retrieval.csv": "769d4de157c74f2f46096d6f6705576c40c6fa8c46786d4217f45d1e29a89ef6",
+    "results/paired_contrasts.csv": "caed461ad6d37a5052f475a726b73cde55bdca0a1719fa1f5fa01301e405a620",
+    "results/summary.json": "4556271fcfb703edebd1f8af8e7db345d7693daf94e9d716df5621cc990724d0"
+  }
+}

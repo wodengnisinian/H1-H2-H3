@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "seeds": [
+    1701,
+    2701,
+    3701
+  ],
+  "epochs": 12,
+  "batch": 128,
+  "lr": 0.003,
+  "feature_batch": 128,
+  "challenge_seed": 11242026,
+  "challenge_per_stratum": 100,
+  "bootstrap_draws": 10000,
+  "bootstrap_seed": 619482,
+  "primary_split": "fresh",
+  "source": "B13 frozen models and B16 train and dev. Prior H1 vector retained as an archival comparator. Seven of 28 unordered pairs removed in both orientations for newly trained heads, including joint, groups and probes. The underlying archived encoder and prior H1 saw all 28 pairs.",
+  "selection": "Fixed last epoch. No model selection by seed, dev or independent scores. Only a designated joint candidate can enter independent testing. Readout, geometry, ablation and groups are diagnostics.",
+  "rounds": {
+    "readout": {
+      "hypothesis": "Frozen representations encode first-relation identity on held-out wording. A matched linear question-only readout exceeds its randomized-label control.",
+      "criterion": "Constrained two-relation probe accuracy exceeds shuffled-label accuracy by at least 5pp in fresh, template and combination original questions. Same ridge penalty and same training examples in both fits. Learned word mass identifies the first relation only when its mass exceeds the competing relation; exact ties are reported as 0.5."
+    },
+    "geometry": {
+      "hypothesis": "The closed gate and per-token margin extrema impose an empirical ceiling on attainable first-hop accuracy.",
+      "criterion": "Before training a new head, compare reachable ceiling with max(first,pool)+5pp. Separate negative strict upper bounds, exact zero ties, uncovered candidates and open/closed gates. Label-informed oracle and mathematical ceiling are diagnostics."
+    },
+    "ablation": {
+      "hypothesis": "Position-specific learned word weights contribute to actual ranking beyond uniform, random and shuffled alternatives.",
+      "criterion": "Learned beats all three weighting controls on fresh original and fresh quartet. Report all seeds. Random vector is Gaussian with learned norm. Shuffled p deterministically permutes valid positions in each example. Candidate swap must preserve p and permute logits within 2e-5."
+    },
+    "groups": {
+      "hypothesis": "Four frozen question components improve ranking over one pooled question representation with identical H1 training budgets.",
+      "criterion": "Four beats one on fresh originals and four-question joint correctness. Both methods learn 64 H1 parameters for the same 12 epochs on the same combination-filtered training examples."
+    },
+    "joint": {
+      "hypothesis": "Old context-only weights overfit original syntax. A question-only clause-order feature helps rank relations across unseen wording with fixed H2.",
+      "criterion": "Compare replacing the 64th hidden coordinate with an annotated ordinal cue feature on precisely the same examples and loss; retain 64 parameters. Fresh original >=5pp gain over each baseline, fresh paraphrase >0 against each baseline and fresh quartet >first, >=pool. Report separate combination and template challenge metrics."
+    }
+  },
+  "joint_training": "Training labels affect only the original candidate CE. Use all pair-filtered originals and one equally weighted, randomly selected, training-family paraphrase per training graph. Both cue and plain controls use identical augmented examples, shuffles, epochs and learning rate.",
+  "confidence": "Each stratum resamples graphs; seed averages come first. Dual-baseline one-sided 95% lower bounds are sorted draws[499]. Formal H3 externally sealed. No diagnostic oracle qualifies.",
+  "groups_definition": "Single group uses the arithmetic mean of the four frozen query vectors as one fixed 64-D query, computes a single token softmax and reads one question vector. The four-group comparator uses the four separate archived queries. All newly fitted heads have 64 parameters, same rows and optimizer budget.",
+  "challenge_index_range": "[16800,70000000); old fresh and B13 person sets are explicitly excluded."
+}

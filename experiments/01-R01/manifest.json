@@ -1,0 +1,118 @@
+{
+  "id": "R01",
+  "path_base": "R3",
+  "registry": {
+    "path": "logs/恢复校验/云端原始轮次登记.jsonl",
+    "bytes": 43598,
+    "sha256": "ac651f9f45c34ee642aecfdb57a2c770c2ed0d6a974707636578642a85294403"
+  },
+  "source_report": {
+    "path": "reports/R01.md",
+    "sha256": "aa1308d4b3f8f466275dddec05b6d94397917bd6aa7b84183fe9fbcae3d592b6",
+    "bytes": 1607
+  },
+  "original_artifact_seal": {
+    "path": "experiments/01-R01/artifacts.json",
+    "sha256": "751f67fd68e0983b49b5fea12e8500bc15bfdc6b52ef876996ec6571218d411d",
+    "bytes": 870
+  },
+  "registered_artifacts": {
+    "preregistration.json": {
+      "path": "experiments/01-R01/preregistration.json",
+      "sha256": "d38bd6cee142fa2577aa84725102eb52f39000ed5f67ac35a08e643f69d1d0d3",
+      "bytes": 576
+    },
+    "stdout.log": {
+      "path": "experiments/01-R01/stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "resources.json": {
+      "path": "experiments/01-R01/resources.json",
+      "sha256": "832ade824cd1483ddb710210735039ee25a06634ed7f90b353d8bb95a97fadf2",
+      "bytes": 262
+    },
+    "snapshot/run_loop.py": {
+      "path": "experiments/01-R01/snapshot/run_loop.py",
+      "sha256": "96198e0b5031a22026e8d1ebbce81fd7db370ff5e5bfc9cfe2d5a7cd8c08db51",
+      "bytes": 7248
+    },
+    "results/input_digests.json": {
+      "path": "experiments/01-R01/results/input_digests.json",
+      "sha256": "e445644d63d7fd47b3dc2393976c00147d3ed89b0644e955d2a27a2d8f22c1ec",
+      "bytes": 9862
+    },
+    "results/metrics.json": {
+      "path": "experiments/01-R01/results/metrics.json",
+      "sha256": "16aea32d464898d99e580ec147d0a47d857323fd6530ba9550cbc85de4ff0e04",
+      "bytes": 2529
+    },
+    "snapshot/src/input_audit.py": {
+      "path": "experiments/01-R01/snapshot/src/input_audit.py",
+      "sha256": "fb894f0c23029096acee886b6bfdde9648ecd1db23cdfef9ddc29045b63bb40b",
+      "bytes": 2963
+    },
+    "snapshot/configs/R01.json": {
+      "path": "experiments/01-R01/snapshot/configs/R01.json",
+      "sha256": "d38bd6cee142fa2577aa84725102eb52f39000ed5f67ac35a08e643f69d1d0d3",
+      "bytes": 576
+    },
+    "snapshot/configs/research_protocol.json": {
+      "path": "experiments/01-R01/snapshot/configs/research_protocol.json",
+      "sha256": "2685817419c4c32724f294ebcde7df8f548e5937e7778a069d82ffbd28f0e610",
+      "bytes": 1937
+    }
+  },
+  "shared_input_manifest": {
+    "path": "datasets/inputs.json",
+    "sha256": "54d20d22a43daea1f6ea58f2cf38ce3d3f59a3fc8ab3cd20b56040332122052c",
+    "bytes": 14343
+  },
+  "shared_input_archive": {
+    "path": "datasets/归档输入.zip",
+    "sha256": "72c84de654b7b84ecadf32147d3255dc96ed8dc2befccf5b93b976e34c8f19ce",
+    "bytes": 10390056
+  },
+  "local_navigation_files_relative_to_round": {
+    "code/src/input_audit.py": {
+      "bytes": 2963,
+      "sha256": "fb894f0c23029096acee886b6bfdde9648ecd1db23cdfef9ddc29045b63bb40b"
+    },
+    "configs/R01.json": {
+      "bytes": 576,
+      "sha256": "d38bd6cee142fa2577aa84725102eb52f39000ed5f67ac35a08e643f69d1d0d3"
+    },
+    "configs/research_protocol.json": {
+      "bytes": 1937,
+      "sha256": "2685817419c4c32724f294ebcde7df8f548e5937e7778a069d82ffbd28f0e610"
+    },
+    "code/run_loop.py": {
+      "bytes": 7248,
+      "sha256": "96198e0b5031a22026e8d1ebbce81fd7db370ff5e5bfc9cfe2d5a7cd8c08db51"
+    },
+    "code/inventory.json": {
+      "bytes": 742,
+      "sha256": "9a199243998f09596fd57c5aa630971ad2d0eb053cb25d6d612fc0edd40b658f"
+    },
+    "configs/inventory.json": {
+      "bytes": 605,
+      "sha256": "888226a0677d46369e78db246245f1043af6855e1f73e563872f388e579ae3d9"
+    },
+    "data/inventory.json": {
+      "bytes": 15963,
+      "sha256": "d6ad9080ec037f314458533f67d8901f938ff94540671c871e4109e885dcbe51"
+    },
+    "checkpoints/inventory.json": {
+      "bytes": 1544,
+      "sha256": "fa643375923837ad8e71e9a3339b3620bd386ff5bf0101ffe71a18e5b0ead340"
+    },
+    "logs/inventory.json": {
+      "bytes": 1163,
+      "sha256": "dbb175181951e899514744a86e98e112785b0aa460e9ef7529228f64e6edcebc"
+    },
+    "report.md": {
+      "bytes": 1522,
+      "sha256": "6dbf350cf0056f14fdf0a7d5657ad191385bdca1a1244b2ca5a3451f3f1a3d48"
+    }
+  }
+}

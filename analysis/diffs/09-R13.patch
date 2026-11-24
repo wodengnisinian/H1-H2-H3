@@ -1,0 +1,50 @@
+--- /dev/null
++++ R13/configs/R13.json
+@@ -0,0 +1,22 @@
++{
++  "id": "R13",
++  "hypothesis": "R08 在首步角色识别上取得的增益可在新进程从零初始化重新训练得到。",
++  "criteria": "复跑全部三个种子，核验12份检查点、参数、逐题预测和错误记录（压缩文件比较解压字节），并核对两个指标体系及配对区间。",
++  "argv": [
++    "src/replicate.py",
++    "--inputs",
++    "{inputs}",
++    "--candidate",
++    "{root}/experiments/08-R08/results",
++    "--out",
++    "{out}"
++  ],
++  "sources": [
++    "src/replicate.py",
++    "src/role_*.py",
++    "src/mech_*.py",
++    "configs/role_protocol.json"
++  ],
++  "receipt": "metrics.json",
++  "after": "据重复性证据决定能否将同一训练器用于下一阶段"
++}
+--- /dev/null
++++ R13/src/replicate.py
+@@ -0,0 +1,22 @@
++"""Repeat R08 from zero in a fresh process and compare persisted scientific outputs."""
++from pathlib import Path
++import argparse,gzip,hashlib,json,subprocess,sys
++def dig(p):
++    opener=gzip.open if p.suffix==".gz" else open
++    with opener(p,"rb") as f:return hashlib.file_digest(f,"sha256").hexdigest()
++p=argparse.ArgumentParser()
++for k in ("inputs","candidate","out"):p.add_argument("--"+k,type=Path,required=True)
++a=p.parse_args();a.out.mkdir(parents=True,exist_ok=False)
++repeat=a.out/"training"
++subprocess.run([sys.executable,"-B",str(Path(__file__).with_name("role_run.py")),"--b13",str(a.inputs/"b13"),
++                "--b16",str(a.inputs/"b16"),"--prior",str(a.inputs/"prior"),"--diagnostic-only","--out",str(repeat)],check=True)
++files=[f.name for f in a.candidate.iterdir() if f.name.startswith(("parameters-","checkpoint-","predictions-","errors-"))]
++receipt={}
++for name in sorted(files):
++    before=dig(a.candidate/name);after=dig(repeat/name);receipt[name]={"sha256":after,"identical":before==after}
++left=json.loads((a.candidate/"metrics.json").read_bytes());right=json.loads((repeat/"metrics.json").read_bytes())
++metrics={k:left[k]==right[k] for k in ("aggregate","h1","per_seed","objective_intervals","paired_intervals","criterion_met")}
++ok=all(x["identical"] for x in receipt.values()) and len(files)==12 and all(metrics.values())
++(a.out/"metrics.json").write_text(json.dumps(dict(hypothesis="R08 deterministic repeat",matched_files=receipt,
++    matched_metrics=metrics,reproduced=ok),ensure_ascii=False,indent=2)+"\n",encoding="utf8")
++if not ok:raise ValueError("Repeat mismatch; see metrics.json")

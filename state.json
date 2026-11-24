@@ -1,0 +1,111 @@
+{
+  "stage": "completed",
+  "latest": {
+    "event": "end",
+    "id": "R17",
+    "path": "experiments/R3-0017_硬关系选择_20261124",
+    "utc": "2026-11-24T11:45:53.573552+00:00",
+    "command": [
+      "/data/miniconda/envs/torch/bin/python",
+      "-B",
+      "-u",
+      "/data/spiderweb-shared-protocol-20261124-r17/code/r3_shared_steps.py"
+    ],
+    "source_sha256": {
+      "code/prepare_shared_round.py": "fed081b90fb49fb5af96109ac38c84c736ecdaf2cb74e23ccf6ec36fd789f266",
+      "code/r3_shared_cohort.py": "e83f0678d2ba7cc8e7a8a3f3ff75dec80b9c83a681acba65376f9ee7e93f2f2d",
+      "code/r3_shared_stats.py": "04a993dbf70a23a940c7bc8b49b0fbc1340292e0000c6fecc74ad7175dde6aae",
+      "code/r3_shared_steps.py": "77e6e4702a175a5df9cc8e3622475d402933aa3ed4939dc9a02863c405cce699",
+      "code/r3_shared_verify.py": "d22b9e52b2348c1bc035cf3c7085d96ed3ebb710e473b56047d4dfb623c2690b",
+      "code/r3_shared_weight_validation.py": "935c22a287e26921502ee4f7a5f3ac02b057f8753aa989a8c4f05b28de48a023",
+      "code/seal_shared_round.py": "3df01695b27479272cad4c96367a8d71958ba6846bd92103d7d14e42f20a3a39",
+      "code/shared_cloud_run.py": "ed8cc57d3a053efa0783ca2b676c94fdb749af492b11e75caa9f41be5db05268",
+      "configs/frozen-dependencies.json": "63061cfd0fea04d4c03449b575e903d2417d09075ad59efe1927a01c69eb69fd",
+      "configs/launch.json": "2ceb33c3eff3368af504c349e48f043fdd39ec785bb421719ff8847c3eb03ab0",
+      "configs/protocol.json": "e2be84f2c0d20cee4c1f1c3ceb8c71f284be42a9b54f3bcd2058b8c8a26074e2"
+    },
+    "protocol_sha256": "e2be84f2c0d20cee4c1f1c3ceb8c71f284be42a9b54f3bcd2058b8c8a26074e2",
+    "input_manifest_sha256": "63061cfd0fea04d4c03449b575e903d2417d09075ad59efe1927a01c69eb69fd",
+    "phase": "development",
+    "max_seconds": 900,
+    "code": 0,
+    "status": "verified",
+    "artifact_manifest_sha256": "7370ff3704c712cf602ab082b7b73b13f5e5bed48db7c675e90512985855c2c8",
+    "manifest_sha256": "3b1efef36c0c21fc104a7fa0fcedecd54bc26030b092c402b71b2615955dbf2a",
+    "result_file": "stats/metrics.json",
+    "checkpoints": [
+      "checkpoints/primary-1701.json",
+      "checkpoints/primary-2701.json",
+      "checkpoints/primary-3701.json"
+    ],
+    "wall_seconds": 28.91847285395488,
+    "development": {
+      "variant": "sharp_role",
+      "h1_accuracy": 1.0,
+      "first_mentioned_accuracy": 0.4999999999999999,
+      "h1_delta": 0.5,
+      "h2_accuracy": 0.9144444444444466,
+      "uniform_accuracy": 0.691666666666667,
+      "h2_delta": 0.22277777777777757,
+      "direct_accuracy": 0.6549999999999999,
+      "pool_accuracy": 0.7077777777777766,
+      "h2_minus_direct": 0.2594444444444445,
+      "h2_minus_pool": 0.2066666666666666,
+      "coverage": 1.0,
+      "h1_lcb95": 0.48000000000000004,
+      "h1_ci95": [
+        0.4766666666666666,
+        0.5238888888888887
+      ],
+      "h2_lcb95": 0.21324074074074065,
+      "h2_ci95": [
+        0.21120370370370364,
+        0.23444444444444434
+      ],
+      "h2_minus_direct_lcb95": 0.23768518518518506,
+      "h2_minus_direct_ci95": [
+        0.23361111111111105,
+        0.2852777777777777
+      ],
+      "h2_minus_pool_lcb95": 0.19611111111111107,
+      "h2_minus_pool_ci95": [
+        0.19398148148148148,
+        0.21944444444444441
+      ],
+      "h1_pass": true,
+      "h2_pass": true
+    }
+  },
+  "budget": {
+    "attempts": 17,
+    "max_attempts": 20,
+    "elapsed_seconds": 7785,
+    "max_seconds": 28800
+  },
+  "next_task": "当前研究已封存。若要求在补充协议发布后再作全新的独立验收，需要另行授权和新的未见队列。",
+  "updated": "2026-11-24T11:47:45.055607+00:00",
+  "stop_reason": "补充协议的两个开发门槛已分版本判定，R12 两项通过并与已通过预置 H3 的冻结模型匹配；论文原式 H1 未通过。累计独立开封 1/1，补充协议发布后未新增正式验收。",
+  "checkpoints": "checkpoints/checkpoint-{1701,2701,3701}.json",
+  "decision": "analysis/H3验收判定.json",
+  "historical_formal_model": "R12 sharp_role",
+  "formal_openings": 1,
+  "formal_attempts_cap": 1,
+  "latest_development_report": "experiments/R3-0017_硬关系选择_20261124/report.md",
+  "new_development_protocol": "configs/共享权重续研冻结协议_20261124.json",
+  "new_formal_openings": 0,
+  "latest_study_report": "reports/R16-R17_补充协议验证报告.md",
+  "version_decisions": {
+    "original": {
+      "h1_dev": false,
+      "h2_dev": true,
+      "h3_this_version": "no dedicated original-weight opening"
+    },
+    "R12": {
+      "h1_dev": true,
+      "h2_dev": true,
+      "h3_existing_R09": true,
+      "h3_after_supplement": "not run"
+    }
+  },
+  "full_archive_verification": "logs/恢复校验/17轮完整性与版本结论.json"
+}

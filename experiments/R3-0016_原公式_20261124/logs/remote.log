@@ -1,0 +1,15 @@
+Verified frozen dependency files 188
+Stage 1 r3_shared_cohort.py
+{"graphs": 600, "rows": 2600, "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad"}
+Stage 2 r3_shared_weight_validation.py
+{"utc": "2026-11-24T11:40:59.791197+00:00", "event": "start", "version": "original"}
+{"utc": "2026-11-24T11:40:59.881012+00:00", "event": "inputs_verified", "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad", "rows": 2600, "graphs": 600}
+{"utc": "2026-11-24T11:40:59.881228+00:00", "event": "seed_started", "seed": 1701}
+{"utc": "2026-11-24T11:41:06.973774+00:00", "event": "seed_saved", "seed": 1701, "prediction_rows": 41600, "primary_rows": 2600, "primary_hits": 1687}
+{"utc": "2026-11-24T11:41:06.973973+00:00", "event": "seed_started", "seed": 2701}
+{"utc": "2026-11-24T11:41:13.137047+00:00", "event": "seed_saved", "seed": 2701, "prediction_rows": 41600, "primary_rows": 2600, "primary_hits": 1735}
+{"utc": "2026-11-24T11:41:13.137174+00:00", "event": "seed_started", "seed": 3701}
+{"utc": "2026-11-24T11:41:18.460440+00:00", "event": "seed_saved", "seed": 3701, "prediction_rows": 41600, "primary_rows": 2600, "primary_hits": 1777}
+{"utc": "2026-11-24T11:41:18.489308+00:00", "event": "complete", "predictions_sha256": "a23a33f84b0ff4dd0d09f40c53b80025a5d8359e44295f5d52ffdbf95af133e9"}
+Stage 3 r3_shared_stats.py
+{"variant": "learned", "h1_accuracy": 0.7015740740740732, "first_mentioned_accuracy": 0.4999999999999999, "h1_delta": 0.20157407407407407, "h2_accuracy": 0.722037037037037, "uniform_accuracy": 0.691666666666667, "h2_delta": 0.03037037037037034, "direct_accuracy": 0.6549999999999999, "pool_accuracy": 0.7077777777777766, "h2_minus_direct": 0.067037037037037, "h2_minus_pool": 0.014259259259259261, "coverage": 1.0, "h1_lcb95": 0.18092592592592588, "h1_ci95": [0.177037037037037, 0.22666666666666657], "h2_lcb95": 0.024351851851851854, "h2_ci95": [0.02324074074074074, 0.037499999999999985], "h2_minus_direct_lcb95": 0.04240740740740747, "h2_minus_direct_ci95": [0.03768518518518522, 0.09657407407407409], "h2_minus_pool_lcb95": 0.0041666666666666675, "h2_minus_pool_ci95": [0.0021296296296296306, 0.02638888888888889], "h1_pass": false, "h2_pass": true}

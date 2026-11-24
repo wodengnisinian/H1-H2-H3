@@ -1,0 +1,30 @@
+{
+  "id": "R12",
+  "version": "max-relation-mass-uniform-v1",
+  "seeds": [
+    1701,
+    2701,
+    3701
+  ],
+  "feature_batch": 128,
+  "challenge_seed": 11242026,
+  "challenge_per_stratum": 100,
+  "bootstrap_draws": 10000,
+  "bootstrap_seed": 619482,
+  "change": "Inference-only hard relation selection. No new fits, no threshold or temperature search. The R08 supervised cue scorer, question relation lexicon, all H2 components, data and ordered candidates are frozen.",
+  "evidence": "On the 600-graph R08 development cohort the supervised relation reader correctly selected its first relation in 100% of decisions, while soft-weight H2 original accuracy was 70.78%; R04's correct-relation ideal scored 85.83%. This comparison separates relation selection from dilution of its H2 correction.",
+  "hypothesis": "On fresh originals changing only soft support to the hard selected relation raises paired top1 accuracy; this test also requires that the prespecified 95% one-sided paired lower bound over soft is above zero. The primary candidate and formal gate are separate from this mechanism test.",
+  "formula": "For relation v let I_v be its token positions, T_v=LSE_{j in I_v}(t_j) and P_v=exp(T_v)/sum_u exp(T_u). Select argmax_v T_v; exact ties resolved by Unicode lexical order. p*_j=1/|I_v*| for positions of the chosen relation, 0 otherwise. H2 then adds G*gamma*(LSE_{j in I_v*}(r_ij)-log|I_v*|). When both relation terms occur once this reduces to the selected position's r_ij.",
+  "limit": "If T has a unique maximizer, soften at relation level as q_lambda(j)=softmax(lambda*T)_{v(j)}/|I_{v(j)}|, whose lambda→infinity limit equals p*. A tie under that smooth rule yields shared mass across tied relations; the explicit lexical convention is a further selection. Exponentiating original token logits instead converges to the token-level maximizers, so in general does not yield uniform weights across all mentions of a chosen repeated relation.",
+  "controls": [
+    "soft_role (same frozen R08 parameters)",
+    "sharp_random_role from R08 matched random-label head",
+    "sharp_first and sharp_last (first/last distinct relation in surface order)",
+    "direction, pool, direct",
+    "label-informed correct-relation uniform weight, diagnostic-only"
+  ],
+  "subgroups": "Report correct relation, gate open/closed, first relation mentioned earlier/later, fixed soft winner confidence bins [0.5,.7),[.7,.9),[.9,.99),[.99,1]. Each contains paired correctness change, correct-minus-other logit margin and graph counts. Raw rows retain both relation masses, scores, corrections and cases.",
+  "primary": "sharp_role",
+  "development_gate": "Use the study-wide fixed gate with all 3 seeds. On fresh originals gain ≥0.05 vs both direct and independently trained pool, fresh paraphrase >0 vs each, fresh quartet >direct and >=pool. Only sharp_role is eligible if the formal cohort is still unopened.",
+  "expected_identity": "When the predicted relation equals the gold relation, hard-selected scores equal the diagnostic label-based oracle with the same set of target positions. Closed-gate scores remain directional for every weight choice. Check both equalities numerically and retain errors independently of conclusion."
+}

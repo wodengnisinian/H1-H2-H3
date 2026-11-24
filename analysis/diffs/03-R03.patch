@@ -1,0 +1,753 @@
+--- /dev/null
++++ R03/configs/R03.json
+@@ -0,0 +1,24 @@
++{
++  "id": "R03",
++  "hypothesis": "Frozen representations encode first-relation identity on held-out wording. A matched linear question-only readout exceeds its randomized-label control.",
++  "criteria": "Constrained two-relation probe accuracy exceeds shuffled-label accuracy by at least 5pp in fresh, template and combination original questions. Same ridge penalty and same training examples in both fits. Learned word mass identifies the first relation only when its mass exceeds the competing relation; exact ties are reported as 0.5.",
++  "argv": [
++    "src/mech_run.py",
++    "--round",
++    "readout",
++    "--b13",
++    "{inputs}/b13",
++    "--b16",
++    "{inputs}/b16",
++    "--prior",
++    "{inputs}/prior",
++    "--out",
++    "{out}"
++  ],
++  "sources": [
++    "src/mech_*.py",
++    "configs/mech_protocol.json"
++  ],
++  "receipt": "metrics.json",
++  "after": "按本轮逐题结果和冻结判据评估下轮实验"
++}
+--- /dev/null
++++ R03/configs/mech_protocol.json
+@@ -0,0 +1,45 @@
++{
++  "version": 1,
++  "seeds": [
++    1701,
++    2701,
++    3701
++  ],
++  "epochs": 12,
++  "batch": 128,
++  "lr": 0.003,
++  "feature_batch": 128,
++  "challenge_seed": 11242026,
++  "challenge_per_stratum": 100,
++  "bootstrap_draws": 10000,
++  "bootstrap_seed": 619482,
++  "primary_split": "fresh",
++  "source": "B13 frozen models and B16 train and dev. Prior H1 vector retained as an archival comparator. Seven of 28 unordered pairs removed in both orientations for newly trained heads, including joint, groups and probes. The underlying archived encoder and prior H1 saw all 28 pairs.",
++  "selection": "Fixed last epoch. No model selection by seed, dev or independent scores. Only a designated joint candidate can enter independent testing. Readout, geometry, ablation and groups are diagnostics.",
++  "rounds": {
++    "readout": {
++      "hypothesis": "Frozen representations encode first-relation identity on held-out wording. A matched linear question-only readout exceeds its randomized-label control.",
++      "criterion": "Constrained two-relation probe accuracy exceeds shuffled-label accuracy by at least 5pp in fresh, template and combination original questions. Same ridge penalty and same training examples in both fits. Learned word mass identifies the first relation only when its mass exceeds the competing relation; exact ties are reported as 0.5."
++    },
++    "geometry": {
++      "hypothesis": "The closed gate and per-token margin extrema impose an empirical ceiling on attainable first-hop accuracy.",
++      "criterion": "Before training a new head, compare reachable ceiling with max(first,pool)+5pp. Separate negative strict upper bounds, exact zero ties, uncovered candidates and open/closed gates. Label-informed oracle and mathematical ceiling are diagnostics."
++    },
++    "ablation": {
++      "hypothesis": "Position-specific learned word weights contribute to actual ranking beyond uniform, random and shuffled alternatives.",
++      "criterion": "Learned beats all three weighting controls on fresh original and fresh quartet. Report all seeds. Random vector is Gaussian with learned norm. Shuffled p deterministically permutes valid positions in each example. Candidate swap must preserve p and permute logits within 2e-5."
++    },
++    "groups": {
++      "hypothesis": "Four frozen question components improve ranking over one pooled question representation with identical H1 training budgets.",
++      "criterion": "Four beats one on fresh originals and four-question joint correctness. Both methods learn 64 H1 parameters for the same 12 epochs on the same combination-filtered training examples."
++    },
++    "joint": {
++      "hypothesis": "Old context-only weights overfit original syntax. A question-only clause-order feature helps rank relations across unseen wording with fixed H2.",
++      "criterion": "Compare replacing the 64th hidden coordinate with an annotated ordinal cue feature on precisely the same examples and loss; retain 64 parameters. Fresh original >=5pp gain over each baseline, fresh paraphrase >0 against each baseline and fresh quartet >first, >=pool. Report separate combination and template challenge metrics."
++    }
++  },
++  "joint_training": "Training labels affect only the original candidate CE. Use all pair-filtered originals and one equally weighted, randomly selected, training-family paraphrase per training graph. Both cue and plain controls use identical augmented examples, shuffles, epochs and learning rate.",
++  "confidence": "Each stratum resamples graphs; seed averages come first. Dual-baseline one-sided 95% lower bounds are sorted draws[499]. Formal H3 externally sealed. No diagnostic oracle qualifies.",
++  "groups_definition": "Single group uses the arithmetic mean of the four frozen query vectors as one fixed 64-D query, computes a single token softmax and reads one question vector. The four-group comparator uses the four separate archived queries. All newly fitted heads have 64 parameters, same rows and optimizer budget.",
++  "challenge_index_range": "[16800,70000000); old fresh and B13 person sets are explicitly excluded."
++}
+--- /dev/null
++++ R03/src/mech_core.py
+@@ -0,0 +1,136 @@
++"""R3 question and candidate scorers. Inference accepts feature-only examples."""
++from __future__ import annotations
++
++import hashlib
++import math
++import torch
++import torch.nn.functional as F
++
++
++def weights(f, w, cue=None, strength=0.):
++    logits = f.hidden @ w
++    if cue is not None:
++        logits = logits + strength * cue
++    return logits.masked_fill(~f.mask, -torch.inf).log_softmax(-1)
++
++
++def apply_logp(f, logp, base=None, amplitude=None):
++    support = (logp[:, None, :] + f.relation).logsumexp(-1)
++    return (f.base if base is None else base) + (f.amplitude if amplitude is None else amplitude)[:, None] * support
++
++
++def shuffled_logp(logp, mask, docs, seed):
++    out = logp.clone()
++    for i, d in enumerate(docs):
++        n = int(mask[i].sum())
++        key = f"{seed}|{d.doc_id}|{' '.join(d.question)}".encode()
++        rng = torch.Generator().manual_seed(int.from_bytes(hashlib.sha256(key).digest()[:8], 'little'))
++        out[i,:n] = logp[i,:n][torch.randperm(n, generator=rng)]
++    return out
++
++
++# These fixed dictionaries are temporal/function words. No template or relation
++# name, entity ID, candidate, gold or question-family identifier is consulted.
++FIRST = set("先 首先 第一步 开头 此前".split())
++SECOND = set("再 随后 之后 第二 最后 结束".split())
++BOUNDARIES = set("， 。 ？ ：".split())
++
++
++def clause_cues(docs, width):
++    """Signed nearest preceding temporal marker in the current punctuation span."""
++    cues = torch.zeros(len(docs), width)
++    for i, d in enumerate(docs):
++        last, strength = -100, 0
++        for j, token in enumerate(d.question):
++            if token in BOUNDARIES:
++                strength = 0
++            elif token in FIRST or token in SECOND:
++                last, strength = j, 1 if token in FIRST else -1
++            if strength:
++                cues[i,j] = strength / (1 + 0.10 * (j - last))
++    return cues
++
++
++def question_groups(bundle, f):
++    queries = bundle.serial.layer1.base.component_queries
++    alpha = (f.hidden @ queries.T / math.sqrt(f.hidden.shape[-1])).masked_fill(
++        ~f.mask.unsqueeze(-1), -torch.inf).softmax(1)
++    return alpha.transpose(1, 2) @ f.hidden
++
++
++@torch.no_grad()
++def single_group(bundle, f):
++    """One frozen query, one attention normalization and one 64-D readout."""
++    query = bundle.serial.layer1.base.component_queries.mean(0)
++    logits = (f.hidden @ query / math.sqrt(f.hidden.shape[-1])).masked_fill(~f.mask,-torch.inf)
++    return (logits.softmax(1).unsqueeze(1) @ f.hidden).squeeze(1)
++
++
++@torch.no_grad()
++def one_direction(bundle, docs, f):
++    """A single query representation scored against the same directional facts."""
++    t = bundle.trainer
++    queries = single_group(bundle, f)
++    out = []
++    for start in range(0, len(docs), 128):
++        batch = docs[start:start+128]
++        enc = t.encode_examples(batch,bundle.vocab,bundle.method)
++        _, nodes = t.collate(enc,bundle.device)
++        facts,_ = bundle.serial.layer1.base.encode(nodes)
++        triples = facts.view(len(batch),2,3,t.MODEL_DIM)
++        vectors = triples.mean(2) + t.DIRECTION_WEIGHT * (triples[:,:,0] - triples[:,:,2])
++        query = queries[start:start+len(batch)]
++        out.append(F.cosine_similarity(vectors,query[:,None],dim=-1) / t.LOGIT_TEMPERATURE)
++    base = torch.cat(out)
++    adapter = bundle.serial.layer1
++    amp = (adapter.alpha + adapter.beta*(base[:,0]-base[:,1]).abs()).sigmoid() * f.active
++    return base, amp
++
++
++def correct_index(docs, gold):
++    return torch.tensor([d.candidates.index(y) if y in d.candidates else -1
++                         for d,y in zip(docs,gold,strict=True)])
++
++
++def fit_joint(f, docs, y, seed, cfg, *, with_cues):
++    """One context scalar replaces one hidden dimension: both compared heads have 64 parameters."""
++    ids = (f.active & (y>=0)).nonzero().flatten()
++    w = torch.zeros(64, requires_grad=True)
++    opt = torch.optim.Adam([w], lr=cfg['lr'])
++    rng = torch.Generator().manual_seed(seed)
++    cues = clause_cues(docs, f.mask.shape[1]) if with_cues else None
++    history = []
++    for ep in range(cfg['epochs']):
++        loss_sum = 0.
++        for batch in ids[torch.randperm(len(ids),generator=rng)].split(cfg['batch']):
++            h = f.hidden[batch]
++            t = h[:,:,:63] @ w[:63] + w[63]*cues[batch] if with_cues else h @ w
++            logp = t.masked_fill(~f.mask[batch],-torch.inf).log_softmax(-1)
++            support = (logp[:,None,:] + f.relation[batch]).logsumexp(-1)
++            z = f.base[batch] + f.amplitude[batch,None]*support
++            loss = F.cross_entropy(z,y[batch])
++            opt.zero_grad()
++            loss.backward()
++            opt.step()
++            loss_sum += float(loss.detach())*len(batch)
++        history.append({'epoch':ep+1,'nll':loss_sum/len(ids),'w_norm':float(w.detach().norm())})
++    return w.detach(),history
++
++
++def from_state(f, docs, state):
++    mode = state['model']
++    w = torch.tensor(state['w'],dtype=f.hidden.dtype)
++    if mode == 'cue64':
++        h = f.hidden[:,:,:63] @ w[:63] + w[63]*clause_cues(docs, f.mask.shape[1])
++        return apply_logp(f,h.masked_fill(~f.mask,-torch.inf).log_softmax(-1))
++    if mode != 'learned':
++        raise ValueError(f"Unknown sealed scorer {mode}")
++    return apply_logp(f, weights(f,w))
++
++
++@torch.no_grad()
++def predict(bundle, docs, state):
++    import model
++    if any(d.gold is not None for d in docs):
++        raise ValueError("Prediction API expects feature-only examples")
++    return from_state(model.extract(bundle,docs), docs, state)
+--- /dev/null
++++ R03/src/mech_data.py
+@@ -0,0 +1,114 @@
++"""Development-only graph populations, including graph-disjoint template and pair challenges."""
++from __future__ import annotations
++
++from collections import Counter
++from hashlib import sha256
++import json
++import random
++import runpy
++
++
++NEW_TEMPLATES = (
++ "请 确定 第一步 的 记录 。 从 {anchor} 出发 ， 首先 追踪 {first} 关系 ， 之后 沿 {second} 关系 找 一人 。",
++ "最后 一段 按 {second} 关系 。 此前 从 {anchor} 开始 ， 首先 沿 {first} 关系 找 一人 。 应 先 使用 哪条 记录 ？",
++ "以 {anchor} 为 起点 ， 第一步 沿 {first} 关系 ， 随后 按 {second} 关系 找 一人 。 哪条 记录 对应 开头 一段 ？",
++ "第二 段 沿 {second} 关系 找 一人 。 第一步 以 {anchor} 为 起点 ， 追踪 {first} 关系 。 应 先 使用 哪条 记录 ？",
++)
++
++# Lexicographically enumerate all 28 unordered pairs and choose seven before
++# observing development labels. Both ordered orientations are withheld.
++def pair_holdout(relations):
++    import itertools
++    return {pair for i,pair in enumerate(itertools.combinations(sorted(relations),2)) if i%4==0}
++
++
++def pair_of(d,relations):
++    values = sorted(set(d.question).intersection(relations))
++    if len(values)!=2:
++        raise ValueError(f"Expected two relations on {d.doc_id}")
++    return tuple(values)
++
++
++def fingerprint(d):
++    return frozenset(person for h,_,t in d.nodes for person in (h,t))
++
++
++def augment(train, templates, evaluator, seed):
++    """Change training wording, preserving graph, gold and fixed candidates."""
++    import data_views as dv
++    token_templates = [t.split() for t in templates]
++    docs, gold = train
++    result = []
++    rng = random.Random(seed)
++    for d in docs:
++        roles = dv.roles_for(d,token_templates)
++        options = [t for t in templates if tuple(t.format(anchor=roles[0],first=roles[1],second=roles[2]).split())!=d.question]
++        result.append(dv.make_question(d,roles,rng.choice(options),evaluator))
++    return result, gold
++
++
++def make_splits(b13,b16,bundle,cfg):
++    import data_views as dv
++    views, historical = dv.build_views(b13,b16,bundle.trainer,bundle.evaluator)
++    train = views.pop('train')
++    fresh, fresh_meta = dv.build_fresh_views(b13,bundle.trainer,bundle.evaluator)
++    old = runpy.run_path(str(b13/'inputs/source/generate.py'))
++    relations = sorted(old['RELATIONS'])
++    held = pair_holdout(relations)
++    train_pairs = [pair_of(d,relations) for d in train[0]]
++    sub_idx = [i for i,pair in enumerate(train_pairs) if pair not in held]
++    sub = ([train[0][i] for i in sub_idx],[train[1][i] for i in sub_idx])
++    excluded = {fingerprint(d) for d in train[0]+views['original'][0]+fresh['original'][0]}
++    excluded.update(frozenset(n for h,_,t in r['nodes'] for n in (h,t))
++                    for r in dv.rows(b13/'cohort/features.jsonl'))
++    styles = set(NEW_TEMPLATES)
++    existing = set().union(*old['QUESTION_FAMILIES'].values(),dv.PARAPHRASE,dv.QUARTET,dv.FRESH_TEMPLATES,
++                           runpy.run_path(str(b13/'code/generate_cohort.py'))['TEMPLATES'])
++    # Include clause rewrites used by the archived frozen model.
++    train_roles = {d.doc_id:dv.roles_for(d,[s.split() for s in old['QUESTION_FAMILIES']['train']]) for d in train[0]}
++    for row in dv.rows(b16/dv.DATA_RELATIVE/'train-clause-views.jsonl'):
++        a,b,c = train_roles[row['doc_id']]
++        for key,r1,r2 in [('original',b,c),('swapped',c,b)]:
++            rename = {a:'{anchor}',r1:'{first}',r2:'{second}'}
++            for pairs in row[key] or []:
++                for item in pairs:
++                    existing.add(' '.join(rename.get(w,w) for w in item['question']))
++    if styles.intersection(existing):
++        raise ValueError('Challenge question template overlap')
++    out = {'fresh':fresh,'archive':views}
++    for si,split in enumerate(('template','combination')):
++        rng = random.Random(cfg['challenge_seed']+si)
++        raw=[]
++        per=cfg['challenge_per_stratum']
++        for k,stratum in enumerate(dv.STRATA):
++            positions = [(i+k*per)%12 for i in range(per)]
++            rng.shuffle(positions)
++            for i,pos in enumerate(positions):
++                while True:
++                    index = rng.randrange(16800,70_000_000)
++                    people = frozenset(old['ranked_people'](index))
++                    if people in excluded:
++                        continue
++                    t = NEW_TEMPLATES[i%4] if split=='template' else dv.FRESH_TEMPLATES[i%4]
++                    r = old['document'](index,stratum,pos,t,rng)
++                    p = tuple(sorted(set(r['question']).intersection(relations)))
++                    if split!='combination' or p in held:
++                        break
++                excluded.add(people)
++                raw.append(r)
++        main = dv.load_view(raw,bundle.trainer,bundle.evaluator)
++        out[split] = dv.make_eval_views(main,NEW_TEMPLATES if split=='template' else dv.FRESH_TEMPLATES,bundle.evaluator)
++    manifest = dict(roles=relations,held_pairs=sorted(held),frozen_train_pairs=len(set(train_pairs)),
++        head_train_pairs=sorted({train_pairs[i] for i in sub_idx}),head_train_graphs=len(sub_idx),
++        challenge_templates=NEW_TEMPLATES,checked_existing_templates=len(existing),
++        archived_train_hash=historical['train_graph_set_sha256'],archived_dev_hash=historical['dev_graph_set_sha256'],
++        fresh_index_hash=fresh_meta['person_indices_sha256'],dataset={})
++    for split, variants in out.items():
++        ds = variants['original'][0]
++        manifest['dataset'][split] = {'size':len(ds),'ids_sha256':dv.canonical_hash([d.doc_id for d in ds]),
++            'graphs_sha256':dv.canonical_hash(sorted(dv.graph_hash(d) for d in ds)),
++            'candidates_sha256':dv.canonical_hash([list(d.candidates) for d in ds]),
++            'gold_sha256':dv.canonical_hash(variants['original'][1]),
++            'question_sha256':dv.canonical_hash([d.question for d in ds]),
++            'strata':dict(Counter(d.stratum for d in ds))}
++    return train,sub,out,relations,manifest
+--- /dev/null
++++ R03/src/mech_metrics.py
+@@ -0,0 +1,74 @@
++"""Graph-paired performance on first hop and within-graph behavior."""
++from collections import defaultdict
++import numpy as np
++
++
++def group_summary(rows):
++    methods=rows[0]['predictions'].keys()
++    index={(r['graph_id'],r['variant']):r for r in rows}
++    values={}
++    for method in methods:
++        hits=defaultdict(list)
++        strat=defaultdict(list)
++        gate=defaultdict(list)
++        form=defaultdict(list)
++        for r in rows:
++            ok=r['predictions'][method]==r['gold']
++            hits[r['variant']].append(ok)
++            if r['variant']=='original':
++                strat[r['kind']].append(ok)
++                gate[str(r['gate'])].append(ok)
++                form[str(r['first_mentioned_earlier'])].append(ok)
++        all4=[];pair=[];reversal=[];paraphrase=[];qrewrite=[]
++        for r in rows:
++            if r['variant']=='original':
++                p=index[(r['graph_id'],'paraphrase')]
++                paraphrase.append(r['predictions'][method]==p['predictions'][method])
++            if r['variant']!='q0':
++                continue
++            four=[index[(r['graph_id'],f'q{i}')] for i in range(4)]
++            picks=[v['predictions'][method] for v in four]
++            ok=[p==v['gold'] for p,v in zip(picks,four,strict=True)]
++            all4.append(all(ok));pair.extend([all(ok[:2]),all(ok[2:])])
++            reversal.extend([picks[0]!=picks[1],picks[2]!=picks[3]])
++            qrewrite.extend([picks[0]==picks[2],picks[1]==picks[3]])
++        avg=lambda x:float(np.mean(x)) if x else None
++        d={'original_top1':avg(hits['original']),'paraphrase_top1':avg(hits['paraphrase']),
++           'quartet_all':avg(all4),'reversal_both':avg(pair),'reversal_changed':avg(reversal),
++           'rewrite_agreement':avg(paraphrase),'quartet_rewrite_agreement':avg(qrewrite),
++           'graph_count':len(hits['original']),'quartet_graphs':len(all4),
++           'by_kind':{k:avg(a) for k,a in strat.items()},'by_gate':{k:avg(a) for k,a in gate.items()},
++           'by_relation_mention_order':{k:avg(a) for k,a in form.items()}}
++        values[method]=d
++    return values
++
++
++def average_dict(values):
++    if isinstance(values[0],dict):
++        return {key:average_dict([a[key] for a in values]) for key in values[0]}
++    return float(np.mean(values)) if values[0] is not None else None
++
++
++def confidence(rows,model,draws,seed):
++    out={}
++    for variant in ('original','paraphrase'):
++        graph=defaultdict(list)
++        for r in rows:
++            if r['variant']==variant:
++                p=r['predictions']; g=r['gold']
++                graph[(r['kind'],r['graph_id'])].append([int(p[model]==g)-int(p[b]==g) for b in ('first','pool')])
++        kinds=sorted({s for s,_ in graph})
++        rng=np.random.default_rng(seed)
++        boot=np.zeros((draws,2)); point=np.zeros(2)
++        for s in kinds:
++            matrix=np.array([np.mean(h,0) for (k,_),h in graph.items() if k==s])
++            point+=matrix.mean(0)/len(kinds)
++            for j in range(0,draws,128):
++                n=min(128,draws-j)
++                idx=rng.integers(len(matrix),size=(n,len(matrix)))
++                boot[j:j+n]+=matrix[idx].mean(1)/len(kinds)
++        band=np.sort(boot,axis=0)
++        out[variant]={b:{'delta':float(point[i]),'lcb95':float(band[int(draws*.05)-1,i]),
++                         'two_sided_95':[float(band[int(draws*.025)-1,i]),float(band[int(draws*.975)-1,i])]}
++                      for i,b in enumerate(('first','pool'))}
++    return out
+--- /dev/null
++++ R03/src/mech_probe.py
+@@ -0,0 +1,51 @@
++"""Question-only, fixed-capacity probes and first-relation diagnostics."""
++import torch
++import torch.nn.functional as F
++from mech_core import question_groups, single_group
++
++
++def representation(bundle,f):
++    groups=question_groups(bundle,f)
++    # Both expose 64 values. Fixed coordinate blocks of identical size retain
++    # group identity; one-control performs exactly one attention read.
++    return {'read_one':single_group(bundle,f),'read_four':torch.cat([groups[:,i,16*i:16*(i+1)] for i in range(4)],dim=1)}
++
++
++def probe_fit(bundle, f, docs, labels, relations, seed):
++    y=torch.tensor([relations.index(d.nodes[g][1]) for d,g in zip(docs,labels,strict=True)])
++    target=F.one_hot(y,len(relations)).double()
++    rng=torch.Generator().manual_seed(seed)
++    random_order=torch.randperm(len(y),generator=rng)
++    out={}
++    for name,x in representation(bundle,f).items():
++        x=torch.cat([x,torch.ones(len(x),1)],1).double()
++        gram=x.T@x+torch.eye(x.shape[1],dtype=x.dtype)
++        out[name]=torch.linalg.solve(gram,x.T@target).float()
++        out[name+'_random_labels']=torch.linalg.solve(gram,x.T@target[random_order]).float()
++    return out
++
++
++def read_probe(bundle,f,docs,relations,state):
++    xs=representation(bundle,f)
++    visible=torch.tensor([[r in d.question for r in relations] for d in docs])
++    results={}
++    for name,vector in state.items():
++        x=xs[name.split('_random_labels')[0]]
++        x=torch.cat([x,torch.ones(len(x),1)],1)
++        scores=x@vector
++        predictions=scores.masked_fill(~visible,-torch.inf).argmax(1)
++        results[name]=(predictions.tolist(),scores.argmax(1).tolist())
++    return results
++
++
++def masses(docs,gold,logp,relations):
++    p=logp.exp()
++    output=[]
++    for i,(d,g) in enumerate(zip(docs,gold,strict=True)):
++        first=d.nodes[g][1]
++        pair=sorted(set(d.question).intersection(relations))
++        other=next(r for r in pair if r!=first)
++        a=sum(float(p[i,j]) for j,w in enumerate(d.question) if w==first)
++        b=sum(float(p[i,j]) for j,w in enumerate(d.question) if w==other)
++        output.append((a,b,0.5 if a==b else float(a>b),first,other))
++    return output
+--- /dev/null
++++ R03/src/mech_run.py
+@@ -0,0 +1,288 @@
++"""Execute one registered CPU mechanism experiment; output directory must be new."""
++from __future__ import annotations
++
++import argparse
++from collections import defaultdict
++from dataclasses import replace
++from datetime import datetime,timezone
++import gzip
++import hashlib
++import json
++from pathlib import Path
++import platform
++import random
++import runpy
++import sys
++import time
++import traceback
++
++import numpy as np
++import torch
++from mech_data import augment, make_splits
++import mech_core as core
++import mech_probe as probe
++from mech_metrics import group_summary, average_dict, confidence
++
++
++def now(): return datetime.now(timezone.utc).isoformat()
++
++def digest(p): return hashlib.sha256(Path(p).read_bytes()).hexdigest()
++
++def save(path,value):
++    with path.open('x',encoding='utf8') as f:
++        json.dump(value,f,ensure_ascii=False,indent=2,allow_nan=False)
++
++def line(f,row):
++    f.write(json.dumps(row,ensure_ascii=False,separators=(',',':'),allow_nan=False)+'\n')
++
++def balanced(view,limit):
++    if not limit: return view
++    ds,ys=view
++    c=defaultdict(int); keep=[]
++    for i,d in enumerate(ds):
++        if c[d.stratum]<limit:
++            c[d.stratum]+=1;keep.append(i)
++    return [ds[i] for i in keep],[ys[i] for i in keep]
++
++
++def fit_round(args,cfg,bundle,sub,prior,seed,log):
++    import model
++    stage=args.round
++    w=torch.tensor(prior['w'],dtype=torch.float32)
++    state={'w':w,'histories':{},'proof':{}}
++    if stage not in ('groups','joint','readout'): return state
++    ds,ys=sub
++    if stage=='joint':
++        families=runpy.run_path(str(args.b13/'inputs/source/generate.py'))['QUESTION_FAMILIES']['train']
++        aug,_=augment(sub,families,bundle.evaluator,seed)
++        ds,ys=ds+aug,ys+ys
++    feats=model.extract(bundle,ds,cfg['feature_batch'])
++    y=core.correct_index(ds,ys)
++    if stage=='readout':
++        state['probes']=probe.probe_fit(bundle,feats,ds,ys,cfg['_relations'],seed)
++    elif stage=='joint':
++        for key,with_cues in [('matched_plain',False),('cue64',True)]:
++            vector,hist=core.fit_joint(feats,ds,y,seed,cfg,with_cues=with_cues)
++            state[key]=vector;state['histories'][key]=hist
++            log('trained',seed=seed,method=key,eligible=int((feats.active&(y>=0)).sum()),history=hist)
++    elif stage=='groups':
++        base,amp=core.one_direction(bundle,ds,feats)
++        for key,features in [('four',feats),('one',replace(feats,base=base,amplitude=amp))]:
++            vector,hist=model.fit(features,y,epochs=cfg['epochs'],lr=cfg['lr'],batch_size=cfg['batch'],seed=seed)
++            state[key]=vector;state['histories'][key]=hist
++            log('trained',seed=seed,method=key,eligible=int((feats.active&(y>=0)).sum()),history=hist)
++    return state
++
++
++def run_view(args,cfg,b,docs,gold,st,split,variant,seed):
++    import model
++    f=model.extract(b,docs,cfg['feature_batch'])
++    y=core.correct_index(docs,gold)
++    w=st['w']
++    weights=core.weights(f,w)
++    learned=core.apply_logp(f,weights)
++    scores={'pool':f.pooled,'direction':f.base}
++    extra={}
++    bounds=None; oracle=None; read=None; mass=None; swaperr=None
++    if args.round=='geometry':
++        bounds=model.correct_margin_bounds(f,y)
++        gold_mentions=torch.zeros_like(f.mask)
++        for i,(d,g) in enumerate(zip(docs,gold,strict=True)):
++            rel=d.nodes[g][1]
++            gold_mentions[i,:len(d.question)]=torch.tensor([t==rel for t in d.question])
++        if not bool(gold_mentions.any(1).all()): raise ValueError('Gold relation missing')
++        logp=torch.zeros_like(f.mask,dtype=torch.float32).masked_fill(~gold_mentions,-torch.inf).log_softmax(-1)
++        oracle=core.apply_logp(f,logp)
++    elif args.round=='ablation':
++        rng=torch.Generator().manual_seed(seed+442)
++        rnd=torch.randn(w.shape,generator=rng);rnd=rnd*w.norm()/rnd.norm()
++        scores.update(old=f.old,uniform=core.apply_logp(f,core.weights(f,w*0)),learned=learned,
++            random=core.apply_logp(f,core.weights(f,rnd)),
++            shuffled=core.apply_logp(f,core.shuffled_logp(weights,f.mask,docs,seed)))
++        rev=[replace(d,candidates=tuple(reversed(d.candidates))) for d in docs]
++        rf=model.extract(b,rev,cfg['feature_batch'])
++        rw=core.weights(rf,w)
++        swapped=core.apply_logp(rf,rw)
++        swaperr=(swapped-learned.flip(1)).abs().amax(1)
++        if swaperr.max()>2e-5 or not torch.allclose(weights.exp(),rw.exp(),atol=2e-5,rtol=0):
++            raise ValueError('Candidate swap audit failed')
++    elif args.round=='readout':
++        scores['learned']=learned
++        read=probe.read_probe(b,f,docs,cfg['_relations'],st['probes'])
++        mass=probe.masses(docs,gold,weights,cfg['_relations'])
++    elif args.round=='groups':
++        base,amp=core.one_direction(b,docs,f)
++        scores['four']=core.apply_logp(f,core.weights(f,st['four']))
++        scores['one']=core.apply_logp(f,core.weights(f,st['one']),base,amp)
++    elif args.round=='joint':
++        scores['learned']=learned
++        for tag in ('matched_plain','cue64'):
++            mode='learned' if tag=='matched_plain' else tag
++            scores[tag]=core.from_state(f,docs,{'model':mode,'w':st[tag].tolist()})
++    if any(not v.isfinite().all() for v in scores.values()): raise ValueError('Nonfinite scores')
++    for i,(d,g) in enumerate(zip(docs,gold,strict=True)):
++        preds={tag:d.candidates[int(v[i].argmax())] for tag,v in scores.items()}
++        preds['first']=d.candidates[0]
++        correctrel=d.nodes[g][1]
++        other=next(t for t in d.question if t in cfg['_relations'] and t!=correctrel)
++        r=dict(graph_id=d.doc_id,kind=d.stratum,variant=variant,seed=seed,split=split,
++            gold=g,candidates=d.candidates,covered=bool(y[i]>=0),gate=bool(f.active[i]),
++            first_relation=correctrel,first_mentioned_earlier=d.question.index(correctrel)<d.question.index(other),
++            predictions=preds,logits={tag:v[i].tolist() for tag,v in scores.items()})
++        if bounds is not None:
++            lo,hi=bounds[i].tolist()
++            possible=bool(y[i]>=0 and (hi>0 or (hi==0 and y[i]==0)))
++            r['geometry']={'min':lo if y[i]>=0 else None,'max':hi if y[i]>=0 else None,
++               'possible':possible,'oracle_fact':d.candidates[int(oracle[i].argmax())],
++               'oracle_logits':oracle[i].tolist(),'direction_wrong':preds['direction']!=g}
++        if swaperr is not None: r['swap_logits_error']=float(swaperr[i])
++        if read is not None:
++            a,bmass,hit,first,second=mass[i]
++            r['h1']={'mass_first':a,'mass_second':bmass,'mass_correct_tie_half':hit,
++                     'mass_choice':first if a>bmass else second if bmass>a else None,
++                     'first':first,'second':second,
++                     'probes':{k:{'pair':cfg['_relations'][a[i]],'all':cfg['_relations'][c[i]]} for k,(a,c) in read.items()}}
++        yield r
++
++
++def diagnostics(rows, stage):
++    subsets=defaultdict(list)
++    for r in rows:
++        subsets[(r['split'],r['variant'])].append(r)
++    outcome={}
++    for (sp,var),rs in subsets.items():
++        if var not in ('original','paraphrase'): continue
++        def avg(values): return float(np.mean(values))
++        d={'n':len(rs),'coverage':avg([r['covered'] for r in rs])}
++        if stage=='readout':
++            d['mass_first_accuracy']=avg([r['h1']['mass_correct_tie_half'] for r in rs])
++            d['mass_tie_rate']=avg([r['h1']['mass_choice'] is None for r in rs])
++            for k in rs[0]['h1']['probes']:
++                for dim in ['all','pair']:
++                    d[k+'_'+dim]=avg([r['h1']['probes'][k][dim]==r['first_relation'] for r in rs])
++            if var=='original':
++                qs={v:{(r['graph_id'],r['seed']):r for r in subsets[(sp,v)]} for v in ['q0','q1','q2','q3','paraphrase']}
++                for method in ['mass',*rs[0]['h1']['probes']]:
++                    def picked(r):
++                        return r['h1']['mass_choice'] if method=='mass' else r['h1']['probes'][method]['pair']
++                    keys=qs['q0'].keys()
++                    if keys:
++                        d[method+'_reverse_both']=avg([all(picked(qs[v][key])==qs[v][key]['first_relation'] for v in pair)
++                                               for key in keys for pair in [('q0','q1'),('q2','q3')]])
++                    d[method+'_rewrite_stability']=avg([picked(r) is not None and picked(r)==picked(qs['paraphrase'][(r['graph_id'],r['seed'])]) for r in rs])
++        if stage=='geometry':
++            for gate,sel in [('all',rs),('open',[r for r in rs if r['gate']]),('closed',[r for r in rs if not r['gate']])]:
++                d[gate]={'rows':len(sel),'attainable_ceiling':avg([r['geometry']['possible'] for r in sel]),
++                    'label_oracle_accuracy':avg([r['geometry']['oracle_fact']==r['gold'] for r in sel]),
++                    'direction_errors':sum(r['geometry']['direction_wrong'] for r in sel),
++                    'structurally_uncorrectable':sum(r['geometry']['direction_wrong'] and not r['geometry']['possible'] for r in sel)}
++        if stage=='ablation': d['max_swap_error']=max(r['swap_logits_error'] for r in rs)
++        outcome.setdefault(sp,{})[var]=d
++    return outcome
++
++
++def run(args):
++    import model
++    cfg=json.loads(args.config.read_text(encoding='utf8'))
++    args.out.mkdir(parents=True,exist_ok=False)
++    def log(event,**kw):
++        with (args.out/'events.jsonl').open('a',encoding='utf8') as fo: line(fo,dict(utc=now(),event=event,**kw))
++    initial=now(); start=time.monotonic()
++    save(args.out/'configuration.json',dict(config=cfg,round=args.round,argv=sys.argv,started=initial,
++        python=sys.version,torch=str(torch.__version__),numpy=np.__version__,platform=platform.platform(),
++        seeds=args.seeds,smoke_per_stratum=args.smoke,code_hashes={p.name:digest(p) for p in Path(__file__).parent.glob('mech_*.py')},
++        prior_code_sha256={n:digest(args.code/n) for n in ['model.py','data_views.py']},protocol_sha256=digest(args.config)))
++    try:
++        b=model.load_bundle(args.b13,args.seeds[0])
++        train,sub,splits,relations,manifest=make_splits(args.b13,args.b16,b,cfg)
++        cfg['_relations']=relations
++        save(args.out/'dataset.json',manifest)
++        sub=balanced(sub,args.smoke)
++        if args.smoke:
++            splits={k:{v:balanced(data,args.smoke) for v,data in views.items()} for k,views in splits.items()}
++        log('data_ready',pair_filtered_train=len(sub[0]),historical_train=len(train[0]))
++        primary={'readout':'learned','geometry':'direction','ablation':'learned','groups':'four','joint':'cue64'}[args.round]
++        perseed={};allrows=defaultdict(list);seed_time={}
++        # Store each fact graph once and every question and gold candidate order, so reported mistakes can be inspected.
++        with gzip.open(args.out/'development-inputs.jsonl.gz','wt',encoding='utf8') as fh:
++            for split,views in splits.items():
++                for variant,(ds,ys) in views.items():
++                    for d,g in zip(ds,ys,strict=True):
++                        obj=dict(split=split,variant=variant,graph_id=d.doc_id,kind=d.stratum,question=d.question,
++                                 candidates=d.candidates,gold=g)
++                        if variant=='original': obj['nodes']=d.nodes
++                        line(fh,obj)
++        for seed in args.seeds:
++            tick=time.monotonic()
++            if seed!=args.seeds[0]: b=model.load_bundle(args.b13,seed)
++            weights=args.weights/f'w-{seed}.json'
++            prior=json.loads(weights.read_bytes())
++            if prior['seed']!=seed: raise ValueError('Checkpoint seed mismatch')
++            log('begin_seed',seed=seed,prior_sha256=digest(weights))
++            st=fit_round(args,cfg,b,sub,prior,seed,log)
++            state_json={k:(v.tolist() if isinstance(v,torch.Tensor) else v) for k,v in st.items() if k!='probes'}
++            if 'probes' in st: state_json['probes']={k:v.tolist() for k,v in st['probes'].items()}
++            save(args.out/f'parameters-{seed}.json',state_json)
++            if args.round=='joint':
++                save(args.out/f'checkpoint-{seed}.json',{'model':'cue64','seed':seed,'w':st['cue64'].tolist()})
++            perseed[seed]={}
++            with gzip.open(args.out/f'predictions-{seed}.jsonl.gz','wt',encoding='utf8') as fo, gzip.open(
++                args.out/f'errors-{seed}.jsonl.gz','wt',encoding='utf8') as err:
++                for split,views in splits.items():
++                    slim=[]
++                    for variant,(docs,ys) in views.items():
++                        for r in run_view(args,cfg,b,docs,ys,st,split,variant,seed):
++                            line(fo,r)
++                            if r['predictions'][primary]!=r['gold']: line(err,r)
++                            r.pop('logits'); slim.append(r)
++                    perseed[seed][split]=group_summary(slim)
++                    allrows[split].extend(slim)
++                    log('scored',seed=seed,split=split,rows=len(slim))
++            seed_time[seed]=time.monotonic()-tick
++        aggregate={sp:average_dict([perseed[s][sp] for s in args.seeds]) for sp in splits}
++        intervals={sp:confidence(rs,primary,cfg['bootstrap_draws'],cfg['bootstrap_seed']) for sp,rs in allrows.items()}
++        diags=diagnostics([r for rs in allrows.values() for r in rs],args.round)
++        for s in args.seeds:
++            perseed[s]['diagnostics']=diagnostics([r for rs in allrows.values() for r in rs if r['seed']==s],args.round)
++        fresh=aggregate['fresh']; main=fresh[primary]
++        check=(all(main['original_top1']-fresh[b]['original_top1']>=.05-1e-12 and
++                   main['paraphrase_top1']>fresh[b]['paraphrase_top1'] for b in ('first','pool'))
++               and main['quartet_all']>fresh['first']['quartet_all'] and main['quartet_all']>=fresh['pool']['quartet_all'])
++        if args.round=='readout':
++            support=all(diags[sp]['original']['read_four_pair']-diags[sp]['original']['read_four_random_labels_pair']>=.05 for sp in ('fresh','template','combination'))
++        elif args.round=='geometry':
++            support=diags['fresh']['original']['all']['attainable_ceiling']>=max(fresh[b]['original_top1'] for b in ('first','pool'))+.05
++        elif args.round=='ablation':
++            support=all(main[k]>fresh[c][k] for c in ('random','shuffled','uniform') for k in ('original_top1','quartet_all'))
++        elif args.round=='groups':
++            support=all(main[k]>fresh['one'][k] for k in ('original_top1','quartet_all'))
++        else: support=check
++        gate={'criteria_met':check,'eligible':args.round=='joint' and check and not args.smoke and args.seeds==cfg['seeds']}
++        save(args.out/'metrics.json',dict(round=args.round,seeds=args.seeds,primary_model=primary,aggregate=aggregate,
++            per_seed=perseed,controls=list(fresh),paired_intervals=intervals,diagnostics=diags,
++            development_gate=gate,criterion_met=bool(support),smoke=bool(args.smoke),
++            protocol_sha256=digest(args.config),elapsed_seconds=time.monotonic()-start,seconds_by_seed=seed_time,
++            started_utc=initial,finished_utc=now(),hypothesis=cfg['rounds'][args.round]))
++        log('finished',criterion_met=bool(support),gate=gate)
++    except BaseException:
++        log('failed',trace=traceback.format_exc())
++        raise
++
++
++if __name__=='__main__':
++    p=argparse.ArgumentParser(description=__doc__)
++    p.add_argument('--round',choices=['readout','geometry','ablation','groups','joint'],required=True)
++    for name in ['prior','b13','b16','out']: p.add_argument('--'+name,type=Path,required=True)
++    p.add_argument('--code',type=Path)
++    p.add_argument('--weights',type=Path,help='directory containing prior w-{seed}.json')
++    p.add_argument('--config',type=Path,default=Path(__file__).resolve().parents[1]/'configs/mech_protocol.json')
++    p.add_argument('--seeds',type=int,nargs='+',default=[1701,2701,3701])
++    p.add_argument('--smoke',type=int,default=0,help='maximum graphs per stratum per view, excludes formal qualification')
++    a=p.parse_args()
++    a.b13=a.b13.resolve();a.b16=a.b16.resolve()
++    a.code=(a.code or a.prior/'code').resolve()
++    a.weights=(a.weights or a.prior/'runs/本地开发-01').resolve()
++    if len(set(a.seeds))!=len(a.seeds) or not set(a.seeds)<={1701,2701,3701}: p.error('invalid seeds')
++    sys.path.insert(0,str(a.code))
++    sys.dont_write_bytecode=True
++    run(a)

@@ -1,0 +1,25 @@
+{
+  "path_base": "R3",
+  "registered_configurations": [
+    {
+      "path": "experiments/12-R10/preregistration.json",
+      "sha256": "eb553df78857f359a40a6d23a87d9344085a49d4556ea133c5e37d958d3122a0",
+      "bytes": 707
+    },
+    {
+      "path": "experiments/12-R10/snapshot/configs/challenge.json",
+      "sha256": "dc78cacd272c1efe460b81e00fbee6195025c268c18ff0e91516f30c69a2f84b",
+      "bytes": 3104
+    },
+    {
+      "path": "experiments/12-R10/snapshot/configs/R10.json",
+      "sha256": "eb553df78857f359a40a6d23a87d9344085a49d4556ea133c5e37d958d3122a0",
+      "bytes": 707
+    },
+    {
+      "path": "experiments/12-R10/snapshot/configs/research_protocol.json",
+      "sha256": "2685817419c4c32724f294ebcde7df8f548e5937e7778a069d82ffbd28f0e610",
+      "bytes": 1937
+    }
+  ]
+}

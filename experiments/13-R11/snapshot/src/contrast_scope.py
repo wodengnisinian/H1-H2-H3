@@ -1,0 +1,313 @@
+"""R11. Frozen development-only stress test for choosing the adopted plan.
+
+python src/contrast_scope.py --b13 inputs/b13 --prior inputs/prior --r07 <R07-run> \
+  --candidate <R08-run> --module role_core --out <new-output-directory>
+"""
+import argparse
+from collections import Counter, defaultdict
+from datetime import datetime, timezone
+import gzip
+from hashlib import sha256
+import importlib
+import json
+from pathlib import Path
+import platform
+import shutil
+import sys
+import time
+import traceback
+
+import numpy as np
+import torch
+import mech_core
+
+
+def require(condition, detail):
+    if not condition:
+        raise ValueError(detail)
+
+
+def digest(path):
+    return sha256(path.read_bytes()).hexdigest()
+
+
+def read(path):
+    return json.loads(path.read_bytes())
+
+
+def write(path, item):
+    path.write_text(json.dumps(item, ensure_ascii=False, indent=2, allow_nan=False)+"\n", encoding="utf-8")
+
+
+def line(stream, item):
+    stream.write(json.dumps(item, ensure_ascii=False, separators=(",", ":"), allow_nan=False)+"\n")
+
+
+def stamp():
+    return datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+
+def paths(nodes, anchor, first, second):
+    return [(i,j) for i,(head,rel,bridge) in enumerate(nodes) if (head,rel)==(anchor,first)
+            for j,(h,r,end) in enumerate(nodes) if (h,r)==(bridge,second) and len({anchor,bridge,end})==3]
+
+
+def explicit_rule(doc, states):
+    """Read only the question and shared candidate facts, without graph labels or pair IDs."""
+    q = doc.question
+    require(q.count(states[0])==1 and q.count(states[1])==1, "ambiguous status markers")
+    start=q.index(states[0])
+    end=q.index("。",start)
+    clause=q[start:end]
+    require(clause[:5]==(states[0],"的","方案","：","先") and clause.count("再")==1, "invalid adopted clause")
+    rel=clause[clause.index("先")+1]
+    anchors=set(q) & {n for h,_,t in doc.nodes for n in (h,t)}
+    require(len(anchors)==1, "ambiguous anchor")
+    names=[i for i in doc.candidates if doc.nodes[i][:2]==(next(iter(anchors)),rel)]
+    require(len(names)==1, "status rule cannot identify a unique fact")
+    return names[0]
+
+
+def prepare(args, cfg, bundle):
+    source_file=args.r07/cfg["source"]["file"]
+    need=cfg["source"]
+    docs=[]
+    labels=[]
+    ids=set()
+    new_tokens=Counter()
+    outputs=(args.out/"inputs.jsonl",args.out/"gold.jsonl")
+    with gzip.open(source_file,"rt",encoding="utf8") as source, outputs[0].open("x",encoding="utf8") as feats, outputs[1].open("x",encoding="utf8") as gold:
+        for raw in source:
+            row=json.loads(raw)
+            if any(row[k]!=need[k] for k in ("split","variant","kind")): continue
+            # The pre-existing document's gold and question never choose the scope-pair target.
+            g=row["graph_id"]
+            require(g not in ids,"duplicate scope graph")
+            ids.add(g)
+            ns=tuple(tuple(v) for v in row["nodes"])
+            cand=tuple(row["candidates"])
+            require(len(set(cand))==2,"invalid source shortlist")
+            (anchor,a,_),(other,b,_)= (ns[i] for i in cand)
+            require(anchor==other and a!=b,"expected two different outgoing relations")
+            if sha256(("scope-v1|"+g).encode()).digest()[0]%2: a,b=b,a
+            chain=[paths(ns,anchor,a,b),paths(ns,anchor,b,a)]
+            require([len(v) for v in chain]==[1,1] and {v[0][0] for v in chain}==set(cand),"source graph is not reversible")
+            qs=[]
+            for v, roles in enumerate((cfg["states"],list(reversed(cfg["states"])))):
+                q=tuple(cfg["question"].format(anchor=anchor,a=a,b=b,state0=roles[0],state1=roles[1]).split())
+                require(len(q)<=bundle.trainer.MAX_SEQUENCE_LENGTH,"question truncated by archive")
+                d=bundle.trainer.Example(g,need["kind"],q,ns,cand,None)
+                target=chain[v][0][0]
+                require(explicit_rule(d,cfg["states"])==target,"text and independent graph-path answer disagree")
+                qs.append(q);docs.append(d);labels.append(target)
+                new_tokens.update(w for w in q if w not in bundle.vocab)
+                line(feats, dict(graph_id=g,view=v,question=q,question_text="".join(q),nodes=ns,candidates=cand))
+                line(gold, dict(graph_id=g,view=v,gold=target,valid_chain=chain[v][0]))
+            require(Counter(qs[0])==Counter(qs[1]) and
+                    sorted(x for x,y in zip(*qs) if x!=y)==sorted(cfg["states"]),"pair violates status-only swap")
+    require(len(ids)==need["expected_graphs"],f"expected {need['expected_graphs']} graphs, got {len(ids)}")
+    return docs,labels,dict(graphs=len(ids),questions=len(docs),oov_token_counts=dict(sorted(new_tokens.items())),
+          source_sha256=digest(source_file),inputs_sha256=digest(outputs[0]),gold_sha256=digest(outputs[1]))
+
+
+def equal_pairs(t):
+    return t[::2].eq(t[1::2]).reshape(len(t)//2,-1).all(1)
+
+
+def equal_raw(encoded):
+    return torch.tensor([torch.equal(a.question,b.question) for a,b in zip(encoded[::2],encoded[1::2])])
+
+
+def read_state(path, seed, kind=None):
+    state=read(path)
+    require(state["seed"]==seed and (kind is None or state["model"]==kind),f"checkpoint mismatch: {path}")
+    return state
+
+
+@torch.no_grad()
+def infer(args,cfg,docs,ys,seed,bundle,candidates):
+    import model
+    states=cfg["states"]
+    f=model.extract(bundle,docs,batch_size=128)
+    raw=bundle.trainer.encode_examples(docs,bundle.vocab,bundle.method,with_alignment=True)
+    ids=equal_raw(raw)
+    pool_raw=bundle.trainer.encode_examples(docs,bundle.pool_vocab,bundle.pool_method)
+    pool_ids=equal_raw(pool_raw)
+    # Equal H2 tensors prove that no input to the fixed H2 scorer can break a tie.
+    h2=equal_pairs(f.base)&equal_pairs(f.amplitude)&equal_pairs(f.relation)&equal_pairs(f.mask)
+    h=equal_pairs(f.hidden)
+    cues=mech_core.clause_cues(docs,f.mask.shape[1])
+    r07_state=read_state(args.r07/f"checkpoint-{seed}.json",seed,"cue64")
+    prior_state=read_state(args.prior/"runs/本地开发-01"/f"w-{seed}.json",seed)
+    cfg7=equal_pairs(f.hidden[:,:,:63])&equal_pairs(cues)
+    old_alignment=torch.tensor([
+        (a.alignment is None and b.alignment is None) or
+        (a.alignment is not None and b.alignment is not None and
+         all(torch.equal(x,y) for x,y in zip(vars(a.alignment).values(),vars(b.alignment).values())))
+        for a,b in zip(raw[::2],raw[1::2])])
+    logits={"pooled":f.pooled,"direction":f.base,"old_first_layer":f.old,
+            "prior_learned":model.score(f,torch.tensor(prior_state["w"],dtype=f.hidden.dtype)),
+            "R07":mech_core.from_state(f,docs,r07_state)}
+    same={"direct_first":torch.ones_like(ids),"pooled":pool_ids,"direction":ids,
+          "old_first_layer":ids&old_alignment,"prior_learned":h&h2,"R07":cfg7&h2,
+          "status_rule":torch.zeros_like(ids)}
+    audit={"frozen_question_ids":ids,"pooled_question_ids":pool_ids,"hidden":h,"h2":h2,
+           "old_alignment":old_alignment,"R07_question_features":cfg7}
+    proof_sources={}
+    for name,(directory,module) in candidates.items():
+        state=read_state(directory/f"checkpoint-{seed}.json",seed)
+        logits[name]=module.predict(bundle,docs,state)
+        # A deterministic function of identical H1/H2 inputs is unable to flip.
+        # A matching pair of outputs alone does not prove the inputs are identical.
+        if module.__name__=="role_core" and state.get("model")=="cue_role":
+            mask,x=module.inputs(docs,f.mask.shape[1],state["relations"])
+            rm=equal_pairs(mask)&equal_pairs(x)
+            audit[name+"_question_features"]=rm
+            same[name]=rm&h2
+            proof_sources[name]="role_core.inputs plus fixed H2"
+        elif hasattr(module,"scope_inputs"):
+            tensors=module.scope_inputs(bundle,docs,state)
+            require(bool(tensors),"empty input-collision proof")
+            rm=torch.stack([equal_pairs(t) for t in tensors]).all(0)
+            audit[name+"_question_features"]=rm
+            same[name]=rm&h2
+            proof_sources[name]="candidate module scope_inputs plus fixed H2"
+        else:
+            same[name]=torch.zeros_like(ids)
+            proof_sources[name]="no verified input decomposition; no collisions claimed"
+    methods=list(same)
+    out=[]
+    with (args.out/f"predictions-{seed}.jsonl").open("x",encoding="utf8") as pred, (args.out/f"errors-{seed}.jsonl").open("x",encoding="utf8") as err:
+        for g,(a,b) in enumerate(zip(docs[::2],docs[1::2])):
+            i=2*g
+            scores={}
+            choices={"direct_first":[a.candidates[0],b.candidates[0]],
+                     "status_rule":[explicit_rule(a,states),explicit_rule(b,states)]}
+            candidate_metrics={}
+            truths=ys[i:i+2]
+            for name,z in logits.items():
+                require(z.shape==(len(docs),2) and torch.isfinite(z[i:i+2]).all(), f"invalid {name} scores")
+                pred_ix=z[i:i+2].argmax(1).tolist()
+                choices[name]=[a.candidates[j] for j in pred_ix]
+                scores[name]=z[i:i+2].tolist()
+                if bool(same[name][g]):
+                    require(torch.equal(z[i],z[i+1]) and choices[name][0]==choices[name][1],
+                            f"identical-input scorer {name} changed output on {a.doc_id}")
+            for name in methods:
+                l,r=(p==y for p,y in zip(choices[name],truths))
+                candidate_metrics[name]={"correct_questions":int(l)+int(r),"both_correct":int(l and r),
+                    "changed_prediction":int(choices[name][0]!=choices[name][1]),"same_input":int(same[name][g])}
+            row=dict(graph_id=a.doc_id,seed=seed,candidates=a.candidates,gold=truths,
+                 gate=f.active[i:i+2].tolist(),input_equal={k:bool(v[g]) for k,v in audit.items()},
+                 encoded_questions=[q.question.tolist() for q in raw[i:i+2]],logits=scores,predictions=choices,metrics=candidate_metrics)
+            line(pred,row)
+            if any(v["both_correct"]==0 for k,v in candidate_metrics.items() if k not in ("direct_first","status_rule")):
+                line(err,dict(row,questions=["".join(a.question),"".join(b.question)],nodes=a.nodes))
+            out.append(row)
+    require(all(r["metrics"]["status_rule"]["both_correct"]==1 for r in out),"failed positive control")
+    return out,{"vocab_size":len(bundle.vocab),"unknown_id":bundle.trainer.UNKNOWN_ID,
+                "optional_model_collision_proofs":proof_sources,
+                "state_token_ids":{t:bundle.vocab.get(t,bundle.trainer.UNKNOWN_ID) for t in states},
+                "oov_counts":dict(sorted(Counter(t for d in docs for t in d.question if t not in bundle.vocab).items())),
+                "input_equal_graphs":{k:int(v.sum()) for k,v in audit.items()},
+                "gate_open_questions":int(f.active.sum()),"questions":len(docs)}
+
+
+def reduced(rows, name):
+    n=len(rows)
+    total=Counter()
+    for r in rows: total.update(r["metrics"][name])
+    collisions=total["same_input"]
+    return dict(graph_seed_pairs=n,question_denominator=2*n,correct_questions=total["correct_questions"],
+        top1=total["correct_questions"]/(2*n),both_correct=total["both_correct"],both_correct_rate=total["both_correct"]/n,
+        predictions_changed=total["changed_prediction"],flip_consistency=total["changed_prediction"]/n,
+        same_choice_rate=1-total["changed_prediction"]/n,proven_collisions=collisions,
+        top1_upper_from_proven_collisions=1-collisions/(2*n),both_upper_from_proven_collisions=1-collisions/n)
+
+
+def summarize(allrows,cfg):
+    rows=[v for seed in cfg["seeds"] for v in allrows[seed]]
+    methods=list(rows[0]["metrics"])
+    result={"pooled":{m:reduced(rows,m) for m in methods},
+            "per_seed":{s:{m:reduced(v,m) for m in methods} for s,v in allrows.items()}}
+    graph=defaultdict(list)
+    for row in rows: graph[row["graph_id"]].append(row["metrics"])
+    require(all(len(r)==len(cfg["seeds"]) for r in graph.values()),"incomplete per-graph seed panel")
+    n=len(graph);bs=cfg["bootstrap"];draw=np.random.default_rng(bs["seed"]).integers(n,size=(bs["replicates"],n))
+    pairs={}
+    for m in methods:
+        for base in ("direct_first","status_rule"):
+            if base==m:continue
+            scores={}
+            for metric,div in (("both_correct",1),("correct_questions",2),("changed_prediction",1)):
+                diffs=np.array([np.mean([(a[m][metric]-a[base][metric])/div for a in rs]) for rs in graph.values()])
+                replicates=diffs[draw].mean(1)
+                scores[metric]={"delta_pp":100*float(diffs.mean()),"lower95_one_sided_pp":
+                    100*float(np.sort(replicates)[bs["lower_rank"]-1])}
+            pairs[f"{m}_minus_{base}"]=scores
+    result["paired_bootstrap"]=pairs
+    result["predeclared_scope_behavior"]={m:all(result["per_seed"][s][m]["both_correct_rate"]>=0.80 for s in cfg["seeds"])
+        and pairs[f"{m}_minus_direct_first"]["both_correct"]["lower95_one_sided_pp"]>0
+        for m in methods if m not in ("direct_first","status_rule")}
+    return result
+
+
+def main(args):
+    start=time.monotonic()
+    args.out.mkdir(parents=True,exist_ok=True)
+    require(not any(args.out.iterdir()),"expected new or empty output directory")
+    def event(event,**meta):
+        with (args.out/"events.jsonl").open("a",encoding="utf8") as stream:
+            line(stream,dict(utc=stamp(),event=event,**meta))
+    shutil.copyfile(args.config,args.out/"frozen-config.json")
+    try:
+        cfg=read(args.config)
+        require(cfg["round"]=="R11" and cfg["seeds"]==[1701,2701,3701],"unexpected protocol")
+        require(len(args.candidate)==len(args.module),"pass --candidate and --module together")
+        sys.path.insert(0,str(args.prior/"code"))
+        import model
+        candidates={}
+        for directory,module_name in zip(args.candidate,args.module):
+            name={"sharp_core":"R12","role_core":"R08"}.get(module_name,module_name)
+            require(name not in candidates and name not in {"R07","prior_learned","direction","direct_first",
+                    "status_rule","pooled","old_first_layer"},"duplicate or reserved model name")
+            candidates[name]=(directory,importlib.import_module(module_name))
+        files=[Path(__file__).resolve(),Path(mech_core.__file__),Path(model.__file__),args.config,
+               args.r07/"development-inputs.jsonl.gz",args.b13/"冻结清单.json"]
+        for directory,module in candidates.values():files.append(Path(module.__file__))
+        for seed in cfg["seeds"]:
+            files.extend([args.prior/"runs/本地开发-01"/f"w-{seed}.json",args.r07/f"checkpoint-{seed}.json"])
+            for directory,module in candidates.values():files.append(directory/f"checkpoint-{seed}.json")
+        write(args.out/"provenance.json",dict(utc=stamp(),platform=platform.platform(),python=sys.version,
+              torch=str(torch.__version__),numpy=np.__version__,argv=sys.argv,sha256={str(p):digest(p) for p in files}))
+        event("begin")
+        panel={};diagnostics={}
+        for seed in cfg["seeds"]:
+            bundle=model.load_bundle(args.b13,seed)
+            if seed==cfg["seeds"][0]:
+                docs,ys,source=prepare(args,cfg,bundle)
+                write(args.out/"dataset.json",source);event("dataset",graphs=source["graphs"])
+            panel[seed],diagnostics[seed]=infer(args,cfg,docs,ys,seed,bundle,candidates)
+            event("scored",seed=seed)
+        result=summarize(panel,cfg)
+        write(args.out/"metrics.json",dict(round="R11",development_only=True,graphs=source["graphs"],
+              threshold_spec=cfg["criterion"],diagnostics=diagnostics,**result,elapsed_s=time.monotonic()-start))
+        event("finished",metrics_sha256=digest(args.out/"metrics.json"))
+        write(args.out/"sha256.json",{p.name:digest(p) for p in sorted(args.out.iterdir()) if p.is_file()})
+    except Exception:
+        event("failed",traceback=traceback.format_exc())
+        raise
+
+
+if __name__=="__main__":
+    p=argparse.ArgumentParser(description=__doc__)
+    for name in ("b13","prior","r07","out"):p.add_argument("--"+name,type=Path,required=True)
+    p.add_argument("--candidate",type=Path,action="append",default=[])
+    p.add_argument("--module",action="append",default=[])
+    p.add_argument("--config",type=Path,default=Path(__file__).resolve().parents[1]/"configs/scope.json")
+    args=p.parse_args()
+    for k in ("b13","prior","r07","out","config"):
+        if getattr(args,k) is not None:setattr(args,k,getattr(args,k).resolve())
+    args.candidate=[path.resolve() for path in args.candidate]
+    main(args)
+

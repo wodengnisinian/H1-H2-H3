@@ -1,0 +1,44 @@
+{
+  "path_base": "R3",
+  "execution_logs": [
+    {
+      "path": "experiments/09-R13/stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "experiments/09-R13/resources.json",
+      "sha256": "597c35c71e3a4690ea7fc5461f5a7aea932dc93493dc43eb753dd696e8c84781",
+      "bytes": 265
+    },
+    {
+      "path": "experiments/09-R13/results/training/events.jsonl",
+      "sha256": "3e73c68b764ec5290189194c8fd8e8911644dbbd8948473c4d5582ad1e5b41fc",
+      "bytes": 25689
+    }
+  ],
+  "archived_environment_and_resource_limits": {
+    "path": "logs/environment.json",
+    "sha256": "a081136648d5aa686556da339538cb3233194e414bb2ab458a85a1f22138ca52",
+    "bytes": 669
+  },
+  "registry": {
+    "path": "logs/恢复校验/云端原始轮次登记.jsonl",
+    "bytes": 43598,
+    "sha256": "ac651f9f45c34ee642aecfdb57a2c770c2ed0d6a974707636578642a85294403"
+  },
+  "start_utc": "2026-11-24T09:55:35.234302+00:00",
+  "end_utc": "2026-11-24T09:57:12.915187+00:00",
+  "command": [
+    "/data/miniconda/envs/torch/bin/python",
+    "-B",
+    "src/replicate.py",
+    "--inputs",
+    "/data/spiderweb-r3-20261124-1740/inputs",
+    "--candidate",
+    "/data/spiderweb-r3-20261124-1740/R3/experiments/08-R08/results",
+    "--out",
+    "/data/spiderweb-r3-20261124-1740/R3/experiments/09-R13/results"
+  ],
+  "exit_code": 0
+}

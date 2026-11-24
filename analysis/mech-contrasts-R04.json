@@ -1,0 +1,320 @@
+{
+  "round": "geometry",
+  "seeds": [
+    1701,
+    2701,
+    3701
+  ],
+  "diagnostic_only": true,
+  "bootstrap_seed": 819432,
+  "bootstrap_draws": 10000,
+  "correction": "Descriptive paired intervals, no adjustment across multiple comparisons.",
+  "score": "First-hop accuracy",
+  "predictions_sha256": {
+    "predictions-1701.jsonl.gz": "0e7317f36aed646e61a7ab3c21809c2f83b5d2f1baf25712fc954ada99178ffe",
+    "predictions-2701.jsonl.gz": "d4500ac0f6c504bb6945e16816f06349a13481aa4e91909ce1083d578c5c907e",
+    "predictions-3701.jsonl.gz": "17a0db118d3bf1861df8625a92e5c1ebea14fdc1ff4b601b5d09f1f0d101a2a0"
+  },
+  "results": {
+    "archive": {
+      "original": {
+        "graphs": {
+          "relation_order": 600,
+          "competing_chain": 600,
+          "role_reversal": 600
+        },
+        "contrasts": {
+          "oracle - direction": {
+            "delta": 0.21018518518518528,
+            "two_sided_95": [
+              0.19851851851851854,
+              0.22203703703703725
+            ],
+            "one_sided_lcb95": 0.20018518518518516
+          },
+          "ceiling - direction": {
+            "delta": 0.21018518518518528,
+            "two_sided_95": [
+              0.19851851851851854,
+              0.22203703703703725
+            ],
+            "one_sided_lcb95": 0.20018518518518516
+          }
+        }
+      },
+      "paraphrase": {
+        "graphs": {
+          "relation_order": 600,
+          "competing_chain": 600,
+          "role_reversal": 600
+        },
+        "contrasts": {
+          "oracle - direction": {
+            "delta": 0.19944444444444462,
+            "two_sided_95": [
+              0.18925925925925938,
+              0.20962962962962983
+            ],
+            "one_sided_lcb95": 0.19074074074074088
+          },
+          "ceiling - direction": {
+            "delta": 0.19944444444444462,
+            "two_sided_95": [
+              0.18925925925925938,
+              0.20962962962962983
+            ],
+            "one_sided_lcb95": 0.19074074074074088
+          }
+        }
+      },
+      "quartet": {
+        "graphs": {
+          "relation_order": 600
+        },
+        "contrasts": {
+          "oracle - direction": {
+            "delta": 0.8183333333333357,
+            "two_sided_95": [
+              0.8000000000000019,
+              0.836111111111113
+            ],
+            "one_sided_lcb95": 0.8027777777777804
+          },
+          "ceiling - direction": {
+            "delta": 0.8183333333333357,
+            "two_sided_95": [
+              0.8000000000000019,
+              0.836111111111113
+            ],
+            "one_sided_lcb95": 0.8027777777777804
+          }
+        }
+      }
+    },
+    "combination": {
+      "original": {
+        "graphs": {
+          "relation_order": 100,
+          "competing_chain": 100,
+          "role_reversal": 100
+        },
+        "contrasts": {
+          "oracle - direction": {
+            "delta": 0.22111111111111095,
+            "two_sided_95": [
+              0.19444444444444442,
+              0.24666666666666667
+            ],
+            "one_sided_lcb95": 0.1988888888888888
+          },
+          "ceiling - direction": {
+            "delta": 0.22111111111111095,
+            "two_sided_95": [
+              0.19444444444444442,
+              0.24666666666666667
+            ],
+            "one_sided_lcb95": 0.1988888888888888
+          }
+        }
+      },
+      "paraphrase": {
+        "graphs": {
+          "relation_order": 100,
+          "competing_chain": 100,
+          "role_reversal": 100
+        },
+        "contrasts": {
+          "oracle - direction": {
+            "delta": 0.18555555555555545,
+            "two_sided_95": [
+              0.16444444444444437,
+              0.2077777777777777
+            ],
+            "one_sided_lcb95": 0.16777777777777766
+          },
+          "ceiling - direction": {
+            "delta": 0.18555555555555545,
+            "two_sided_95": [
+              0.16444444444444437,
+              0.2077777777777777
+            ],
+            "one_sided_lcb95": 0.16777777777777766
+          }
+        }
+      },
+      "quartet": {
+        "graphs": {
+          "relation_order": 100
+        },
+        "contrasts": {
+          "oracle - direction": {
+            "delta": 0.9166666666666669,
+            "two_sided_95": [
+              0.8866666666666668,
+              0.9466666666666665
+            ],
+            "one_sided_lcb95": 0.8933333333333333
+          },
+          "ceiling - direction": {
+            "delta": 0.9166666666666669,
+            "two_sided_95": [
+              0.8866666666666668,
+              0.9466666666666665
+            ],
+            "one_sided_lcb95": 0.8933333333333333
+          }
+        }
+      }
+    },
+    "fresh": {
+      "original": {
+        "graphs": {
+          "relation_order": 200,
+          "role_reversal": 200,
+          "competing_chain": 200
+        },
+        "contrasts": {
+          "oracle - direction": {
+            "delta": 0.2122222222222223,
+            "two_sided_95": [
+              0.19388888888888908,
+              0.23055555555555554
+            ],
+            "one_sided_lcb95": 0.1966666666666669
+          },
+          "ceiling - direction": {
+            "delta": 0.2122222222222223,
+            "two_sided_95": [
+              0.19388888888888908,
+              0.23055555555555554
+            ],
+            "one_sided_lcb95": 0.1966666666666669
+          }
+        }
+      },
+      "paraphrase": {
+        "graphs": {
+          "relation_order": 200,
+          "role_reversal": 200,
+          "competing_chain": 200
+        },
+        "contrasts": {
+          "oracle - direction": {
+            "delta": 0.18666666666666684,
+            "two_sided_95": [
+              0.17000000000000012,
+              0.2033333333333335
+            ],
+            "one_sided_lcb95": 0.1727777777777779
+          },
+          "ceiling - direction": {
+            "delta": 0.18666666666666684,
+            "two_sided_95": [
+              0.17000000000000012,
+              0.2033333333333335
+            ],
+            "one_sided_lcb95": 0.1727777777777779
+          }
+        }
+      },
+      "quartet": {
+        "graphs": {
+          "relation_order": 200
+        },
+        "contrasts": {
+          "oracle - direction": {
+            "delta": 0.84,
+            "two_sided_95": [
+              0.8116666666666663,
+              0.8666666666666666
+            ],
+            "one_sided_lcb95": 0.8150000000000003
+          },
+          "ceiling - direction": {
+            "delta": 0.84,
+            "two_sided_95": [
+              0.8116666666666663,
+              0.8666666666666666
+            ],
+            "one_sided_lcb95": 0.8150000000000003
+          }
+        }
+      }
+    },
+    "template": {
+      "original": {
+        "graphs": {
+          "relation_order": 100,
+          "competing_chain": 100,
+          "role_reversal": 100
+        },
+        "contrasts": {
+          "oracle - direction": {
+            "delta": 0.20555555555555557,
+            "two_sided_95": [
+              0.17666666666666664,
+              0.23444444444444437
+            ],
+            "one_sided_lcb95": 0.1811111111111111
+          },
+          "ceiling - direction": {
+            "delta": 0.20555555555555557,
+            "two_sided_95": [
+              0.17666666666666664,
+              0.23444444444444437
+            ],
+            "one_sided_lcb95": 0.1811111111111111
+          }
+        }
+      },
+      "paraphrase": {
+        "graphs": {
+          "relation_order": 100,
+          "competing_chain": 100,
+          "role_reversal": 100
+        },
+        "contrasts": {
+          "oracle - direction": {
+            "delta": 0.19555555555555545,
+            "two_sided_95": [
+              0.171111111111111,
+              0.22111111111111104
+            ],
+            "one_sided_lcb95": 0.1744444444444444
+          },
+          "ceiling - direction": {
+            "delta": 0.19555555555555545,
+            "two_sided_95": [
+              0.171111111111111,
+              0.22111111111111104
+            ],
+            "one_sided_lcb95": 0.1744444444444444
+          }
+        }
+      },
+      "quartet": {
+        "graphs": {
+          "relation_order": 100
+        },
+        "contrasts": {
+          "oracle - direction": {
+            "delta": 0.8433333333333337,
+            "two_sided_95": [
+              0.7999999999999998,
+              0.8833333333333337
+            ],
+            "one_sided_lcb95": 0.8066666666666668
+          },
+          "ceiling - direction": {
+            "delta": 0.8433333333333337,
+            "two_sided_95": [
+              0.7999999999999998,
+              0.8833333333333337
+            ],
+            "one_sided_lcb95": 0.8066666666666668
+          }
+        }
+      }
+    }
+  }
+}

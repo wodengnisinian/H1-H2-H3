@@ -1,0 +1,38 @@
+{
+  "study": "R3 SpiderWeb 首跳排序持续研究",
+  "initial_date": "2026-11-24",
+  "reference_commit": "9e19abe1ac1eeed98e854a8543174c166ba049bc",
+  "max_attempts": 20,
+  "max_elapsed_hours": 8,
+  "start_local": "2026-11-24T17:38:00+08:00",
+  "seeds": [
+    1701,
+    2701,
+    3701
+  ],
+  "cpu_threads": 1,
+  "bootstrap": {
+    "draws": 10000,
+    "rank_one_based": 500,
+    "group": "graph",
+    "strata": "equal",
+    "pairing": "same graph and all three fixed seeds"
+  },
+  "outcomes": {
+    "original": "first-hop top1",
+    "paraphrase": "first-hop top1",
+    "quartet": "all four correct"
+  },
+  "formal": {
+    "max_openings": 1,
+    "draw_after_freeze": true,
+    "development_gate": "Primary new development original gains >= 5 pp vs both direct and independently trained pooled, both paraphrase gains > 0, quartet > direct and >= pool. A fixed feature-only candidate and weights are required. Oracle scores excluded.",
+    "main": "Two paired absolute accuracy gains >= .05, each lower one-sided 95% bound strictly positive",
+    "test_size": 4800,
+    "per_stratum": 1600,
+    "precision": "For a per-graph paired difference in [-1,1], its SD is <=1. Under independent draws within equally sized strata, worst-case normal-approximation one-sided 95% half-width is 1.645/sqrt(4800)=0.02375. Pre-specified precision method, not a guarantee of power.",
+    "domain": "Raw generator indices 70000000..74974367 reserved for formal sampling. Explicitly exclude all exposed B13 and R3 development personnel sets. Trials built in separate named graph space are ineligible for the canonical H3 claim.",
+    "rule": "freeze state+candidate code+templates+hashes before entropy; feature-only sealed predictions then one scoring opening. Upon failure retire cohort; no second opening in this budget."
+  },
+  "notes": "A result on relation reading and identical-first-relation two-hop disambiguation will be evaluated separately."
+}

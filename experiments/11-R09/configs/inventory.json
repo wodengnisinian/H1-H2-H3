@@ -1,0 +1,30 @@
+{
+  "path_base": "R3",
+  "registered_configurations": [
+    {
+      "path": "experiments/11-R09/preregistration.json",
+      "sha256": "3aa0667cc7309f239d2eb7be94754805c574fb45594d5f7bfde4d99d6e1e7e0a",
+      "bytes": 918
+    },
+    {
+      "path": "experiments/11-R09/snapshot/configs/formal_templates.json",
+      "sha256": "40f0dee7c8f11eb6027fed054f0c010b57dced6f42caa61971e09596daf4cddc",
+      "bytes": 1320
+    },
+    {
+      "path": "experiments/11-R09/snapshot/configs/sharp_protocol.json",
+      "sha256": "64f919f8bf3020eb0254425222cf9899f01d41616d83689da02f5f504dc35b67",
+      "bytes": 3237
+    },
+    {
+      "path": "experiments/11-R09/snapshot/configs/R09.json",
+      "sha256": "3aa0667cc7309f239d2eb7be94754805c574fb45594d5f7bfde4d99d6e1e7e0a",
+      "bytes": 918
+    },
+    {
+      "path": "experiments/11-R09/snapshot/configs/research_protocol.json",
+      "sha256": "2685817419c4c32724f294ebcde7df8f548e5937e7778a069d82ffbd28f0e610",
+      "bytes": 1937
+    }
+  ]
+}

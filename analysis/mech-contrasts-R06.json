@@ -1,0 +1,224 @@
+{
+  "round": "groups",
+  "seeds": [
+    1701,
+    2701,
+    3701
+  ],
+  "diagnostic_only": true,
+  "bootstrap_seed": 819432,
+  "bootstrap_draws": 10000,
+  "correction": "Descriptive paired intervals, no adjustment across multiple comparisons.",
+  "score": "First-hop accuracy",
+  "predictions_sha256": {
+    "predictions-1701.jsonl.gz": "44c932020dd8ec2a53f54b4aa33f4657abd749d18b3edcf6218246cb64b1fa6f",
+    "predictions-2701.jsonl.gz": "cf65d8851a7dbf342adbc067dd03219b81ac568584dd952c41915dac30e20707",
+    "predictions-3701.jsonl.gz": "59b826755739bf5e189d8b1a5b1fb6940021967cd89a483c647106e7e47b787d"
+  },
+  "results": {
+    "archive": {
+      "original": {
+        "graphs": {
+          "relation_order": 600,
+          "competing_chain": 600,
+          "role_reversal": 600
+        },
+        "contrasts": {
+          "four - one": {
+            "delta": -0.0014814814814814812,
+            "two_sided_95": [
+              -0.0038888888888888883,
+              0.000925925925925926
+            ],
+            "one_sided_lcb95": -0.003518518518518518
+          }
+        }
+      },
+      "paraphrase": {
+        "graphs": {
+          "relation_order": 600,
+          "competing_chain": 600,
+          "role_reversal": 600
+        },
+        "contrasts": {
+          "four - one": {
+            "delta": 0.0014814814814814812,
+            "two_sided_95": [
+              -0.0012962962962962963,
+              0.004259259259259259
+            ],
+            "one_sided_lcb95": -0.0009259259259259259
+          }
+        }
+      },
+      "quartet": {
+        "graphs": {
+          "relation_order": 600
+        },
+        "contrasts": {
+          "four - one": {
+            "delta": 0.0011111111111111111,
+            "two_sided_95": [
+              -0.005,
+              0.007222222222222222
+            ],
+            "one_sided_lcb95": -0.00388888888888889
+          }
+        }
+      }
+    },
+    "combination": {
+      "original": {
+        "graphs": {
+          "relation_order": 100,
+          "competing_chain": 100,
+          "role_reversal": 100
+        },
+        "contrasts": {
+          "four - one": {
+            "delta": -0.0022222222222222222,
+            "two_sided_95": [
+              -0.01,
+              0.005555555555555556
+            ],
+            "one_sided_lcb95": -0.008888888888888889
+          }
+        }
+      },
+      "paraphrase": {
+        "graphs": {
+          "relation_order": 100,
+          "competing_chain": 100,
+          "role_reversal": 100
+        },
+        "contrasts": {
+          "four - one": {
+            "delta": -0.0011111111111111111,
+            "two_sided_95": [
+              -0.006666666666666667,
+              0.0044444444444444444
+            ],
+            "one_sided_lcb95": -0.005555555555555556
+          }
+        }
+      },
+      "quartet": {
+        "graphs": {
+          "relation_order": 100
+        },
+        "contrasts": {
+          "four - one": {
+            "delta": -0.003333333333333333,
+            "two_sided_95": [
+              -0.01,
+              0.0
+            ],
+            "one_sided_lcb95": -0.01
+          }
+        }
+      }
+    },
+    "fresh": {
+      "original": {
+        "graphs": {
+          "relation_order": 200,
+          "role_reversal": 200,
+          "competing_chain": 200
+        },
+        "contrasts": {
+          "four - one": {
+            "delta": 0.0038888888888888883,
+            "two_sided_95": [
+              -0.0016666666666666668,
+              0.009999999999999998
+            ],
+            "one_sided_lcb95": -0.0011111111111111107
+          }
+        }
+      },
+      "paraphrase": {
+        "graphs": {
+          "relation_order": 200,
+          "role_reversal": 200,
+          "competing_chain": 200
+        },
+        "contrasts": {
+          "four - one": {
+            "delta": 0.0016666666666666663,
+            "two_sided_95": [
+              -0.0033333333333333335,
+              0.006666666666666667
+            ],
+            "one_sided_lcb95": -0.002777777777777778
+          }
+        }
+      },
+      "quartet": {
+        "graphs": {
+          "relation_order": 200
+        },
+        "contrasts": {
+          "four - one": {
+            "delta": 0.006666666666666666,
+            "two_sided_95": [
+              -0.005,
+              0.01833333333333333
+            ],
+            "one_sided_lcb95": -0.0033333333333333327
+          }
+        }
+      }
+    },
+    "template": {
+      "original": {
+        "graphs": {
+          "relation_order": 100,
+          "competing_chain": 100,
+          "role_reversal": 100
+        },
+        "contrasts": {
+          "four - one": {
+            "delta": -0.0044444444444444444,
+            "two_sided_95": [
+              -0.011111111111111112,
+              0.0011111111111111113
+            ],
+            "one_sided_lcb95": -0.01
+          }
+        }
+      },
+      "paraphrase": {
+        "graphs": {
+          "relation_order": 100,
+          "competing_chain": 100,
+          "role_reversal": 100
+        },
+        "contrasts": {
+          "four - one": {
+            "delta": 0.002222222222222222,
+            "two_sided_95": [
+              -0.0044444444444444444,
+              0.008888888888888889
+            ],
+            "one_sided_lcb95": -0.0033333333333333335
+          }
+        }
+      },
+      "quartet": {
+        "graphs": {
+          "relation_order": 100
+        },
+        "contrasts": {
+          "four - one": {
+            "delta": -0.006666666666666666,
+            "two_sided_95": [
+              -0.016666666666666666,
+              0.0
+            ],
+            "one_sided_lcb95": -0.016666666666666666
+          }
+        }
+      }
+    }
+  }
+}

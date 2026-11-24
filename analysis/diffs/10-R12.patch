@@ -1,0 +1,327 @@
+--- /dev/null
++++ R12/configs/R12.json
+@@ -0,0 +1,24 @@
++{
++  "id": "R12",
++  "hypothesis": "R08 选中首步关系达到100%，而软分配仍限制最终纠错。仅改变软分配到最高质量关系硬分配能否提升同题表现？",
++  "criteria": "主候选只使用 R08 冻结、无标签的关系选择。原问相对同权重软对照的配对点估计和单侧下界均大于零。H3开发门槛维持原设定。",
++  "argv": [
++    "src/sharp_run.py",
++    "--b13",
++    "{inputs}/b13",
++    "--prior",
++    "{inputs}/prior",
++    "--candidate",
++    "{root}/experiments/08-R08/results",
++    "--out",
++    "{out}"
++  ],
++  "sources": [
++    "src/sharp_*.py",
++    "src/role_*.py",
++    "src/mech_*.py",
++    "configs/sharp_protocol.json"
++  ],
++  "receipt": "metrics.json",
++  "after": "通过开发门槛后冻结 sharp_role。在全新图上仅开封一次。"
++}
+--- /dev/null
++++ R12/configs/sharp_protocol.json
+@@ -0,0 +1,30 @@
++{
++  "id": "R12",
++  "version": "max-relation-mass-uniform-v1",
++  "seeds": [
++    1701,
++    2701,
++    3701
++  ],
++  "feature_batch": 128,
++  "challenge_seed": 11242026,
++  "challenge_per_stratum": 100,
++  "bootstrap_draws": 10000,
++  "bootstrap_seed": 619482,
++  "change": "Inference-only hard relation selection. No new fits, no threshold or temperature search. The R08 supervised cue scorer, question relation lexicon, all H2 components, data and ordered candidates are frozen.",
++  "evidence": "On the 600-graph R08 development cohort the supervised relation reader correctly selected its first relation in 100% of decisions, while soft-weight H2 original accuracy was 70.78%; R04's correct-relation ideal scored 85.83%. This comparison separates relation selection from dilution of its H2 correction.",
++  "hypothesis": "On fresh originals changing only soft support to the hard selected relation raises paired top1 accuracy; this test also requires that the prespecified 95% one-sided paired lower bound over soft is above zero. The primary candidate and formal gate are separate from this mechanism test.",
++  "formula": "For relation v let I_v be its token positions, T_v=LSE_{j in I_v}(t_j) and P_v=exp(T_v)/sum_u exp(T_u). Select argmax_v T_v; exact ties resolved by Unicode lexical order. p*_j=1/|I_v*| for positions of the chosen relation, 0 otherwise. H2 then adds G*gamma*(LSE_{j in I_v*}(r_ij)-log|I_v*|). When both relation terms occur once this reduces to the selected position's r_ij.",
++  "limit": "If T has a unique maximizer, soften at relation level as q_lambda(j)=softmax(lambda*T)_{v(j)}/|I_{v(j)}|, whose lambda→infinity limit equals p*. A tie under that smooth rule yields shared mass across tied relations; the explicit lexical convention is a further selection. Exponentiating original token logits instead converges to the token-level maximizers, so in general does not yield uniform weights across all mentions of a chosen repeated relation.",
++  "controls": [
++    "soft_role (same frozen R08 parameters)",
++    "sharp_random_role from R08 matched random-label head",
++    "sharp_first and sharp_last (first/last distinct relation in surface order)",
++    "direction, pool, direct",
++    "label-informed correct-relation uniform weight, diagnostic-only"
++  ],
++  "subgroups": "Report correct relation, gate open/closed, first relation mentioned earlier/later, fixed soft winner confidence bins [0.5,.7),[.7,.9),[.9,.99),[.99,1]. Each contains paired correctness change, correct-minus-other logit margin and graph counts. Raw rows retain both relation masses, scores, corrections and cases.",
++  "primary": "sharp_role",
++  "development_gate": "Use the study-wide fixed gate with all 3 seeds. On fresh originals gain ≥0.05 vs both direct and independently trained pool, fresh paraphrase >0 vs each, fresh quartet >direct and >=pool. Only sharp_role is eligible if the formal cohort is still unopened.",
++  "expected_identity": "When the predicted relation equals the gold relation, hard-selected scores equal the diagnostic label-based oracle with the same set of target positions. Closed-gate scores remain directional for every weight choice. Check both equalities numerically and retain errors independently of conclusion."
++}
+--- /dev/null
++++ R12/src/sharp_core.py
+@@ -0,0 +1,57 @@
++"""R12 feature-only hard relation decoding of a frozen R08 role reader."""
++import torch
++from role_core import MARKERS, inputs as role_inputs
++
++
++def features(docs,width,state):
++    if state.get('feature_version')!='r08-previous-markers-v1' or state.get('markers')!=[list(a) for a in MARKERS]:
++        raise ValueError('Frozen R08 feature map mismatch')
++    mask,x=role_inputs(docs,width,state['relations'])
++    # Sort by Unicode code point for deterministic ties independent of candidates
++    # and surface order. Collect every mention, including repeated mentions.
++    classes=torch.zeros((len(docs),2,width),dtype=torch.bool)
++    vocab=set(state['relations'])
++    names=[]
++    for i,d in enumerate(docs):
++        words=sorted(set(d.question).intersection(vocab))
++        if len(words)!=2:raise ValueError('Expected two distinct question relation words')
++        names.append(words)
++        for j,t in enumerate(d.question):
++            if t in vocab:classes[i,words.index(t),j]=True
++    return mask,x,classes,names
++
++
++def decode(x,mask,classes,w):
++    t=(x@w).masked_fill(~mask,-torch.inf)
++    logp=t.log_softmax(-1)
++    # Normalizer of softmax(t) cancels in the pairwise comparison of masses.
++    masses=t[:,None,:].masked_fill(~classes,-torch.inf).logsumexp(-1)
++    choice=masses.argmax(1)
++    selected=classes[torch.arange(len(t)),choice]
++    hard=torch.zeros_like(t).masked_fill(~selected,-torch.inf).log_softmax(-1)
++    return logp,hard,choice,masses.softmax(-1)
++
++
++def rank(f,logp):
++    return f.base+f.amplitude[:,None]*(logp[:,None,:]+f.relation).logsumexp(-1)
++
++
++def scope_inputs(bundle,docs,state):
++    """Expose the exact mask, pre-linear features and relation grouping.
++
++    H1 consumes question tokens and the frozen R08 relation vocabulary. The
++    bundle's encoder supplies the separate H2 directional and matching terms.
++    """
++    if any(d.gold is not None for d in docs):raise ValueError('Expected feature-only examples')
++    mask,x,classes,_=features(docs,max(len(d.question) for d in docs),state)
++    return mask,x,classes
++
++
++def predict(bundle,docs,state):
++    import model
++    if state.get('model')!='sharp_role' or state.get('decoder')!='max-relation-mass-uniform-v1' or any(d.gold is not None for d in docs):
++        raise ValueError('Expected R12 sharp_role state and feature-only examples')
++    f=model.extract(bundle,docs)
++    mask,x,classes,_=features(docs,f.mask.shape[1],state)
++    _,hard,_,_=decode(x,mask,classes,torch.tensor(state['w'],dtype=torch.float32))
++    return rank(f,hard)
+--- /dev/null
++++ R12/src/sharp_run.py
+@@ -0,0 +1,204 @@
++"""R12 inference-only mechanism comparison on the exact preserved R08 dev inputs."""
++from __future__ import annotations
++import argparse
++from collections import defaultdict
++from dataclasses import replace
++import gzip
++import hashlib
++import json
++from pathlib import Path
++import platform
++import shutil
++import sys
++import time
++import traceback
++import numpy as np
++import torch
++from mech_core import correct_index
++from mech_metrics import group_summary,average_dict,confidence
++from mech_run import save,now,line
++import sharp_core as sc
++
++
++def sha(p):
++    with p.open('rb') as f:return hashlib.file_digest(f,'sha256').hexdigest()
++
++
++def gzrows(p):
++    with gzip.open(p,'rt',encoding='utf8') as f:
++        for l in f:yield json.loads(l)
++
++
++def data(b,path):
++    records=list(gzrows(path))
++    nodes={(r['split'],r['graph_id']):tuple(map(tuple,r['nodes'])) for r in records if r['variant']=='original'}
++    views=defaultdict(lambda:defaultdict(lambda:([],[])))
++    for r in records:
++        ds,ys=views[r['split']][r['variant']]
++        d=b.trainer.Example(r['graph_id'],r['kind'],tuple(r['question']),nodes[(r['split'],r['graph_id'])],tuple(r['candidates']),None)
++        ds.append(d);ys.append(r['gold'])
++    for vs in views.values():
++        for ds,_ in vs.values():
++            if any(a.candidates!=b.candidates for a,b in zip(ds,b.evaluator.shortlist(ds,'direction'),strict=True)):
++                raise ValueError('R08 shortlist mismatch')
++    return views
++
++
++def log_uniform(mask):
++    return torch.zeros_like(mask,dtype=torch.float32).masked_fill(~mask,-torch.inf).log_softmax(-1)
++
++
++def view(b,ds,ys,ck,rnd,split,var,ref,cfg):
++    import model
++    f=model.extract(b,ds,cfg['feature_batch'])
++    y=correct_index(ds,ys)
++    mask,x,classes,names=sc.features(ds,f.mask.shape[1],ck)
++    soft,hard,idx,masses=sc.decode(x,mask,classes,torch.tensor(ck['w']))
++    _,empty,_,_=sc.decode(x,mask,classes,torch.tensor(rnd))
++    scores=dict(soft_role=sc.rank(f,soft),sharp_role=sc.rank(f,hard),sharp_random_role=sc.rank(f,empty),pool=f.pooled,direction=f.base)
++    surface=torch.tensor([int(d.question.index(a)>d.question.index(c)) for d,(a,c) in zip(ds,names,strict=True)])
++    rows=torch.arange(len(ds))
++    for label,pick in [('sharp_first',surface),('sharp_last',1-surface)]:
++        scores[label]=sc.rank(f,log_uniform(classes[rows,pick]))
++    role_indices=torch.tensor([names[i].index(d.nodes[g][1]) for i,(d,g) in enumerate(zip(ds,ys,strict=True))])
++    oracle=sc.rank(f,log_uniform(classes[rows,role_indices]))
++    if not torch.equal(oracle[idx==role_indices],scores['sharp_role'][idx==role_indices]):
++        raise ValueError('Correct role does not reproduce the label-informed oracle')
++    for k,v in scores.items():
++        if not v.isfinite().all():raise ValueError(f'Nonfinite output {k}')
++    if not torch.equal(scores['sharp_role'][~f.active],f.base[~f.active]):
++        raise ValueError('Closed-gate change')
++    flipped=[replace(d,candidates=tuple(reversed(d.candidates))) for d in ds]
++    ff=model.extract(b,flipped,cfg['feature_batch'])
++    m2,x2,c2,_=sc.features(flipped,ff.mask.shape[1],ck)
++    _,h2,cidx,_=sc.decode(x2,m2,c2,torch.tensor(ck['w']))
++    err=(sc.rank(ff,h2)-scores['sharp_role'].flip(1)).abs().amax(1)
++    if not torch.equal(idx,cidx) or not torch.equal(hard,h2) or float(err.max())>2e-5:raise ValueError('Swap invalid')
++    for i,(d,g) in enumerate(zip(ds,ys,strict=True)):
++        key=(split,var,d.doc_id)
++        prior=ref[key]
++        if tuple(prior[0])!=d.candidates or prior[1]!=g:raise ValueError('R08 input mismatch')
++        replay=float((scores['soft_role'][i]-torch.tensor(prior[2])).abs().max())
++        pred={k:d.candidates[int(v[i].argmax())] for k,v in scores.items()};pred['first']=d.candidates[0]
++        if replay>2e-5 or pred['soft_role']!=prior[3]: raise ValueError('R08 soft prediction mismatch')
++        margins={k:float(v[i,y[i]]-v[i,1-y[i]]) if y[i]>=0 else None for k,v in scores.items()}
++        yield dict(split=split,variant=var,seed=ck['seed'],graph_id=d.doc_id,kind=d.stratum,gate=bool(f.active[i]),
++            gold=g,candidates=d.candidates,covered=bool(y[i]>=0),predictions=pred,
++            logits={k:v[i].tolist() for k,v in scores.items()},candidate_margins=margins,
++            relation_names=names[i],relation_masses=masses[i].tolist(),choice=names[i][idx[i]],
++            role_correct=bool(idx[i]==role_indices[i]),first_mentioned_earlier=bool(role_indices[i]==surface[i]),
++            correct_relation=d.nodes[g][1],confidence=float(masses[i].max()),mass_gap=float((masses[i,0]-masses[i,1]).abs()),
++            tie=bool(masses[i,0]==masses[i,1]),repeated_mentions=bool(classes[i].sum(-1).max()>1),
++            selected_token_weights=hard[i,:len(d.question)].exp().tolist(),swap_max_error=float(err[i]),
++            prior_logit_max_error=replay,oracle_correct=d.candidates[int(oracle[i].argmax())]==g,
++            hard_corrected=(pred['sharp_role']==g and pred['soft_role']!=g),
++            hard_broke=(pred['sharp_role']!=g and pred['soft_role']==g))
++
++
++def strata_stats(rows):
++    by=defaultdict(list)
++    for r in rows:
++        if r['variant']!='original': continue
++        p=r['confidence'];bucket='[.5,.7)' if p<.7 else '[.7,.9)' if p<.9 else '[.9,.99)' if p<.99 else '[.99,1]'
++        for group in ('all','confidence '+bucket,'gate '+str(r['gate']),'role_correct '+str(r['role_correct']),
++                      'surface_first '+str(r['first_mentioned_earlier'])):by[group].append(r)
++    out={}
++    for group,rs in by.items():
++        def mean(field):return float(np.mean([r[field] for r in rs]))
++        out[group]=dict(decisions=len(rs),distinct_graphs=len({r['graph_id'] for r in rs}),
++                       mean_confidence=mean('confidence'),mean_mass_gap=mean('mass_gap'),role_accuracy=mean('role_correct'),
++                       sharp_accuracy=float(np.mean([r['predictions']['sharp_role']==r['gold'] for r in rs])),
++                       soft_accuracy=float(np.mean([r['predictions']['soft_role']==r['gold'] for r in rs])),
++                       oracle_accuracy=mean('oracle_correct'),corrected=sum(r['hard_corrected'] for r in rs),
++                       broken=sum(r['hard_broke'] for r in rs),coverage=mean('covered'),ties=sum(r['tie'] for r in rs),
++                       repeated_mentions=sum(r['repeated_mentions'] for r in rs),
++                       mean_margin={k:float(np.mean([r['candidate_margins'][k] for r in rs if r['covered']]))
++                                    for k in ('sharp_role','soft_role')} if any(r['covered'] for r in rs) else None)
++    return out
++
++
++def main(a):
++    import model
++    a.out.mkdir(parents=True,exist_ok=False);tick=time.monotonic()
++    cfg=json.loads(a.config.read_bytes());base=a.candidate
++    previous=json.loads((base/'metrics.json').read_bytes())
++    if previous.get('primary_model')!='cue_role' or (previous['smoke'] and not a.smoke):
++        raise ValueError('Expected R08 result; smoke inputs require --smoke')
++    if previous['development_gate']['eligible'] and not a.diagnostic_only:
++        raise ValueError('An eligible earlier candidate must be preserved')
++    def log(e,**kw):
++        with (a.out/'events.jsonl').open('a',encoding='utf8') as f:line(f,dict(utc=now(),event=e,**kw))
++    try:
++        files=['metrics.json','configuration.json','dataset.json','development-inputs.jsonl.gz','events.jsonl']
++        files.extend(n for s in a.seeds for n in [f'parameters-{s}.json',f'checkpoint-{s}.json',f'predictions-{s}.jsonl.gz'])
++        save(a.out/'configuration.json',dict(utc=now(),protocol=cfg,protocol_sha256=sha(a.config),seed=a.seeds,
++           argv=sys.argv,python=sys.version,torch=str(torch.__version__),numpy=np.__version__,platform=platform.platform(),
++           r08_data_and_weights_sha256={p:sha(base/p) for p in files},new_training_updates=0,
++           source_sha256={p.name:sha(p) for p in [Path(__file__),Path(sc.__file__),a.code/'model.py']}))
++        # Identical exposed dev inputs also feed the formal overlap audit.
++        for n in ('dataset.json','development-inputs.jsonl.gz'):shutil.copyfile(base/n,a.out/n)
++        b=model.load_bundle(a.b13,a.seeds[0]);ds=data(b,base/'development-inputs.jsonl.gz')
++        aggregate={};byseed={};allrows=defaultdict(list);times={}
++        for s in a.seeds:
++            ts=time.monotonic();log('start_seed',seed=s)
++            if s!=a.seeds[0]:b=model.load_bundle(a.b13,s)
++            ck=json.loads((base/f'checkpoint-{s}.json').read_bytes())
++            if ck['model']!='cue_role' or ck['seed']!=s:raise ValueError('Invalid R08 checkpoint')
++            ck.update(model='sharp_role',decoder=cfg['version'],r08_checkpoint_sha256=sha(base/f'checkpoint-{s}.json'))
++            save(a.out/f'checkpoint-{s}.json',ck)
++            pars=json.loads((base/f'parameters-{s}.json').read_bytes())['weights']
++            if pars['cue_role']!=ck['w']:raise ValueError('R08 primary weight mismatch')
++            ref={(r['split'],r['variant'],r['graph_id']):(r['candidates'],r['gold'],r['logits']['cue_role'],r['predictions']['cue_role'])
++                 for r in gzrows(base/f'predictions-{s}.jsonl.gz')}
++            byseed[s]={}
++            with gzip.open(a.out/f'predictions-{s}.jsonl.gz','wt',encoding='utf8') as out,gzip.open(
++                        a.out/f'errors-{s}.jsonl.gz','wt',encoding='utf8') as err:
++                for sp,views in ds.items():
++                    slim=[]
++                    for v,(docs,ys) in views.items():
++                        for r in view(b,docs,ys,ck,pars['cue_random_role'],sp,v,ref,cfg):
++                            line(out,r)
++                            if r['predictions']['sharp_role']!=r['gold'] or r['hard_corrected']:line(err,r)
++                            for name in ['logits','selected_token_weights','relation_masses','relation_names']:r.pop(name)
++                            slim.append(r)
++                    byseed[s][sp]=group_summary(slim);allrows[sp].extend(slim)
++                    log('scored',seed=s,split=sp,rows=len(slim))
++            times[s]=time.monotonic()-ts
++        aggregate={sp:average_dict([byseed[s][sp] for s in a.seeds]) for sp in ds}
++        pair={sp:confidence(rs,'sharp_role',cfg['bootstrap_draws'],cfg['bootstrap_seed']) for sp,rs in allrows.items()}
++        # Use exactly the same graph-paired protocol for both reporting the
++        # designated soft baseline and a stronger fixed negative control.
++        controls={}
++        for sp,rs in allrows.items():
++            proxies=[dict(r,predictions={**r['predictions'],'first':r['predictions']['soft_role'],
++                                         'pool':r['predictions']['sharp_random_role']}) for r in rs]
++            c=confidence(proxies,'sharp_role',cfg['bootstrap_draws'],cfg['bootstrap_seed'])
++            controls[sp]={v:{'soft_role':d['first'],'sharp_random_role':d['pool']} for v,d in c.items()}
++        fresh=aggregate['fresh'];main=fresh['sharp_role']
++        check=(all(main['original_top1']-fresh[b]['original_top1']>=.05-1e-12 and main['paraphrase_top1']>fresh[b]['paraphrase_top1'] for b in ('first','pool')) and
++           main['quartet_all']>fresh['first']['quartet_all'] and main['quartet_all']>=fresh['pool']['quartet_all'])
++        support=controls['fresh']['original']['soft_role']['lcb95']>0 and controls['fresh']['original']['soft_role']['delta']>0
++        eligible=bool(check and a.seeds==cfg['seeds'] and not a.smoke and not a.diagnostic_only)
++        save(a.out/'metrics.json',dict(round='hard_selection',seeds=a.seeds,primary_model='sharp_role',aggregate=aggregate,
++            per_seed=byseed,diagnostics={sp:strata_stats(rs) for sp,rs in allrows.items()},controls=list(fresh),
++            paired_intervals=pair,frozen_control_intervals=controls,criterion_met=support,
++            development_gate={'criteria_met':check,'eligible':eligible},smoke=a.smoke,
++            protocol_sha256=sha(a.config),new_training_updates=0,max_swap_error=max(r['swap_max_error'] for rs in allrows.values() for r in rs),
++            max_r08_soft_replay_error=max(r['prior_logit_max_error'] for rs in allrows.values() for r in rs),
++            started_from=str(base),elapsed_seconds=time.monotonic()-tick,seconds_by_seed=times,finished_utc=now()))
++        log('finished',criterion=support,eligible=eligible)
++    except BaseException:
++        log('failed',trace=traceback.format_exc());raise
++
++
++if __name__=='__main__':
++    p=argparse.ArgumentParser(description=__doc__)
++    for k in ('b13','prior','candidate','out'):p.add_argument('--'+k,required=True,type=Path)
++    p.add_argument('--b16',type=Path,help='accepted for consistency; manifest and exact dev inputs are reused from R08')
++    p.add_argument('--code',type=Path);p.add_argument('--smoke',action='store_true');p.add_argument('--diagnostic-only',action='store_true')
++    p.add_argument('--seeds',type=int,nargs='+',default=[1701,2701,3701])
++    p.add_argument('--config',type=Path,default=Path(__file__).resolve().parents[1]/'configs/sharp_protocol.json')
++    a=p.parse_args()
++    if len(set(a.seeds))!=len(a.seeds) or not set(a.seeds)<={1701,2701,3701}:p.error('invalid seeds')
++    a.b13=a.b13.resolve();a.candidate=a.candidate.resolve();a.code=(a.code or a.prior/'code').resolve()
++    sys.path.insert(0,str(a.code));sys.dont_write_bytecode=True;main(a)

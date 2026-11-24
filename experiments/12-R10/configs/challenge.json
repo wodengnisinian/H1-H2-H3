@@ -1,0 +1,23 @@
+{
+  "study": "R3 同起点同关系的真实二跳与未见关系组合挑战",
+  "claim": "在成对反事实图上，只改变候选中间节点的后继关系。检验从题面学习两步关系角色并沿有向连接读取后继事实，能否在训练未见的关系搭配及措辞上选对首条。",
+  "scope": "独立合成机制实验。图模型显式获得词相等与边连接的归纳偏置，实验对象为新训练的探针。历史 H1/H2/H3 的冻结模型与独立验收保持单独命名。",
+  "schema_version": 1,
+  "generator_seed": 31579067,
+  "model_seeds": [1701, 2701, 3701],
+  "relations": ["转递", "签收", "代管", "回访", "运送", "调拨", "交接", "核验"],
+  "pair_split_ring_distances": {"train": [3, 4], "dev": [2], "challenge": [1], "seen_pair_test": [3, 4]},
+  "twin_groups_per_pair": {"train": 40, "dev": 8, "challenge": 20, "seen_pair_test": 12},
+  "styles": {
+    "train": [["先 经 {r} 找 人", "再 经 {r} 找 人"], ["第一步 沿 {r} 走", "第二步 沿 {r} 走"]],
+    "dev": [["先 经 {r} 走", "再 沿 {r} 找 人"], ["第一步 经 {r} 找 人", "第二步 沿 {r} 找 人"]],
+    "challenge": [["先 沿 {r} 找 人", "再 沿 {r} 走"], ["第一步 经 {r} 走", "第二步 经 {r} 找 人"]]
+  },
+  "template_assignment": "每个关系对内交替分配两种措辞。每图构造 AB、BA 两个语义顺序，各用两个相反的分句顺序提问，词袋保持一致。seen_pair_test 使用 challenge 的措辞。",
+  "roles": "图中所有锚点出边按打乱后的事实位置组成有序候选，共四条。每种首步关系恰有两个同头同关系的不同中间节点，金标来自唯一可走通的后继。审计每张图所有有向两跳关系组合（含干扰边），要求都落入相应的关系对集合。挑战图另有只替换第二步关系的配对题，保持首步关系、图及有序候选，金标必交换。",
+  "architecture": "两种探针共享局部问题编码器，以关系提及附近的题面词学习首步/次步分配。单跳探针看候选关系；二跳探针另看候选尾节点可达的后继关系。符号对照读取明确顺序词和有向图，输出可达首跳。",
+  "training": {"epochs": 16, "batch_size": 128, "learning_rate": 0.02, "embedding_dim": 12, "threads": 1, "selection": "固定最后一轮，不对挑战集调参"},
+  "bootstrap": {"seed": 734239, "replicates": 10000, "interval": "双侧百分位95%，成对孪生图组为重采样单位，关系对内重采样；每组内平均三个种子与全部问法"},
+  "success": {"challenge_top1_min": 0.85, "challenge_quartet_min": 0.75, "second_only_pair_both_correct_min": 0.75, "each_seed_top1_min": 0.8, "gain_over_onehop_ci_lower_pp_min_strict": 25.0, "symbolic_top1_required": 1.0, "onehop_ceiling": 0.5},
+  "bounds": "同一对孪生图的起点、问题、候选三元组和位置相同，两图正确首条不同。均衡孪生图上任何仅见这些输入的确定性选择器最多答对一半。随机从四候选中选一条的期望为25%。读取完整图的符号路径枚举可达100%。"
+}

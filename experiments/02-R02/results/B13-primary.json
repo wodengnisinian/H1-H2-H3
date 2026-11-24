@@ -1,0 +1,89 @@
+{
+  "per_stratum": {
+    "role_reversal": {
+      "graphs": 1000,
+      "gold_covered": 1000,
+      "gold_rank_one": 495,
+      "first_edge_rule_hits": 1000,
+      "serial_1701": 398,
+      "pooled_1701": 506,
+      "serial_2701": 423,
+      "pooled_2701": 525,
+      "serial_3701": 430,
+      "pooled_3701": 480
+    },
+    "relation_order": {
+      "graphs": 1000,
+      "gold_covered": 1000,
+      "gold_rank_one": 496,
+      "first_edge_rule_hits": 1000,
+      "serial_1701": 408,
+      "pooled_1701": 532,
+      "serial_2701": 407,
+      "pooled_2701": 532,
+      "serial_3701": 457,
+      "pooled_3701": 492
+    },
+    "competing_chain": {
+      "graphs": 1000,
+      "gold_covered": 1000,
+      "gold_rank_one": 1000,
+      "first_edge_rule_hits": 1000,
+      "serial_1701": 802,
+      "pooled_1701": 809,
+      "serial_2701": 850,
+      "pooled_2701": 805,
+      "serial_3701": 776,
+      "pooled_3701": 748
+    }
+  },
+  "pooled_counts": {
+    "graphs": 3000,
+    "gold_covered": 3000,
+    "gold_rank_one": 1991,
+    "first_edge_rule_hits": 3000,
+    "serial_1701": 1608,
+    "pooled_1701": 1847,
+    "serial_2701": 1680,
+    "pooled_2701": 1862,
+    "serial_3701": 1663,
+    "pooled_3701": 1720
+  },
+  "seed_order": [
+    1701,
+    2701,
+    3701
+  ],
+  "document_count": 3000,
+  "model_denominator": 9000,
+  "distinct_people_sets": 3000,
+  "raw_edge_position": {
+    "2": 250,
+    "3": 250,
+    "8": 250,
+    "7": 250,
+    "9": 250,
+    "5": 250,
+    "6": 250,
+    "4": 250,
+    "0": 250,
+    "10": 250,
+    "1": 250,
+    "11": 250
+  },
+  "bootstrap": "archive CPython conditional-binomial, seed 619482",
+  "contrasts": {
+    "pooled": {
+      "effect_pp": -5.311111111111111,
+      "lower95_pp": -6.2444444444444445,
+      "archived_lower95_pp": -6.2444444444444445,
+      "threshold_met": false
+    },
+    "lexical": {
+      "effect_pp": -11.355555555555556,
+      "lower95_pp": -12.822222222222221,
+      "archived_lower95_pp": -12.822222222222221,
+      "threshold_met": false
+    }
+  }
+}

@@ -1,0 +1,273 @@
+{
+  "train": {
+    "graphs": 960,
+    "groups": 480,
+    "questions": 3840,
+    "relation_pairs": [
+      [
+        "转递",
+        "回访"
+      ],
+      [
+        "转递",
+        "运送"
+      ],
+      [
+        "转递",
+        "调拨"
+      ],
+      [
+        "签收",
+        "运送"
+      ],
+      [
+        "签收",
+        "调拨"
+      ],
+      [
+        "签收",
+        "交接"
+      ],
+      [
+        "代管",
+        "调拨"
+      ],
+      [
+        "代管",
+        "交接"
+      ],
+      [
+        "代管",
+        "核验"
+      ],
+      [
+        "回访",
+        "交接"
+      ],
+      [
+        "回访",
+        "核验"
+      ],
+      [
+        "运送",
+        "核验"
+      ]
+    ],
+    "template_family": "train",
+    "gold_fact_position_counts": {
+      "8": 358,
+      "7": 326,
+      "6": 328,
+      "1": 300,
+      "3": 298,
+      "11": 310,
+      "0": 350,
+      "2": 290,
+      "9": 344,
+      "10": 314,
+      "4": 310,
+      "5": 312
+    },
+    "features_sha256": "4ce19531fe33081ffc08d9312dc3ede5d321aa2a8392229cec7fd137a3221c3e",
+    "gold_sha256": "08f51b90b7baa613233063043c53c63409294b5dd2a8ea1e01d7f2a80ac7bfbf",
+    "canonical_graph_set_sha256": "c162be1c3d43a3c5aab878042a4d5efb892dfbcf06dfe7bd42323f835ed048f2",
+    "namespace": "R3NODE_train_"
+  },
+  "dev": {
+    "graphs": 128,
+    "groups": 64,
+    "questions": 512,
+    "relation_pairs": [
+      [
+        "转递",
+        "代管"
+      ],
+      [
+        "转递",
+        "交接"
+      ],
+      [
+        "签收",
+        "回访"
+      ],
+      [
+        "签收",
+        "核验"
+      ],
+      [
+        "代管",
+        "运送"
+      ],
+      [
+        "回访",
+        "调拨"
+      ],
+      [
+        "运送",
+        "交接"
+      ],
+      [
+        "调拨",
+        "核验"
+      ]
+    ],
+    "template_family": "dev",
+    "gold_fact_position_counts": {
+      "11": 50,
+      "7": 52,
+      "9": 46,
+      "4": 42,
+      "5": 46,
+      "3": 32,
+      "0": 28,
+      "1": 38,
+      "2": 50,
+      "10": 42,
+      "6": 54,
+      "8": 32
+    },
+    "features_sha256": "7492536f38944a8205ae3dd71d5972b71f56aa4465bb2d131d4e4f18e295583e",
+    "gold_sha256": "5749305424f0612ef21c8c74f28868238287fdf1205333dad95f9fa43dee54a8",
+    "canonical_graph_set_sha256": "25887b3bc52d2d285e012ddd85eb6ddc8b16eb8715c46ba4e03f08ee39afa485",
+    "namespace": "R3NODE_dev_"
+  },
+  "seen_pair_test": {
+    "graphs": 288,
+    "groups": 144,
+    "questions": 1152,
+    "relation_pairs": [
+      [
+        "转递",
+        "回访"
+      ],
+      [
+        "转递",
+        "运送"
+      ],
+      [
+        "转递",
+        "调拨"
+      ],
+      [
+        "签收",
+        "运送"
+      ],
+      [
+        "签收",
+        "调拨"
+      ],
+      [
+        "签收",
+        "交接"
+      ],
+      [
+        "代管",
+        "调拨"
+      ],
+      [
+        "代管",
+        "交接"
+      ],
+      [
+        "代管",
+        "核验"
+      ],
+      [
+        "回访",
+        "交接"
+      ],
+      [
+        "回访",
+        "核验"
+      ],
+      [
+        "运送",
+        "核验"
+      ]
+    ],
+    "template_family": "challenge",
+    "gold_fact_position_counts": {
+      "3": 110,
+      "5": 88,
+      "9": 92,
+      "0": 94,
+      "11": 94,
+      "1": 100,
+      "10": 86,
+      "2": 78,
+      "4": 94,
+      "6": 104,
+      "8": 108,
+      "7": 104
+    },
+    "features_sha256": "3aa1f15719106d60f1217914c33a2ea8d091e1b0198f338b13b6a8a29cdf8036",
+    "gold_sha256": "cee5fcc80d8ecf67ff15a9e772c967910e625c89ee805075e7d50fd449a59a77",
+    "canonical_graph_set_sha256": "4af0748fca3d3b40045414f09346e7f03027a6f7803df692b0017aa5b0e59c4b",
+    "namespace": "R3NODE_seen_pair_test_"
+  },
+  "challenge": {
+    "graphs": 320,
+    "groups": 160,
+    "questions": 1280,
+    "relation_pairs": [
+      [
+        "转递",
+        "签收"
+      ],
+      [
+        "转递",
+        "核验"
+      ],
+      [
+        "签收",
+        "代管"
+      ],
+      [
+        "代管",
+        "回访"
+      ],
+      [
+        "回访",
+        "运送"
+      ],
+      [
+        "运送",
+        "调拨"
+      ],
+      [
+        "调拨",
+        "交接"
+      ],
+      [
+        "交接",
+        "核验"
+      ]
+    ],
+    "template_family": "challenge",
+    "gold_fact_position_counts": {
+      "5": 102,
+      "4": 104,
+      "3": 100,
+      "11": 102,
+      "8": 118,
+      "0": 88,
+      "7": 114,
+      "9": 104,
+      "10": 112,
+      "6": 114,
+      "2": 112,
+      "1": 110
+    },
+    "features_sha256": "b12f1811d600c411c2677473c7b7cb6ffbf68eec889ea7e36dc913aae2456516",
+    "gold_sha256": "2cf119fd72616d1463586408781787e8c21611185066cfc7b287770e4cb59617",
+    "canonical_graph_set_sha256": "0a9f1014be3e3b83ed03d18bc061fc99fd527767bd46152a3b7ebd493d035789",
+    "namespace": "R3NODE_challenge_"
+  },
+  "challenge_second": {
+    "graphs": 320,
+    "questions": 1280,
+    "paired_to": "challenge",
+    "features_sha256": "756852c500d8f43ce5408a5348699d6a47c39a5020f81830e005bc1a8fcc31c1",
+    "gold_sha256": "38f9c1adf015482ab3cc99e6f9f1d9354a0e35d4be57d63e5977b6ebf9691a63"
+  }
+}

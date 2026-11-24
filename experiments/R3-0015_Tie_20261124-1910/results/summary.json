@@ -1,0 +1,1067 @@
+{
+  "experiment": "R15 content tie-break on frozen R12 development",
+  "seeds": [
+    1701,
+    2701,
+    3701
+  ],
+  "graphs": 600,
+  "graph_seeds": 1800,
+  "presentations": [
+    "original",
+    "reversed",
+    "shuffled"
+  ],
+  "new_training_updates": 0,
+  "new_formal_assessments": 0,
+  "split": "fresh",
+  "variant": "original",
+  "methods": [
+    "first",
+    "pool",
+    "sharp_role"
+  ],
+  "graphs_per_stratum": 200,
+  "strict_primary": "Same ordered canonical candidate pair and same canonical sharp_role prediction within each seed across all three presentations for every graph.",
+  "primary_passing_graphs": {
+    "source_index": 101,
+    "content_sha256": 600
+  },
+  "primary_pass": true,
+  "strict_source_comparison": "Empirical pass count under identical criteria for the historical source-index rule.",
+  "content_key": "Retain direction rule's lexical overlap and anchor preference; sort ties ascending by SHA-256 of compact UTF-8 JSON fact triple; on digest ties sort by literal Unicode tuple.",
+  "entity_scope": "Fact hashes depend on literal entity and relation strings; this experiment preserves these strings and evaluates three presentations of each graph.",
+  "digest_collision_graphs": 0,
+  "original_r12_parity_rows": 1800,
+  "r14_parity_rows_eligible": 3600,
+  "r14_reference": {
+    "summary_sha256": "4556271fcfb703edebd1f8af8e7db345d7693daf94e9d716df5621cc990724d0",
+    "predictions_sha256": "9730975898a6ce19b9759f860555c57ef89a726b4bee14df3465bc2fab5c46df"
+  },
+  "parity_max_logit_abs_error": {
+    "1701": {
+      "r12_identity": 0.0,
+      "r14_source_presentations": 0.0
+    },
+    "2701": {
+      "r12_identity": 0.0,
+      "r14_source_presentations": 0.0
+    },
+    "3701": {
+      "r12_identity": 0.0,
+      "r14_source_presentations": 0.0
+    }
+  },
+  "tolerance": 2e-05,
+  "shuffle": "Python random.Random(int.from_bytes(SHA256(('R15-fact-order-v1' + NUL + graph_id).encode('utf-8')).digest(),'big')).shuffle(original_indices)",
+  "bootstrap": {
+    "unit": "graph, preserving presentations, rules, methods and three fixed seeds; equal stratum weights",
+    "draws": 10000,
+    "seed": 619482,
+    "interval": "two-sided 95%, inverse empirical CDF",
+    "contrasts": "content_minus_source = content rule minus source-index rule within each graph",
+    "estimates": "empirical proportions or proportion differences, conditional on the observed development graphs"
+  },
+  "all_graph_metrics": [
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "all_presentations",
+      "metric": "candidate_set_invariant",
+      "estimate": 0.835,
+      "low95": 0.8116666666666666,
+      "high95": 0.8583333333333334
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "all_presentations",
+      "metric": "candidate_set_invariant",
+      "estimate": 1.0,
+      "low95": 1.0,
+      "high95": 1.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "all_presentations",
+      "metric": "candidate_set_invariant",
+      "estimate": 0.165,
+      "low95": 0.14166666666666666,
+      "high95": 0.18833333333333332
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "all_presentations",
+      "metric": "first_all_seeds_invariant",
+      "estimate": 0.3333333333333333,
+      "low95": 0.3333333333333333,
+      "high95": 0.3333333333333333
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "all_presentations",
+      "metric": "first_all_seeds_invariant",
+      "estimate": 1.0,
+      "low95": 1.0,
+      "high95": 1.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "all_presentations",
+      "metric": "first_all_seeds_invariant",
+      "estimate": 0.6666666666666666,
+      "low95": 0.6666666666666666,
+      "high95": 0.6666666666666666
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "all_presentations",
+      "metric": "first_seed_invariance",
+      "estimate": 0.3333333333333333,
+      "low95": 0.3333333333333333,
+      "high95": 0.3333333333333333
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "all_presentations",
+      "metric": "first_seed_invariance",
+      "estimate": 1.0,
+      "low95": 1.0,
+      "high95": 1.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "all_presentations",
+      "metric": "first_seed_invariance",
+      "estimate": 0.6666666666666666,
+      "low95": 0.6666666666666666,
+      "high95": 0.6666666666666666
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "all_presentations",
+      "metric": "ordered_pair_invariant",
+      "estimate": 0.16833333333333333,
+      "low95": 0.145,
+      "high95": 0.19166666666666665
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "all_presentations",
+      "metric": "ordered_pair_invariant",
+      "estimate": 1.0,
+      "low95": 1.0,
+      "high95": 1.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "all_presentations",
+      "metric": "ordered_pair_invariant",
+      "estimate": 0.8316666666666667,
+      "low95": 0.8083333333333332,
+      "high95": 0.855
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "all_presentations",
+      "metric": "pool_all_seeds_invariant",
+      "estimate": 0.8966666666666666,
+      "low95": 0.875,
+      "high95": 0.9183333333333333
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "all_presentations",
+      "metric": "pool_all_seeds_invariant",
+      "estimate": 1.0,
+      "low95": 1.0,
+      "high95": 1.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "all_presentations",
+      "metric": "pool_all_seeds_invariant",
+      "estimate": 0.10333333333333333,
+      "low95": 0.08166666666666667,
+      "high95": 0.125
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "all_presentations",
+      "metric": "pool_seed_invariance",
+      "estimate": 0.9433333333333334,
+      "low95": 0.9305555555555555,
+      "high95": 0.956111111111111
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "all_presentations",
+      "metric": "pool_seed_invariance",
+      "estimate": 1.0,
+      "low95": 1.0,
+      "high95": 1.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "all_presentations",
+      "metric": "pool_seed_invariance",
+      "estimate": 0.05666666666666669,
+      "low95": 0.0438888888888889,
+      "high95": 0.06944444444444446
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "all_presentations",
+      "metric": "sharp_role_all_seeds_invariant",
+      "estimate": 0.915,
+      "low95": 0.8933333333333334,
+      "high95": 0.935
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "all_presentations",
+      "metric": "sharp_role_all_seeds_invariant",
+      "estimate": 1.0,
+      "low95": 1.0,
+      "high95": 1.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "all_presentations",
+      "metric": "sharp_role_all_seeds_invariant",
+      "estimate": 0.085,
+      "low95": 0.065,
+      "high95": 0.10666666666666667
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "all_presentations",
+      "metric": "sharp_role_seed_invariance",
+      "estimate": 0.9550000000000001,
+      "low95": 0.9422222222222222,
+      "high95": 0.9666666666666668
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "all_presentations",
+      "metric": "sharp_role_seed_invariance",
+      "estimate": 1.0,
+      "low95": 1.0,
+      "high95": 1.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "all_presentations",
+      "metric": "sharp_role_seed_invariance",
+      "estimate": 0.045000000000000005,
+      "low95": 0.03333333333333333,
+      "high95": 0.05777777777777777
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "all_presentations",
+      "metric": "strict_primary",
+      "estimate": 0.16833333333333333,
+      "low95": 0.145,
+      "high95": 0.19166666666666665
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "all_presentations",
+      "metric": "strict_primary",
+      "estimate": 1.0,
+      "low95": 1.0,
+      "high95": 1.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "all_presentations",
+      "metric": "strict_primary",
+      "estimate": 0.8316666666666667,
+      "low95": 0.8083333333333332,
+      "high95": 0.855
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "original",
+      "metric": "coverage",
+      "estimate": 1.0,
+      "low95": 1.0,
+      "high95": 1.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "original",
+      "metric": "coverage",
+      "estimate": 1.0,
+      "low95": 1.0,
+      "high95": 1.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "original",
+      "metric": "coverage",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "original",
+      "metric": "first_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "original",
+      "metric": "first_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "original",
+      "metric": "first_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "original",
+      "metric": "first_top1",
+      "estimate": 0.6616666666666667,
+      "low95": 0.6283333333333333,
+      "high95": 0.6933333333333334
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "original",
+      "metric": "first_top1",
+      "estimate": 0.6766666666666667,
+      "low95": 0.645,
+      "high95": 0.71
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "original",
+      "metric": "first_top1",
+      "estimate": 0.015,
+      "low95": -0.03,
+      "high95": 0.06
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "original",
+      "metric": "ordered_pair_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "original",
+      "metric": "ordered_pair_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "original",
+      "metric": "ordered_pair_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "original",
+      "metric": "pool_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "original",
+      "metric": "pool_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "original",
+      "metric": "pool_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "original",
+      "metric": "pool_top1",
+      "estimate": 0.63,
+      "low95": 0.6061111111111109,
+      "high95": 0.6544444444444445
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "original",
+      "metric": "pool_top1",
+      "estimate": 0.6316666666666667,
+      "low95": 0.6072222222222223,
+      "high95": 0.6561111111111111
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "original",
+      "metric": "pool_top1",
+      "estimate": 0.0016666666666666668,
+      "low95": -0.0044444444444444444,
+      "high95": 0.007777777777777778
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "original",
+      "metric": "set_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "original",
+      "metric": "set_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "original",
+      "metric": "set_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "original",
+      "metric": "sharp_role_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "original",
+      "metric": "sharp_role_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "original",
+      "metric": "sharp_role_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "original",
+      "metric": "sharp_role_top1",
+      "estimate": 0.8583333333333331,
+      "low95": 0.84,
+      "high95": 0.8761111111111112
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "original",
+      "metric": "sharp_role_top1",
+      "estimate": 0.8616666666666664,
+      "low95": 0.8438888888888888,
+      "high95": 0.8794444444444443
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "original",
+      "metric": "sharp_role_top1",
+      "estimate": 0.0033333333333333327,
+      "low95": -0.0016666666666666668,
+      "high95": 0.008333333333333333
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "reversed",
+      "metric": "coverage",
+      "estimate": 1.0,
+      "low95": 1.0,
+      "high95": 1.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "reversed",
+      "metric": "coverage",
+      "estimate": 1.0,
+      "low95": 1.0,
+      "high95": 1.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "reversed",
+      "metric": "coverage",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "reversed",
+      "metric": "first_changed_from_original",
+      "estimate": 0.6666666666666666,
+      "low95": 0.6666666666666666,
+      "high95": 0.6666666666666666
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "reversed",
+      "metric": "first_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "reversed",
+      "metric": "first_changed_from_original",
+      "estimate": -0.6666666666666666,
+      "low95": -0.6666666666666666,
+      "high95": -0.6666666666666666
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "reversed",
+      "metric": "first_top1",
+      "estimate": 0.6716666666666667,
+      "low95": 0.64,
+      "high95": 0.7050000000000001
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "reversed",
+      "metric": "first_top1",
+      "estimate": 0.6766666666666667,
+      "low95": 0.645,
+      "high95": 0.71
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "reversed",
+      "metric": "first_top1",
+      "estimate": 0.005,
+      "low95": -0.041666666666666664,
+      "high95": 0.05333333333333334
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "reversed",
+      "metric": "ordered_pair_changed_from_original",
+      "estimate": 0.8316666666666667,
+      "low95": 0.8083333333333332,
+      "high95": 0.855
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "reversed",
+      "metric": "ordered_pair_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "reversed",
+      "metric": "ordered_pair_changed_from_original",
+      "estimate": -0.8316666666666667,
+      "low95": -0.855,
+      "high95": -0.8083333333333332
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "reversed",
+      "metric": "pool_changed_from_original",
+      "estimate": 0.05666666666666669,
+      "low95": 0.043888888888888894,
+      "high95": 0.06944444444444446
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "reversed",
+      "metric": "pool_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "reversed",
+      "metric": "pool_changed_from_original",
+      "estimate": -0.05666666666666669,
+      "low95": -0.06944444444444446,
+      "high95": -0.043888888888888894
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "reversed",
+      "metric": "pool_top1",
+      "estimate": 0.633888888888889,
+      "low95": 0.6094444444444445,
+      "high95": 0.6583333333333333
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "reversed",
+      "metric": "pool_top1",
+      "estimate": 0.6316666666666667,
+      "low95": 0.6072222222222223,
+      "high95": 0.6561111111111111
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "reversed",
+      "metric": "pool_top1",
+      "estimate": -0.002222222222222223,
+      "low95": -0.008333333333333335,
+      "high95": 0.0038888888888888883
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "reversed",
+      "metric": "set_changed_from_original",
+      "estimate": 0.165,
+      "low95": 0.14166666666666666,
+      "high95": 0.18833333333333332
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "reversed",
+      "metric": "set_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "reversed",
+      "metric": "set_changed_from_original",
+      "estimate": -0.165,
+      "low95": -0.18833333333333332,
+      "high95": -0.14166666666666666
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "reversed",
+      "metric": "sharp_role_changed_from_original",
+      "estimate": 0.045000000000000005,
+      "low95": 0.033333333333333326,
+      "high95": 0.05777777777777777
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "reversed",
+      "metric": "sharp_role_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "reversed",
+      "metric": "sharp_role_changed_from_original",
+      "estimate": -0.045000000000000005,
+      "low95": -0.05777777777777777,
+      "high95": -0.033333333333333326
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "reversed",
+      "metric": "sharp_role_top1",
+      "estimate": 0.8672222222222219,
+      "low95": 0.8494444444444444,
+      "high95": 0.8844444444444445
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "reversed",
+      "metric": "sharp_role_top1",
+      "estimate": 0.8616666666666664,
+      "low95": 0.8438888888888888,
+      "high95": 0.8794444444444443
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "reversed",
+      "metric": "sharp_role_top1",
+      "estimate": -0.005555555555555557,
+      "low95": -0.011666666666666667,
+      "high95": 0.0005555555555555556
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "shuffled",
+      "metric": "coverage",
+      "estimate": 1.0,
+      "low95": 1.0,
+      "high95": 1.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "shuffled",
+      "metric": "coverage",
+      "estimate": 1.0,
+      "low95": 1.0,
+      "high95": 1.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "shuffled",
+      "metric": "coverage",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "shuffled",
+      "metric": "first_changed_from_original",
+      "estimate": 0.34,
+      "low95": 0.30833333333333335,
+      "high95": 0.37333333333333335
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "shuffled",
+      "metric": "first_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "shuffled",
+      "metric": "first_changed_from_original",
+      "estimate": -0.34,
+      "low95": -0.37333333333333335,
+      "high95": -0.30833333333333335
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "shuffled",
+      "metric": "first_top1",
+      "estimate": 0.6716666666666667,
+      "low95": 0.64,
+      "high95": 0.7033333333333335
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "shuffled",
+      "metric": "first_top1",
+      "estimate": 0.6766666666666667,
+      "low95": 0.645,
+      "high95": 0.71
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "shuffled",
+      "metric": "first_top1",
+      "estimate": 0.005,
+      "low95": -0.03833333333333334,
+      "high95": 0.05000000000000001
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "shuffled",
+      "metric": "ordered_pair_changed_from_original",
+      "estimate": 0.4216666666666667,
+      "low95": 0.3833333333333333,
+      "high95": 0.45999999999999996
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "shuffled",
+      "metric": "ordered_pair_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "shuffled",
+      "metric": "ordered_pair_changed_from_original",
+      "estimate": -0.4216666666666667,
+      "low95": -0.45999999999999996,
+      "high95": -0.3833333333333333
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "shuffled",
+      "metric": "pool_changed_from_original",
+      "estimate": 0.02666666666666666,
+      "low95": 0.017777777777777778,
+      "high95": 0.03666666666666665
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "shuffled",
+      "metric": "pool_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "shuffled",
+      "metric": "pool_changed_from_original",
+      "estimate": -0.02666666666666666,
+      "low95": -0.03666666666666665,
+      "high95": -0.017777777777777778
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "shuffled",
+      "metric": "pool_top1",
+      "estimate": 0.6333333333333334,
+      "low95": 0.6094444444444443,
+      "high95": 0.6577777777777777
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "shuffled",
+      "metric": "pool_top1",
+      "estimate": 0.6316666666666667,
+      "low95": 0.6072222222222223,
+      "high95": 0.6561111111111111
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "shuffled",
+      "metric": "pool_top1",
+      "estimate": -0.0016666666666666672,
+      "low95": -0.007777777777777778,
+      "high95": 0.004444444444444444
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "shuffled",
+      "metric": "set_changed_from_original",
+      "estimate": 0.08166666666666667,
+      "low95": 0.06333333333333334,
+      "high95": 0.10166666666666667
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "shuffled",
+      "metric": "set_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "shuffled",
+      "metric": "set_changed_from_original",
+      "estimate": -0.08166666666666667,
+      "low95": -0.10166666666666667,
+      "high95": -0.06333333333333334
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "shuffled",
+      "metric": "sharp_role_changed_from_original",
+      "estimate": 0.02722222222222222,
+      "low95": 0.017777777777777778,
+      "high95": 0.03777777777777778
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "shuffled",
+      "metric": "sharp_role_changed_from_original",
+      "estimate": 0.0,
+      "low95": 0.0,
+      "high95": 0.0
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "shuffled",
+      "metric": "sharp_role_changed_from_original",
+      "estimate": -0.02722222222222222,
+      "low95": -0.03777777777777778,
+      "high95": -0.017777777777777778
+    },
+    {
+      "stratum": "all",
+      "condition": "source_index",
+      "presentation": "shuffled",
+      "metric": "sharp_role_top1",
+      "estimate": 0.8611111111111108,
+      "low95": 0.8433333333333332,
+      "high95": 0.8788888888888886
+    },
+    {
+      "stratum": "all",
+      "condition": "content_sha256",
+      "presentation": "shuffled",
+      "metric": "sharp_role_top1",
+      "estimate": 0.8616666666666664,
+      "low95": 0.8438888888888888,
+      "high95": 0.8794444444444443
+    },
+    {
+      "stratum": "all",
+      "condition": "content_minus_source",
+      "presentation": "shuffled",
+      "metric": "sharp_role_top1",
+      "estimate": 0.0005555555555555556,
+      "low95": -0.005,
+      "high95": 0.006111111111111111
+    }
+  ],
+  "pinned_r14_helper_sha256": "affd20a5d4d1b1404d4e630e7eba8d8e03528825bd9dc7b3c049beee027e76f4",
+  "script_sha256": "593f13b3e3da49e14b691b63cc084e2d48b3c5a5d96052596fe7198537deb3a0",
+  "r12_sha256": {
+    "results/development-inputs.jsonl.gz": "2d5c74c095109fb1819dc5c3f14e7397de89058af8364c2434736d611fae7cc3",
+    "results/predictions-1701.jsonl.gz": "e605acf796e46ab58fb20b02c5e40bf2917a7ad30b5f2c9f5a00a86364184dfe",
+    "results/predictions-2701.jsonl.gz": "da2480ac1ef50020c574ac5b3651fb981c2f9516f47ea0d149d839d1ee48b514",
+    "results/predictions-3701.jsonl.gz": "cc74876737b2c20a2dfdb718f51e6208051e172d4b31cdb0fd531e19d8627d66",
+    "results/checkpoint-1701.json": "98f1c920d07cb74a4409c4aaab32c8f21069e6e8cfcbefc8a5344dcd25a2e33d",
+    "results/checkpoint-2701.json": "3e1653c209aee3161b1431fb7029d1b9464c25195c2136cafd0e9ab107012dd7",
+    "results/checkpoint-3701.json": "2bd1a3da698ed71c9d816843c75cfd3d3a9299a11e5d743faed421f039f792e8",
+    "results/configuration.json": "16f61d90c5acd601108cf4c0bb5d26e992ae66428d24fb12cf74c7f6e2a5736e",
+    "snapshot/src/sharp_core.py": "f56c15184956476784b4922b453d4898178412e4c709f0f5dc632ab5dba86c54",
+    "snapshot/src/role_core.py": "713909ab7c417c2b7f950938e291498c51651adfef3922a169067749a509ab8f"
+  },
+  "inputs_sha256": {
+    "prior/code/model.py": "f85636ffa19443880e48d953c7d552af3d6bda5238c60ad424f445202c2c2b0f",
+    "b13/inputs/b12-code/tie_rank.py": "41c5b4b19b67be9ffe6a5735a15275ba152921466244771585d2bc324e4c64f9",
+    "b13/inputs/b12-code/evaluate.py": "68c64cf602d16f6477011fe4092677775a178a3a7c5b32b0da057443b38b0501"
+  },
+  "outputs_sha256": {
+    "metrics.csv": "1f67dd7f8b9b448420973b263fa872c2c1fbe8cad5603b7638504316d5b22a8c",
+    "per_seed.csv": "eed21a52164790fb93f82aed86088f0920552d271f6359bb3f8a445a7688e57f",
+    "graphs.jsonl.gz": "d67f0f078959614ff11f5d7f64613e03f5b2ee46944fe3691c0d5455e2f5b1c7",
+    "predictions.jsonl.gz": "22b6b0c8f1e2a2ec7542b31ad6de47cb2275a42aa1046b6d3cff18feea0d357a"
+  },
+  "python": "3.12.13",
+  "torch": "2.10.0+cu128",
+  "numpy": "1.26.4"
+}

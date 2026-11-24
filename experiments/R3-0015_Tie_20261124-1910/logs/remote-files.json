@@ -1,0 +1,15 @@
+{
+  "r3_dev_order_audit.py": "affd20a5d4d1b1404d4e630e7eba8d8e03528825bd9dc7b3c049beee027e76f4",
+  "r3_content_tie_audit.py": "593f13b3e3da49e14b691b63cc084e2d48b3c5a5d96052596fe7198537deb3a0",
+  "record_resources.py": "c0465903299abf480840e9169a9dccd96d5b7a1ff9c2ffa8156f075507863bed",
+  "protocol.json": "2485931d4e86c8e6bbc614004144a587bfcd21b9aa7ffe67c358946d654d1fb1",
+  "frozen-inputs.json": "4fa2160ca13a1234629209a5cb932b2668c3c98400fb621c5949de49307a1f41",
+  "remote.log": "018a12238e2178f732d7a1d57cd88b09d144ed78b12844d0aabb6a664a87914a",
+  "timing.txt": "6838e27b4269d22a0ce6af3af43e014cb592a86169cda77f97b7cb81e8685b93",
+  "exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+  "results/predictions.jsonl.gz": "22b6b0c8f1e2a2ec7542b31ad6de47cb2275a42aa1046b6d3cff18feea0d357a",
+  "results/graphs.jsonl.gz": "d67f0f078959614ff11f5d7f64613e03f5b2ee46944fe3691c0d5455e2f5b1c7",
+  "results/metrics.csv": "1f67dd7f8b9b448420973b263fa872c2c1fbe8cad5603b7638504316d5b22a8c",
+  "results/per_seed.csv": "eed21a52164790fb93f82aed86088f0920552d271f6359bb3f8a445a7688e57f",
+  "results/summary.json": "0f38cdb97c10c8acbb36d4a09896bb36a9536e515ca3e063e64362011ff2a8eb"
+}

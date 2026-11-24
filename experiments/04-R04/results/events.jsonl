@@ -1,0 +1,17 @@
+{"utc":"2026-11-24T09:46:32.371959+00:00","event":"data_ready","pair_filtered_train":9007,"historical_train":12000}
+{"utc":"2026-11-24T09:46:32.696334+00:00","event":"begin_seed","seed":1701,"prior_sha256":"a3cf4167344c14eb0d0e281e9e43ce379289fe40157e39de9a230074c211fa59"}
+{"utc":"2026-11-24T09:46:34.005732+00:00","event":"scored","seed":1701,"split":"fresh","rows":2000}
+{"utc":"2026-11-24T09:46:37.644560+00:00","event":"scored","seed":1701,"split":"archive","rows":6000}
+{"utc":"2026-11-24T09:46:38.243397+00:00","event":"scored","seed":1701,"split":"template","rows":1000}
+{"utc":"2026-11-24T09:46:38.846828+00:00","event":"scored","seed":1701,"split":"combination","rows":1000}
+{"utc":"2026-11-24T09:46:39.033039+00:00","event":"begin_seed","seed":2701,"prior_sha256":"1d3a0e23cdb417f229a7231cec039b8d9b7ec803c08b539a4f38ce4fc6f183a9"}
+{"utc":"2026-11-24T09:46:40.204976+00:00","event":"scored","seed":2701,"split":"fresh","rows":2000}
+{"utc":"2026-11-24T09:46:43.718505+00:00","event":"scored","seed":2701,"split":"archive","rows":6000}
+{"utc":"2026-11-24T09:46:44.317207+00:00","event":"scored","seed":2701,"split":"template","rows":1000}
+{"utc":"2026-11-24T09:46:44.918512+00:00","event":"scored","seed":2701,"split":"combination","rows":1000}
+{"utc":"2026-11-24T09:46:45.213759+00:00","event":"begin_seed","seed":3701,"prior_sha256":"9217b8edda35fad73650fbe8bdf354e26df0a4f0f8530b6549d62773f93f670e"}
+{"utc":"2026-11-24T09:46:46.402461+00:00","event":"scored","seed":3701,"split":"fresh","rows":2000}
+{"utc":"2026-11-24T09:46:49.899575+00:00","event":"scored","seed":3701,"split":"archive","rows":6000}
+{"utc":"2026-11-24T09:46:50.496754+00:00","event":"scored","seed":3701,"split":"template","rows":1000}
+{"utc":"2026-11-24T09:46:51.105435+00:00","event":"scored","seed":3701,"split":"combination","rows":1000}
+{"utc":"2026-11-24T09:46:53.621375+00:00","event":"finished","criterion_met":true,"gate":{"criteria_met":false,"eligible":false}}

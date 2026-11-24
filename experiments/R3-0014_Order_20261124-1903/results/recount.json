@@ -1,0 +1,172 @@
+{
+  "unique_graphs": 600,
+  "graph_seeds": 1800,
+  "counts": {
+    "identity|first": {
+      "correct": 1191,
+      "changed": 0
+    },
+    "identity|pool": {
+      "correct": 1134,
+      "changed": 0
+    },
+    "identity|sharp_role": {
+      "correct": 1545,
+      "changed": 0
+    },
+    "candidate_reverse|first": {
+      "correct": 609,
+      "changed": 1800
+    },
+    "candidate_reverse|pool": {
+      "correct": 1134,
+      "changed": 0
+    },
+    "candidate_reverse|sharp_role": {
+      "correct": 1545,
+      "changed": 0
+    },
+    "fact_reverse|first": {
+      "correct": 1209,
+      "changed": 1200
+    },
+    "fact_reverse|pool": {
+      "correct": 1141,
+      "changed": 102
+    },
+    "fact_reverse|sharp_role": {
+      "correct": 1561,
+      "changed": 81,
+      "newly_correct": 31,
+      "newly_wrong": 15,
+      "both_wrong": 35,
+      "changed_set": 81,
+      "competition": 81
+    }
+  },
+  "examples": {
+    "fact_reverse|both_wrong": {
+      "graph_id": "4d86201f-3e70-56e4-a7b7-5f2b87b519ed",
+      "seed": 1701,
+      "question": [
+        "第二",
+        "段",
+        "按",
+        "跟随",
+        "关系",
+        "找",
+        "一人",
+        "。",
+        "此前",
+        "从",
+        "许舟",
+        "开始",
+        "，",
+        "沿",
+        "协助",
+        "关系",
+        "追踪",
+        "。",
+        "应",
+        "先",
+        "使用",
+        "哪条",
+        "记录",
+        "？"
+      ],
+      "gold": 5,
+      "before": 1,
+      "after": 11,
+      "original_candidates": [
+        5,
+        1
+      ],
+      "modified_candidates": [
+        5,
+        11
+      ]
+    },
+    "fact_reverse|corrected": {
+      "graph_id": "140988d7-fc38-5ed4-94ee-a1bb1c7ab208",
+      "seed": 1701,
+      "question": [
+        "请",
+        "确定",
+        "第一步",
+        "的",
+        "记录",
+        "。",
+        "以",
+        "周晴",
+        "为",
+        "起点",
+        "，",
+        "开头",
+        "一段",
+        "追踪",
+        "邀请",
+        "关系",
+        "。",
+        "随后",
+        "按",
+        "跟随",
+        "关系",
+        "找",
+        "一人",
+        "。"
+      ],
+      "gold": 1,
+      "before": 7,
+      "after": 1,
+      "original_candidates": [
+        1,
+        7
+      ],
+      "modified_candidates": [
+        1,
+        11
+      ]
+    },
+    "fact_reverse|broken": {
+      "graph_id": "57b9252b-0adc-5d1e-ba52-7c2717471060",
+      "seed": 1701,
+      "question": [
+        "请",
+        "确定",
+        "第一步",
+        "的",
+        "记录",
+        "。",
+        "以",
+        "唐舟",
+        "为",
+        "起点",
+        "，",
+        "开头",
+        "一段",
+        "追踪",
+        "协助",
+        "关系",
+        "。",
+        "随后",
+        "按",
+        "推荐",
+        "关系",
+        "找",
+        "一人",
+        "。"
+      ],
+      "gold": 2,
+      "before": 2,
+      "after": 10,
+      "original_candidates": [
+        2,
+        4
+      ],
+      "modified_candidates": [
+        2,
+        10
+      ]
+    }
+  }
+}

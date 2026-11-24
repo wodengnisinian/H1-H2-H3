@@ -1,0 +1,31 @@
+{
+  "template": "最后 一段 追踪 {second} 关系 。 从 {anchor} 开始 ， 首先 沿 {first} 关系 找 一人 。 应 先 使用 哪条 记录 ？",
+  "graphs": 1000,
+  "seeds": [
+    1701,
+    2701,
+    3701
+  ],
+  "counts": {
+    "serial": {
+      "graph_seed": 3000,
+      "both_meanings_correct_first_step_described_first": 1514,
+      "both_meanings_correct_first_step_described_last": 2874,
+      "all_four_correct": 1509,
+      "matches_first_relation_mentioned_in_all_four": 0,
+      "matches_last_relation_mentioned_in_all_four": 0,
+      "constant_candidate_in_all_four": 121,
+      "selection_changed_on_clause_reordering": 1370
+    },
+    "pooled": {
+      "graph_seed": 3000,
+      "both_meanings_correct_first_step_described_first": 2279,
+      "both_meanings_correct_first_step_described_last": 2584,
+      "all_four_correct": 2089,
+      "matches_first_relation_mentioned_in_all_four": 0,
+      "matches_last_relation_mentioned_in_all_four": 0,
+      "constant_candidate_in_all_four": 214,
+      "selection_changed_on_clause_reordering": 709
+    }
+  }
+}

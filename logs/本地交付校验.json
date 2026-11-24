@@ -1,0 +1,12 @@
+{
+  "time": "2026-11-24T18:06:15.8153840+08:00",
+  "source": "/data/spiderweb-r3-20261124-1740/R3",
+  "archive_bytes": 82018254,
+  "archive_sha256": "AEFE15F906C4C2853E977D23B982A8B0C98DA617C97317E0F49084FA70180F17",
+  "server_files_verified": 495,
+  "experiment_hashes_verified": 364,
+  "rounds": 13,
+  "round_reports": 13,
+  "figure_sha256": "4CEF099ACAD746DC43647EF50041736F28DD44E5398382F5077BA0F3DE57C7B0",
+  "state": "completed"
+}

@@ -1,0 +1,40 @@
+{
+  "path_base": "R3",
+  "registered_sources": [
+    {
+      "path": "experiments/11-R09/snapshot/src/formal.py",
+      "sha256": "fd8d7bc3fabe9b4118de4734e8a5ca52450c23a4609932cafe60f7d28575ed2e",
+      "bytes": 8983
+    },
+    {
+      "path": "experiments/11-R09/snapshot/src/sharp_core.py",
+      "sha256": "f56c15184956476784b4922b453d4898178412e4c709f0f5dc632ab5dba86c54",
+      "bytes": 2512
+    },
+    {
+      "path": "experiments/11-R09/snapshot/src/role_core.py",
+      "sha256": "713909ab7c417c2b7f950938e291498c51651adfef3922a169067749a509ab8f",
+      "bytes": 4094
+    },
+    {
+      "path": "experiments/11-R09/snapshot/src/mech_core.py",
+      "sha256": "8a2ae2cf12883285ca2c42499210ba406cb5bdbe598964f6c192d4d5859f1795",
+      "bytes": 5486
+    },
+    {
+      "path": "experiments/11-R09/snapshot/run_loop.py",
+      "sha256": "96198e0b5031a22026e8d1ebbce81fd7db370ff5e5bfc9cfe2d5a7cd8c08db51",
+      "bytes": 7248
+    }
+  ],
+  "changes": {
+    "path": "analysis/diffs/11-R09.patch",
+    "sha256": "8636c1fd34a3ed63f72f5c4949ac542d5f22926df182275cb82f4469ac474410",
+    "bytes": 11593
+  },
+  "runtime_dependencies": {
+    "path": "logs/environment.json",
+    "sha256": "a081136648d5aa686556da339538cb3233194e414bb2ab458a85a1f22138ca52",
+    "bytes": 669
+  }
+}

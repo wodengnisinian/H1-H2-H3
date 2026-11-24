@@ -1,0 +1,33 @@
+{
+  "id": "R11",
+  "hypothesis": "当两种相反的计划同时出现，仅交换已采用与已放弃的状态词时，冻结读题器是否随实际采用的方案改变首跳？",
+  "criteria": "每对的图、词袋、候选顺序相同而正确边互异。检验神经模型实际输入碰撞，按图配对估计双正确率；适用范围及阈值来自 scope.json。仅使用开发集。",
+  "argv": [
+    "src/contrast_scope.py",
+    "--b13",
+    "{inputs}/b13",
+    "--prior",
+    "{inputs}/prior",
+    "--r07",
+    "{root}/experiments/07-R07/results",
+    "--candidate",
+    "{root}/experiments/08-R08/results",
+    "--module",
+    "role_core",
+    "--candidate",
+    "{root}/experiments/10-R12/results",
+    "--module",
+    "sharp_core",
+    "--out",
+    "{out}"
+  ],
+  "sources": [
+    "src/contrast_scope.py",
+    "src/sharp_core.py",
+    "src/role_core.py",
+    "src/mech_core.py",
+    "configs/scope.json"
+  ],
+  "receipt": "metrics.json",
+  "after": "总结同分布首跳、方案状态和必须读取后继证据的适用边界"
+}

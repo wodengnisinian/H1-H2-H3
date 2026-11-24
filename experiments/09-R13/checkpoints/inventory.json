@@ -1,0 +1,91 @@
+{
+  "path_base": "R3",
+  "produced": [
+    {
+      "path": "experiments/09-R13/results/training/checkpoint-1701.json",
+      "sha256": "e5582ee18680e332bf88bd2c6299bed9dd804c94902c81f6434e89cc9c183597",
+      "bytes": 1515
+    },
+    {
+      "path": "experiments/09-R13/results/training/checkpoint-2701.json",
+      "sha256": "cbe17056718d8f12dd8c63b3cbccc32c9c819237cb0c4f232842ed4466cd0a78",
+      "bytes": 1521
+    },
+    {
+      "path": "experiments/09-R13/results/training/checkpoint-3701.json",
+      "sha256": "daa6fac643c00f3a8cf5ee9b9bcbda5fc1ad5ad3197c0ade48151d9c99a3f1e9",
+      "bytes": 1519
+    }
+  ],
+  "upstream_result_checkpoints": [
+    {
+      "path": "experiments/08-R08/results/checkpoint-1701.json",
+      "sha256": "e5582ee18680e332bf88bd2c6299bed9dd804c94902c81f6434e89cc9c183597",
+      "bytes": 1515
+    },
+    {
+      "path": "experiments/08-R08/results/checkpoint-2701.json",
+      "sha256": "cbe17056718d8f12dd8c63b3cbccc32c9c819237cb0c4f232842ed4466cd0a78",
+      "bytes": 1521
+    },
+    {
+      "path": "experiments/08-R08/results/checkpoint-3701.json",
+      "sha256": "daa6fac643c00f3a8cf5ee9b9bcbda5fc1ad5ad3197c0ade48151d9c99a3f1e9",
+      "bytes": 1519
+    }
+  ],
+  "weights_available_within_declared_archive_prefixes": [
+    {
+      "member": "inputs/b13/inputs/server-run/controls/pooled/1701/best.pt",
+      "bytes": 822889,
+      "sha256": "e9115ffc1f49266ff49efa12f3a7470fee5047bea32621f0a3d481a066e52bc7"
+    },
+    {
+      "member": "inputs/b13/inputs/server-run/controls/pooled/2701/best.pt",
+      "bytes": 822185,
+      "sha256": "146b7c702f326cc9fb050fddc076850eacd7295abf12a6a0a7bbaddaee91bae9"
+    },
+    {
+      "member": "inputs/b13/inputs/server-run/controls/pooled/3701/best.pt",
+      "bytes": 823657,
+      "sha256": "462f8ef29c84f13036353588308d17ef2858c060839bdf198e64dcb46ba69f2b"
+    },
+    {
+      "member": "inputs/b13/inputs/server-run/development/serial/1701/best.pt",
+      "bytes": 570872,
+      "sha256": "703b3edfbf72b2213431c054e38dcad3300dd880f8443707b7119b9859a7728c"
+    },
+    {
+      "member": "inputs/b13/inputs/server-run/development/serial/2701/best.pt",
+      "bytes": 689016,
+      "sha256": "521911f7ec4b7679a4ba733754d3f87b890f0723596f075fd79b1a9b21cfa4bf"
+    },
+    {
+      "member": "inputs/b13/inputs/server-run/development/serial/3701/best.pt",
+      "bytes": 641720,
+      "sha256": "d5585978da8310b9e5452f0a3cd3a6a6be07559a91943816076d52d42895939b"
+    }
+  ],
+  "shared_archive_for_weights": {
+    "path": "datasets/归档输入.zip",
+    "sha256": "72c84de654b7b84ecadf32147d3255dc96ed8dc2befccf5b93b976e34c8f19ce",
+    "bytes": 10390056
+  },
+  "fitted_parameter_records": [
+    {
+      "path": "experiments/09-R13/results/training/parameters-1701.json",
+      "sha256": "5b5483916092e5d1e0949ac597e523a12c6d9385b3d8aa518986550f60cd000e",
+      "bytes": 8413
+    },
+    {
+      "path": "experiments/09-R13/results/training/parameters-2701.json",
+      "sha256": "86ee5be6bdf6f2efcb4e17cbbb30d8e5833d311a5e38ecf2dd411ef90fa5e48d",
+      "bytes": 8404
+    },
+    {
+      "path": "experiments/09-R13/results/training/parameters-3701.json",
+      "sha256": "145306da24c5ac3f39fa57fbd6b1078c2d5c61d66d63139d83e752b7cd141c13",
+      "bytes": 8410
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "utc": "2026-11-26T12:05:18.843435+00:00",
+  "out": "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\H1-H2-H3\\experiments\\R3-0021_位置分数H1H2H3_20261126\\results\\h3",
+  "module": "r21_module",
+  "checkpoints": "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\H1-H2-H3\\experiments\\R3-0021_位置分数H1H2H3_20261126\\checkpoints",
+  "sha256": {
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\H1-H2-H3\\experiments\\R3-0021_位置分数H1H2H3_20261126\\checkpoints\\pos_table-1701.json": "853a068a04b5dff428a01811b2a65866828bfa70ce567b1b47d6b21bedf64fb8",
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\H1-H2-H3\\experiments\\R3-0021_位置分数H1H2H3_20261126\\checkpoints\\pos_table-2701.json": "1b48961e6d890d41821af9673f78a3e149cc6710d5137698448820f500df06ff",
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\H1-H2-H3\\experiments\\R3-0021_位置分数H1H2H3_20261126\\checkpoints\\pos_table-3701.json": "6ab1049a8c83797a3f9ad4f212a70a329b20b1121d5a03dfcabd656a6ea51069",
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\H1-H2-H3\\experiments\\R3-0021_位置分数H1H2H3_20261126\\checkpoints\\pos_linear-1701.json": "04c7f9de6e7cc3315bc1a7fe37154bd2066756f73ec6d0c9b92ec2cc164cbb80",
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\H1-H2-H3\\experiments\\R3-0021_位置分数H1H2H3_20261126\\checkpoints\\pos_linear-2701.json": "a2923336a39cf73b69909343a869960a0c385ca3fba2683e6d61aa7c7344a872",
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\H1-H2-H3\\experiments\\R3-0021_位置分数H1H2H3_20261126\\checkpoints\\pos_linear-3701.json": "688b3286fa6f0629e867b0041bcc333366b070a32ff08dcac303b24c3345e1c9",
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\H1-H2-H3\\experiments\\R3-0021_位置分数H1H2H3_20261126\\checkpoints\\pos_only-1701.json": "ff757498e87db41f135c68e8c60d9953eec646d4ca8f8de2453bbdf8391ca4dd",
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\H1-H2-H3\\experiments\\R3-0021_位置分数H1H2H3_20261126\\checkpoints\\pos_only-2701.json": "be46746d43aa6ab7109723562b714e64465232f91eded017ff57cb27fd7cf9ae",
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\H1-H2-H3\\experiments\\R3-0021_位置分数H1H2H3_20261126\\checkpoints\\pos_only-3701.json": "f1a88bd60832fbc14cc1430d6fcca7814b0a7a2b763fc20c0b2f942f0411a484",
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\_r18_inputs\\inputs\\prior\\code\\model.py": "f85636ffa19443880e48d953c7d552af3d6bda5238c60ad424f445202c2c2b0f",
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\_r18_inputs\\inputs\\prior\\code\\evaluate.py": "9fc47f0c9ce644eb31bca0747012784340b62b0b85ddc045e83adaaca9518d90",
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\_r18_inputs\\inputs\\b13\\冻结清单.json": "12eedcf17da956ed9bea234e412dd93a3d6f21c11ea5d102f12a8770ab26e485",
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\_r18_inputs\\inputs\\b13\\inputs\\source\\generate.py": "c6d8eaa5081868946bc24969ddeed4450d6685ae9bd782a3cdb70dd43717b46f",
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\H1-H2-H3\\configs\\formal_templates.json": "40f0dee7c8f11eb6027fed054f0c010b57dced6f42caa61971e09596daf4cddc",
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\H1-H2-H3\\experiments\\R3-0021_位置分数H1H2H3_20261126\\code\\r21_core.py": "1dec739d8f21a3f7075274160d7843ce7ad94ad44a8e370b0fdddc2c7451d54d",
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\H1-H2-H3\\experiments\\R3-0021_位置分数H1H2H3_20261126\\code\\r21_evaluate.py": "c6efc856af6be2d2b422dd9b03216e863be691cf24e8f4a53254e1981bc0ba26",
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\H1-H2-H3\\experiments\\R3-0021_位置分数H1H2H3_20261126\\code\\r21_h1.py": "93a65ebee2c56a85fb4b3340a14a7dbe9f337f6ab6585ecb62968716c84c28a5",
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\H1-H2-H3\\experiments\\R3-0021_位置分数H1H2H3_20261126\\code\\r21_h3.py": "c127e55bbc29d3202e7319d429846fb6677093959ef86f99a74a5ebba73c30cb",
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\H1-H2-H3\\experiments\\R3-0021_位置分数H1H2H3_20261126\\code\\r21_module.py": "cda4c1f9185acc7c447d8fd4ac2786de5f4c465493126e77ad14a83876373a81",
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\H1-H2-H3\\experiments\\R3-0021_位置分数H1H2H3_20261126\\code\\r21_pos_dev.py": "94a1312e86f1f62d0a624946aaa1470389f8a21babd9693beda9a155a364cd78"
+  }
+}

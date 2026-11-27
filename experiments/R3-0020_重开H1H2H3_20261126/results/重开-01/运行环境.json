@@ -1,0 +1,78 @@
+{
+  "started": "2026-11-26T19:48:11+08:00",
+  "args": [
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\_r19_stage\\prior\\code\\run.py",
+    "--out",
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\_r19_stage\\prior\\runs\\重开-01",
+    "--r2",
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\_r19_stage\\R2实验"
+  ],
+  "python": "3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.28020-SP0",
+  "torch": "2.13.0+cpu",
+  "numpy": "2.5.0",
+  "cpu": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+  "cpu_threads_per_model": 1,
+  "archive": "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\_r19_stage\\R2实验\\13-R2方向排序一次性验证-20261120-01a1f1b2",
+  "b16": "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\_r19_stage\\R2实验\\16-R2循环交接训练-20261120-01a1f1b2",
+  "protocol": {
+    "title": "SpiderWeb 共享首步词权重本地开发实验",
+    "version": 1,
+    "repository": "https://github.com/wodengnisinian/spiderweb-research",
+    "revision": "9e19abe1ac1eeed98e854a8543174c166ba049bc",
+    "stage": "development",
+    "seeds": [
+      1701,
+      2701,
+      3701
+    ],
+    "device": "cpu",
+    "torch_threads": 1,
+    "optimization": {
+      "epochs": 12,
+      "lr": 0.003,
+      "batch_size": 128,
+      "optimizer": "Adam",
+      "initial_w": 0,
+      "dimension": 64,
+      "selection": "固定采用第12轮，以训练集门控打开且正确记录入围的题学习 w。冻结 B13 的编码器、投影及门控。所有比对关闭第二层。"
+    },
+    "feature_batch_size": 64,
+    "datasets": {
+      "train": "B16 所附历史 train.jsonl 全部 12000 张图",
+      "archive_dev": "历史开发 1800 张图，原编码器曾据此选模",
+      "fresh_dev": "另生成每类 200 张开发图，抽样种子 20261124，排除历史人员集合",
+      "unit": "图。每图 12 条事实，同一有序 Top-2；每种子在原问、改写及合格图四问上比较。"
+    },
+    "metrics": {
+      "primary": "首跳 Top-1，三种子先在图内平均，三题型等权。正确边未入围计错。",
+      "quartet": "两种语义顺序 × 两种等义问法，同一图、种子的四问均正确才计1。",
+      "baselines": [
+        "first",
+        "pool"
+      ],
+      "ablations": [
+        "direction",
+        "old",
+        "uniform"
+      ],
+      "bootstrap_draws": 10000,
+      "bootstrap_seed": 619482,
+      "lower_bound_one_based_rank": 500,
+      "h3": "对两个基线的增益各至少5个百分点且对应单侧95%下界各大于0。开发计算仅诊断。",
+      "development_screen": "对历史开发和新开发的原问与改写各自比较，三种子、三题型等权的 learned 准确率均须严格高于 direction、old、uniform。此处将论文的“稳定优于”操作化。若满足则冻结并另抽全新图正式验收。"
+    },
+    "tie_break": "总分相同取原候选首位",
+    "checkpoint_selection": "固定训练预算，开发和正式验收均不参与 w 更新，不选择最佳轮次。"
+  },
+  "code_sha256": {
+    "check_model.py": "6f8e0b79e34408ccb8509e9188a288dbd0bae39c3f49dd8d425bbfffc3a7b651",
+    "data_views.py": "63e3a58286f0fc8af0908d794a27378f167e6c72d92eb4a424967345c380f8b9",
+    "evaluate.py": "9fc47f0c9ce644eb31bca0747012784340b62b0b85ddc045e83adaaca9518d90",
+    "model.py": "f85636ffa19443880e48d953c7d552af3d6bda5238c60ad424f445202c2c2b0f",
+    "plot_results.py": "ee9010ae1c0cc9b1ca104cc4b3f739d94ada3bdfba8e1a083f863da98509b0b1",
+    "run.py": "70ea09a37faab05402ae57814a1656b3ea48664cd40af0840b003270de6d34e0",
+    "verify_results.py": "2b22dc52bb5b72fc1235eaf29c086e03e358e2461e5d9e4b433ee6774426a73d"
+  },
+  "protocol_sha256": "22c42d26fe59b8bc2a16c13ed5b5a7a9b737263b3dc02431d2f21a6e432904ce"
+}

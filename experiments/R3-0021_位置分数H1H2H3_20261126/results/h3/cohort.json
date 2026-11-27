@@ -1,0 +1,18 @@
+{
+  "features_sha256": "df33bdfefb5a83e0513329a7e2ea0e1ddda3786de490428e17dc195fddcdb173",
+  "labels_sha256": "f8c5c8ea9f5c9ccc043d995707bb53892cffa27b414c143d01545e1d68d66818",
+  "graphs": 3000,
+  "per_stratum": 1000,
+  "utc": "2026-11-26T12:05:29.120552+00:00",
+  "quartet_graphs": 1000,
+  "index_range": [
+    65000000,
+    70000000
+  ],
+  "excluded_populations": [
+    "b13-cohort",
+    "fresh-dev",
+    "r16-dev-cohort",
+    "r09-formal-cohort"
+  ]
+}

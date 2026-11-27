@@ -1,0 +1,42 @@
+{
+  "id": "R18",
+  "title": "给论文原公式的每个题面词位增加可学习位置分数的改进实验",
+  "created_utc": "2026-11-26T04:10:00+00:00",
+  "version": "original_position_scores",
+  "hypothesis": "论文原始共享词权重的 H1 读出只依赖 w·h_j，缺少位置信息。在保持编码器冻结、训练数据、候选损失与优化预算不变的前提下，把逐词打分改为 t_j = w·h_j + s_j，其中 s_j 是题面第 j 个词位的可学习位置分数，能否让原公式版本在 R16/R17 冻结的 600 图开发队列上通过 H1 门槛并保持 H2 增益？",
+  "criteria": "沿用 R16/R17 冻结判据：H1 主指标为按关系求和的位置权重读出准确率，要求整体 ≥0.80 且相对词面顺序基线的配对单侧 95% 下界 >0；H2 要求相对全有效词位均匀权重至少提高 0.02 且单侧 95% 下界 >0。三种子 1701/2701/3701 先在图内平均，再按题型等权；分题型按图配对 Bootstrap 10,000 次，单侧下界取排序第 500 位。",
+  "primary_variant": "pos_table",
+  "diagnostics": [
+    "pos_linear",
+    "pos_only"
+  ],
+  "controls": [
+    "first_mentioned（词面顺序基线）",
+    "uniform（全有效词位均匀）",
+    "uniform_mentions（关系词位均匀）",
+    "learned（冻结的论文原公式权重）",
+    "random（同范数随机向量）",
+    "shuffled（逐题打乱有效词位）",
+    "pool / first（候选排序基线）"
+  ],
+  "training": {
+    "data": "B16 历史 train.jsonl 全部 12,000 张图，经 build_views 重建后取门控开启且金标入围的 8,000 条",
+    "epochs": 12,
+    "lr": 0.003,
+    "batch_size": 128,
+    "optimizer": "Adam（默认超参数）",
+    "initial": "w 与 s 均零初始化",
+    "loss": "候选负对数似然，与冻结权重训练相同",
+    "pos_table": "s 为长度 L 的绝对位置表，L 覆盖训练与开发队列的最大题面长度，超表位置记 0 分",
+    "pos_linear": "s_j = a*j + b，仅 2 个参数",
+    "pos_only": "w 冻结为零，仅训练位置表 s",
+    "freeze": "B13 编码器、投影、门控、候选规则与评估队列全部冻结；不在本队列上做任何模型选择"
+  },
+  "freeze": {
+    "cohort": "复用 R16 冻结的 600 图开发队列（SHA-256 与 R16/R17 一致），不重新抽样",
+    "seeds": [1701, 2701, 3701],
+    "bootstrap": "NumPy PCG64 种子 2026112417，按题型分层、以图为单位配对重抽 10,000 次",
+    "thresholds_frozen_before_run": true
+  },
+  "stop": "以 pos_table 为预注册主变体报告 H1/H2 判定；pos_linear 与 pos_only 仅作诊断，不参与任何事后主变体切换。独立 H3 的正式开封额度已用尽，本轮回合只做开发评测。"
+}

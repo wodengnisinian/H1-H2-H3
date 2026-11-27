@@ -1,0 +1,43 @@
+{
+  "id": "R31",
+  "title": "三分量混合：稀疏分量 + 冻结历史权重分量",
+  "created_utc": "2026-11-27T05:15:00+00:00",
+  "motivation": "R29/R30 结论：H1 能力绑定零初始化稀疏读出（mix 80.04%），泛化绑定历史 learned w（winit/learned 未见句式 43-44%），同一参数向量无法兼得。本轮把两者作为独立分量组合：p = λ1·sparsemax(w_s·h) + λ2·entmax(1.5)(w_e·h) + λ3·softmax(learned_w·h)（均限关系词位），w_s/w_e 零初始化训练，learned 分量冻结，λ 可学习。",
+  "hard_constraint": "延续 R26 用户要求：不得预先写死任何时序/标记字词表（先、再、把、被等）作为输入特征。",
+  "variants": {
+    "mix3": {
+      "formula": "三分量混合，λ=softmax(参数)，初始 [0,0,0.5]，w_s/w_e 零初始化，learned 冻结（主变体）"
+    },
+    "mix3_lam0": {
+      "formula": "同 mix3，λ 初始 [0,0,0]（等权起步，诊断）"
+    },
+    "mix3_learned": {
+      "formula": "同 mix3，λ 初始 [−2,−2,2]（先学后稀疏，诊断）"
+    },
+    "mix3_tau": {
+      "formula": "同 mix3，另加共享可学习温度 τ（诊断）"
+    }
+  },
+  "controls": ["uniform", "uniform_mentions", "first_mentioned", "learned", "learned_rel", "relmask_cand", "entmax15", "sparsemax", "mix", "random", "shuffled", "pool", "first"],
+  "continuity_checks": {
+    "mix": "复现 R29 的 80.04% / 77.03%",
+    "sparsemax": "81.19%",
+    "learned": "70.16%"
+  },
+  "training": {
+    "data": "B16 历史 train.jsonl 12,000 图，门控开启且金标入围 8,000 条",
+    "epochs": 12, "lr": 0.003, "batch_size": 128, "optimizer": "Adam", "seeds": [1701, 2701, 3701]
+  },
+  "evaluation": {
+    "cohort": "R16/R17 冻结 600 图开发队列（SHA-256 cf7d3ba2…）",
+    "h1": "≥0.80 且相对 first_mentioned 单侧 95% 下界 >0",
+    "h2": "Top-1 相对均匀权重 ≥+0.02 且下界 >0",
+    "primary": "mix3",
+    "generalization_watch": "unseen_template H1 逐项报告；入选要求 ≥ 35%"
+  },
+  "decision_rule": {
+    "dev_pass": "主变体 H1/H2 双过且 unseen_template H1 ≥ 35% 时冻结代码与权重，进入新 H3 验收准备（新独立队列、一次性开封、用户授权，按 R24 流程）；",
+    "dev_fail": "如实记录，下一轮沿指标最优方向继续"
+  },
+  "environment": "tdklgrqctvo9g2techo.funhpc.com；/data/miniconda/envs/torch；Python 3.12.13 / PyTorch 2.10.0+cu128"
+}

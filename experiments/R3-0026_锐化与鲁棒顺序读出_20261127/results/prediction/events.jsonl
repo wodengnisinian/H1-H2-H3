@@ -1,0 +1,18 @@
+{"utc": "2026-11-27T02:44:22.748610+00:00", "event": "start"}
+{"utc": "2026-11-27T02:44:22.831698+00:00", "event": "inputs_verified", "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad", "rows": 2600, "graphs": 600}
+{"utc": "2026-11-27T02:44:26.627864+00:00", "event": "seed_started", "seed": 1701}
+{"utc": "2026-11-27T02:44:39.335481+00:00", "event": "trained", "seed": 1701, "variant": "relmask_tau", "final_nll": 0.0017251685159280895, "tau": 1.6739805936813354}
+{"utc": "2026-11-27T02:45:05.939023+00:00", "event": "trained", "seed": 1701, "variant": "relpair_role_tau", "final_loss": 0.00041044731927104296, "tau": 1.6673016548156738}
+{"utc": "2026-11-27T02:45:07.785124+00:00", "event": "trained", "seed": 1701, "variant": "relmask_gap", "final_nll": 0.001778142461553216}
+{"utc": "2026-11-27T02:45:12.244524+00:00", "event": "seed_saved", "seed": 1701, "prediction_rows": 36400}
+{"utc": "2026-11-27T02:45:12.244642+00:00", "event": "seed_started", "seed": 2701}
+{"utc": "2026-11-27T02:45:24.863950+00:00", "event": "trained", "seed": 2701, "variant": "relmask_tau", "final_nll": 0.0022314044330269097, "tau": 2.0295205116271973}
+{"utc": "2026-11-27T02:45:51.453563+00:00", "event": "trained", "seed": 2701, "variant": "relpair_role_tau", "final_loss": 0.0007262879856862128, "tau": 1.979731559753418}
+{"utc": "2026-11-27T02:45:53.321589+00:00", "event": "trained", "seed": 2701, "variant": "relmask_gap", "final_nll": 0.002397286273539066}
+{"utc": "2026-11-27T02:45:57.824478+00:00", "event": "seed_saved", "seed": 2701, "prediction_rows": 36400}
+{"utc": "2026-11-27T02:45:57.824598+00:00", "event": "seed_started", "seed": 3701}
+{"utc": "2026-11-27T02:46:10.400868+00:00", "event": "trained", "seed": 3701, "variant": "relmask_tau", "final_nll": 0.0014358599614351989, "tau": 1.7457879781723022}
+{"utc": "2026-11-27T02:46:36.922319+00:00", "event": "trained", "seed": 3701, "variant": "relpair_role_tau", "final_loss": 0.00043473677104339, "tau": 1.67548406124115}
+{"utc": "2026-11-27T02:46:38.757796+00:00", "event": "trained", "seed": 3701, "variant": "relmask_gap", "final_nll": 0.001467696857638657}
+{"utc": "2026-11-27T02:46:43.366594+00:00", "event": "seed_saved", "seed": 3701, "prediction_rows": 36400}
+{"utc": "2026-11-27T02:46:43.382829+00:00", "event": "complete", "predictions_sha256": "9813f117c3d432843d03c49428ab4cefc9cca2b46c6110255fa5ac716f3dd6cf"}

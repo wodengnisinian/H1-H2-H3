@@ -1,0 +1,22 @@
+{
+  "features_sha256": "d753f65b5044874ab02920d362b1e7e0adedc24d5905080efb528912b0def649",
+  "labels_sha256": "0289bcb6cc15fac57cab9ed826fac80d36d68a8d93d909e306f018865a6338fb",
+  "graphs": 3000,
+  "per_stratum": 1000,
+  "utc": "2026-11-27T06:29:22.489965+00:00",
+  "quartet_graphs": 1000,
+  "index_range": [
+    45000000,
+    50000000
+  ],
+  "excluded_populations": [
+    "b13-cohort",
+    "fresh-dev",
+    "r16-dev-cohort",
+    "r09-formal-cohort",
+    "r21-formal-cohort",
+    "r24-formal-cohort",
+    "r42-formal-cohort",
+    "r43-formal-cohort"
+  ]
+}

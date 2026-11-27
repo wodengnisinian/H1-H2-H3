@@ -1,0 +1,15 @@
+{"utc": "2026-11-27T00:23:12.163111+00:00", "event": "start"}
+{"utc": "2026-11-27T00:23:12.256473+00:00", "event": "inputs_verified", "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad", "rows": 2600, "graphs": 600}
+{"utc": "2026-11-27T00:23:16.533163+00:00", "event": "seed_started", "seed": 1701}
+{"utc": "2026-11-27T00:23:26.648977+00:00", "event": "trained", "seed": 1701, "mode": "cand", "final_nll": 0.001778142461553216, "final_w_norm": 1.8723732233047485}
+{"utc": "2026-11-27T00:23:28.012335+00:00", "event": "trained", "seed": 1701, "mode": "role", "final_nll": 0.0017418153453618288, "final_w_norm": 1.8729920387268066}
+{"utc": "2026-11-27T00:23:30.870963+00:00", "event": "seed_saved", "seed": 1701, "prediction_rows": 26000}
+{"utc": "2026-11-27T00:23:30.871185+00:00", "event": "seed_started", "seed": 2701}
+{"utc": "2026-11-27T00:23:40.717946+00:00", "event": "trained", "seed": 2701, "mode": "cand", "final_nll": 0.0023972862884402276, "final_w_norm": 2.4623985290527344}
+{"utc": "2026-11-27T00:23:42.035683+00:00", "event": "trained", "seed": 2701, "mode": "role", "final_nll": 0.004315955078229308, "final_w_norm": 2.3422701358795166}
+{"utc": "2026-11-27T00:23:44.824692+00:00", "event": "seed_saved", "seed": 2701, "prediction_rows": 26000}
+{"utc": "2026-11-27T00:23:44.824803+00:00", "event": "seed_started", "seed": 3701}
+{"utc": "2026-11-27T00:23:54.610312+00:00", "event": "trained", "seed": 3701, "mode": "cand", "final_nll": 0.001467696857638657, "final_w_norm": 1.8526960611343384}
+{"utc": "2026-11-27T00:23:55.927443+00:00", "event": "trained", "seed": 3701, "mode": "role", "final_nll": 0.0018724664282053708, "final_w_norm": 1.8616372346878052}
+{"utc": "2026-11-27T00:23:58.756129+00:00", "event": "seed_saved", "seed": 3701, "prediction_rows": 26000}
+{"utc": "2026-11-27T00:23:58.769407+00:00", "event": "complete", "predictions_sha256": "8a00ce1129082061b8ba810ac581b38e173e188a00965de1014f78d869d6e2db"}

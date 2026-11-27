@@ -1,0 +1,49 @@
+{
+  "id": "R27",
+  "title": "entmax 组合：角色监督、多任务、α 扫参与对比归一化",
+  "created_utc": "2026-11-27T03:10:00+00:00",
+  "motivation": "R26 证明：锐化（温度/entmax/硬选择）未把 H1 推过 80%，entmax(α=1.5) 79.41% 为词典无关方向最佳；角色监督在 R08（100%）与 R22（79.02%）均强于候选损失；主变体跨种子波动大（92.67/72.31/70.14）。本轮把 entmax 与角色监督、多任务损失、α 扫参（1.2/2.0）、词典无关对比归一化组合。",
+  "hard_constraint": "延续 R26 用户要求：不得预先写死任何时序/标记字词表（先、再、把、被等）作为输入特征。",
+  "variants": {
+    "entmax_role": {
+      "formula": "p = α-entmax(t)，α=1.5，t_j = w·h_j 仅关系词位置；损失 −log Σ_{j∈gold 关系} p_j（主变体）"
+    },
+    "entmax_multi": {
+      "formula": "同 entmax(1.5)，损失 = 0.5·候选 NLL + 0.5·角色损失（诊断）"
+    },
+    "entmax_tau": {
+      "formula": "p = α-entmax(τ·t)，α=1.5，τ 可学习（诊断，锐化+稀疏化叠加）"
+    },
+    "entmax_alpha12": {
+      "formula": "α=1.2，候选损失（诊断，更接近 softmax）"
+    },
+    "entmax_alpha20": {
+      "formula": "α=2.0（sparsemax），候选损失（诊断，更接近 argmax）"
+    },
+    "entmax_contrast": {
+      "formula": "t_j = w·(h_j − q̄)，q̄ 为全有效词位隐向量均值（词典无关对比归一化），α=1.5，候选损失（诊断）"
+    }
+  },
+  "controls": ["uniform", "uniform_mentions", "first_mentioned", "learned", "relmask_cand", "entmax15", "random", "shuffled", "pool", "first"],
+  "continuity_checks": {
+    "relmask_cand": "应复现 R22 的 78.61%",
+    "entmax15": "应复现 R26 的 79.41%",
+    "learned": "冻结 w 读出 70.16%"
+  },
+  "training": {
+    "data": "B16 历史 train.jsonl 12,000 图，门控开启且金标入围 8,000 条",
+    "epochs": 12, "lr": 0.003, "batch_size": 128, "optimizer": "Adam", "seeds": [1701, 2701, 3701]
+  },
+  "evaluation": {
+    "cohort": "R16/R17 冻结 600 图开发队列（SHA-256 cf7d3ba2…）",
+    "h1": "≥0.80 且相对 first_mentioned 单侧 95% 下界 >0",
+    "h2": "Top-1 相对均匀权重 ≥+0.02 且下界 >0",
+    "primary": "entmax_role",
+    "generalization_watch": "unseen_template H1 逐项报告；历史参考 learned 43.44%、entmax15 35.67%"
+  },
+  "decision_rule": {
+    "dev_pass": "主变体 H1/H2 双过且 unseen_template H1 ≥ 40% 时冻结进入新 H3 验收准备；",
+    "dev_fail": "如实记录，下一轮沿指标最优方向继续"
+  },
+  "environment": "tdklgrqctvo9g2techo.funhpc.com；/data/miniconda/envs/torch；Python 3.12.13 / PyTorch 2.10.0+cu128"
+}

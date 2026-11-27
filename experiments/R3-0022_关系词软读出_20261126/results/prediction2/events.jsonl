@@ -1,0 +1,15 @@
+{"utc": "2026-11-26T12:26:19.931126+00:00", "event": "start"}
+{"utc": "2026-11-26T12:26:20.066923+00:00", "event": "inputs_verified", "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad", "rows": 2600, "graphs": 600}
+{"utc": "2026-11-26T12:26:26.037649+00:00", "event": "seed_started", "seed": 1701}
+{"utc": "2026-11-26T12:26:34.202748+00:00", "event": "trained", "seed": 1701, "mode": "cand", "final_nll": 0.0017781423460692168, "final_w_norm": 1.872373104095459}
+{"utc": "2026-11-26T12:26:35.100167+00:00", "event": "trained", "seed": 1701, "mode": "role", "final_nll": 0.0017418153472244739, "final_w_norm": 1.8729920387268066}
+{"utc": "2026-11-26T12:26:37.486579+00:00", "event": "seed_saved", "seed": 1701, "prediction_rows": 26000}
+{"utc": "2026-11-26T12:26:37.487193+00:00", "event": "seed_started", "seed": 2701}
+{"utc": "2026-11-26T12:26:46.493427+00:00", "event": "trained", "seed": 2701, "mode": "cand", "final_nll": 0.0023972863368690012, "final_w_norm": 2.4623985290527344}
+{"utc": "2026-11-26T12:26:47.319398+00:00", "event": "trained", "seed": 2701, "mode": "role", "final_nll": 0.004315955171361565, "final_w_norm": 2.3422703742980957}
+{"utc": "2026-11-26T12:26:49.589607+00:00", "event": "seed_saved", "seed": 2701, "prediction_rows": 26000}
+{"utc": "2026-11-26T12:26:49.590410+00:00", "event": "seed_started", "seed": 3701}
+{"utc": "2026-11-26T12:26:55.818022+00:00", "event": "trained", "seed": 3701, "mode": "cand", "final_nll": 0.0014676967645063997, "final_w_norm": 1.8526960611343384}
+{"utc": "2026-11-26T12:26:56.700226+00:00", "event": "trained", "seed": 3701, "mode": "role", "final_nll": 0.0018724662344902754, "final_w_norm": 1.8616372346878052}
+{"utc": "2026-11-26T12:26:59.002404+00:00", "event": "seed_saved", "seed": 3701, "prediction_rows": 26000}
+{"utc": "2026-11-26T12:26:59.029298+00:00", "event": "complete", "predictions_sha256": "3089d406ac85a57b262564633a0e152df05356067f0528df985ec1f6a9cb0c54"}

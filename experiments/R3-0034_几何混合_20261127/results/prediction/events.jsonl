@@ -1,0 +1,12 @@
+{"utc": "2026-11-27T04:37:22.566544+00:00", "event": "start"}
+{"utc": "2026-11-27T04:37:22.649221+00:00", "event": "inputs_verified", "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad", "rows": 2600, "graphs": 600}
+{"utc": "2026-11-27T04:37:26.919468+00:00", "event": "seed_started", "seed": 1701}
+{"utc": "2026-11-27T04:38:33.212302+00:00", "event": "trained", "seed": 1701, "geo2r_lam": 0.4775259792804718, "geo2r_tau": 1.1382724046707153}
+{"utc": "2026-11-27T04:38:37.879342+00:00", "event": "seed_saved", "seed": 1701, "prediction_rows": 41600}
+{"utc": "2026-11-27T04:38:37.879462+00:00", "event": "seed_started", "seed": 2701}
+{"utc": "2026-11-27T04:39:41.352102+00:00", "event": "trained", "seed": 2701, "geo2r_lam": 0.46167808771133423, "geo2r_tau": 1.3465790748596191}
+{"utc": "2026-11-27T04:39:45.152372+00:00", "event": "seed_saved", "seed": 2701, "prediction_rows": 41600}
+{"utc": "2026-11-27T04:39:45.152487+00:00", "event": "seed_started", "seed": 3701}
+{"utc": "2026-11-27T04:40:48.229104+00:00", "event": "trained", "seed": 3701, "geo2r_lam": 0.47610628604888916, "geo2r_tau": 1.1770843267440796}
+{"utc": "2026-11-27T04:40:52.090830+00:00", "event": "seed_saved", "seed": 3701, "prediction_rows": 41600}
+{"utc": "2026-11-27T04:40:52.108194+00:00", "event": "complete", "predictions_sha256": "60b35558098e6605313c13fdc67b67a3b73ea021ca3529b5e07ab48a049cfea6"}

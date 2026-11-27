@@ -1,0 +1,38 @@
+{
+  "id": "R18",
+  "reference": "/data/spiderweb-r3-20261124-1740/R3",
+  "inputs": "/data/spiderweb-r3-20261124-1740/inputs",
+  "cohort_source": "/data/spiderweb-shared-protocol-20261124-r16/data/cohort/cohort.jsonl.gz",
+  "steps": [
+    [
+      "{py}",
+      "-B",
+      "-u",
+      "{code}/r18_pos_score.py",
+      "--b13",
+      "{inputs}/b13",
+      "--b16",
+      "{inputs}/b16",
+      "--prior",
+      "{inputs}/prior",
+      "--cohort",
+      "{cohort}",
+      "--out",
+      "{results}/prediction"
+    ],
+    [
+      "{py}",
+      "-B",
+      "-u",
+      "{code}/r18_stats.py",
+      "--cohort",
+      "{cohort}",
+      "--predictions",
+      "{results}/prediction/predictions.jsonl.gz",
+      "--primary",
+      "pos_table",
+      "--out",
+      "{results}/stats"
+    ]
+  ]
+}

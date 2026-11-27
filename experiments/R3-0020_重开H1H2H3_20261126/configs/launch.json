@@ -1,0 +1,10 @@
+{
+  "id": "R20",
+  "stage_a": "python -B <prior>/code/run.py --out <prior>/runs/重开-01 --r2 <R2实验>",
+  "stage_b": [
+    "python -B experiments/02-R02/code/src/legacy/第13项逐层复核.py <b13>",
+    "python -B experiments/02-R02/code/src/legacy/第13项首层分项复核.py <b13>",
+    "python -B experiments/02-R02/code/src/legacy/第13项关系换序复核.py <b13>",
+    "python -B experiments/02-R02/code/src/legacy/第13项语义与分句顺序复核.py <b13>"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "id": "R24",
+  "title": "cue 变体的全新 H3 独立验收（用户授权，一次性开封）",
+  "created_utc": "2026-11-27T01:30:00+00:00",
+  "hypothesis": "R23 的 cue 变体（关系词掩码 + 一维时序符号线索）在 R16/R17 冻结 600 图队列上通过 H1（82.59%）与 H2（76.88%）开发门槛。按补充协议冻结其代码、权重、候选规则与问法后，在从未参与设计的新图上检验相对直接首位与池化的首跳增益。",
+  "candidate": "cue：t_j = w·h_j + s·c_j，softmax 仅限两个关系词位置；c_j 为当前分句内最近时序标记的符号并按距离衰减（先类 +1、后类 −1，遇标点重置）；64 维 w + 标量 s；候选损失训练 12 轮（R23 冻结权重）",
+  "authorization": "用户在 2026-11-27 对话中明确授权本次一次性正式验收",
+  "cohort": {
+    "graphs": 3000,
+    "per_stratum": {"relation_order": 1000, "role_reversal": 1000, "competing_chain": 1000},
+    "index_range": [50000000, 55000000],
+    "excluded_populations": ["b13 历史 3,000 图", "fresh_dev 600 图", "R16 冻结开发队列 600 图", "R09 正式队列 4,800 图", "R21 正式队列 3,000 图", "本队列已抽取集合"],
+    "templates": "configs/formal_templates.json（R09 冻结问法），先校验不与历史模板重复且全部在冻结词表内",
+    "entropy": "freeze 后 secrets.token_hex(32) 作为抽图随机种子",
+    "seeds": [1701, 2701, 3701]
+  },
+  "acceptance": {
+    "primary": "原问 Top-1；图内平均三种子，三题型等权；题型内按图配对重抽 10,000 次，第 500 个排序值作单侧 95% 下界",
+    "thresholds": "相对直接首位与相对池化各自增益 ≥0.05 且对应下界 >0，两项同时满足才通过",
+    "secondary": "改写命中率、同图四问全对率（可逆图）、候选覆盖率同时报告",
+    "openings": "1 次；开封后不复测，抽图熵、冻结清单与开封收据保留"
+  },
+  "environment": "tdklgrqctvo9g2techo.funhpc.com；/data/miniconda/envs/torch；Python 3.12.13 / PyTorch 2.10.0+cu128 / NumPy 1.26.4"
+}

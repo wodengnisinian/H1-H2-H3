@@ -1,0 +1,46 @@
+{
+  "id": "R35",
+  "title": "λ3 细扫 + 角色损失混合：抬升稀疏-泛化前沿",
+  "created_utc": "2026-11-27T07:40:00+00:00",
+  "motivation": "R34 的 lin3_lam15（λ3=0.15）达到 (H1 79.23%, 未见 37.33%)，是当前离 (80%, 35%) 最近的点；纯 λ 前沿斜率约为 uH1 +0.35pp / H1 −0.063pp 每 0.01 λ3，无法同时越过两门槛。本轮细扫 λ3∈{0.08,0.10,0.12}，并在候选 NLL 上叠加 β=0.3 的角色损失（−log Σ_{gold} p_j），直接提升混合分布对 H1 目标的贴合。",
+  "hard_constraint": "延续 R26 用户要求：不得预先写死任何时序/标记字词表（先、再、把、被等）作为输入特征。",
+  "variants": {
+    "lin3_lam10_role": {
+      "formula": "线性三分量（sparsemax + rolew + learned_softmax，关系词位），λ3 固定 0.10，λ1/λ2 可学习，损失 = 候选 NLL + 0.3·(−log Σ_{gold} p_j)（主变体）"
+    },
+    "lin3_lam08_role": {
+      "formula": "同主变体，λ3=0.08（诊断）"
+    },
+    "lin3_lam12_role": {
+      "formula": "同主变体，λ3=0.12（诊断）"
+    },
+    "lin3_lam10": {
+      "formula": "λ3=0.10，纯候选损失（对照）"
+    },
+    "mix2r_role": {
+      "formula": "二分量（λ3=0），损失 = 候选 NLL + 0.3·角色损失（诊断）"
+    }
+  },
+  "controls": ["uniform", "uniform_mentions", "first_mentioned", "learned", "relmask_cand", "entmax15", "sparsemax", "rolew_sparse", "mix2r", "lin3_lam15", "random", "shuffled", "pool", "first"],
+  "continuity_checks": {
+    "mix2r": "80.17%",
+    "lin3_lam15": "79.23% / 未见 37.33%（R34）",
+    "rolew_sparse": "79.02%"
+  },
+  "training": {
+    "data": "B16 历史 train.jsonl 12,000 图，门控开启且金标入围 8,000 条（非增广）",
+    "epochs": 12, "lr": 0.003, "batch_size": 128, "optimizer": "Adam", "seeds": [1701, 2701, 3701]
+  },
+  "evaluation": {
+    "cohort": "R16/R17 冻结 600 图开发队列（SHA-256 cf7d3ba2…）",
+    "h1": "≥0.80 且相对 first_mentioned 单侧 95% 下界 >0",
+    "h2": "Top-1 相对均匀权重 ≥+0.02 且下界 >0",
+    "primary": "lin3_lam10_role",
+    "generalization_watch": "unseen_template H1 逐项报告；入选要求 ≥ 35%"
+  },
+  "decision_rule": {
+    "dev_pass": "主变体 H1/H2 双过且 unseen_template H1 ≥ 35% 时冻结代码与权重，进入新 H3 验收准备（新独立队列、一次性开封、用户授权，按 R24 流程）；",
+    "dev_fail": "如实记录，下一轮沿指标最优方向继续"
+  },
+  "environment": "tdklgrqctvo9g2techo.funhpc.com；/data/miniconda/envs/torch；Python 3.12.13 / PyTorch 2.10.0+cu128"
+}

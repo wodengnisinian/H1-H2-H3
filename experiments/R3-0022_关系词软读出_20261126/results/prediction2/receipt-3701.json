@@ -1,0 +1,14 @@
+{
+  "seed": 3701,
+  "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad",
+  "script_sha256": "a4ab8120005b86fbe3aca4482b457189d3e59b6e20d373aed79269a0aee48e17",
+  "frozen_files_sha256": {
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\_r18_inputs\\inputs\\b13\\inputs\\server-run\\development\\serial\\3701\\best.pt": "d5585978da8310b9e5452f0a3cd3a6a6be07559a91943816076d52d42895939b",
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\_r18_inputs\\inputs\\b13\\inputs\\server-run\\controls\\pooled\\3701\\best.pt": "462f8ef29c84f13036353588308d17ef2858c060839bdf198e64dcb46ba69f2b",
+    "C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\_r18_inputs\\inputs\\prior\\runs\\本地开发-01\\w-3701.json": "9217b8edda35fad73650fbe8bdf354e26df0a4f0f8530b6549d62773f93f670e"
+  },
+  "counts": {
+    "prediction_rows": 26000
+  },
+  "predictions_sha256": "e0b62842807841bd7ab53ecdcfe896f3e1cea19a676d475be92e7af6c841a519"
+}

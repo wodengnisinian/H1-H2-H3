@@ -1,0 +1,4 @@
+{
+  "status": "incomplete",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\H1-H2-H3\\experiments\\R3-0022_关系词软读出_20261126\\code\\r22_relmask.py\", line 334, in <module>\n    main(args)\n    ~~~~^^^^^^\n  File \"C:\\Users\\xxs\\Documents\\ChatGPT\\speedweb\\H1-H2-H3\\experiments\\R3-0022_关系词软读出_20261126\\code\\r22_relmask.py\", line 195, in main\n    a.out.mkdir(parents=True, exist_ok=False)\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\xxs\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\pathlib\\__init__.py\", line 1011, in mkdir\n    os.mkdir(self, mode)\n    ~~~~~~~~^^^^^^^^^^^^\nFileExistsError: [WinError 183] 当文件已存在时，无法创建该文件。: 'C:\\\\Users\\\\xxs\\\\Documents\\\\ChatGPT\\\\speedweb\\\\H1-H2-H3\\\\experiments\\\\R3-0022_关系词软读出_20261126\\\\results\\\\prediction'\n"
+}

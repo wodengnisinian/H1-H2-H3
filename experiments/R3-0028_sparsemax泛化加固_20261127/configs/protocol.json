@@ -1,0 +1,49 @@
+{
+  "id": "R28",
+  "title": "sparsemax 泛化加固：角色监督、多任务与对比归一化",
+  "created_utc": "2026-11-27T03:35:00+00:00",
+  "motivation": "R27 诊断：sparsemax（α=2.0）首次在无手工时序词表约束下通过 H1+H2 开发门槛（81.19% / 78.77%），但未见句式 H1 仅 27.67%（比 learned 43.44% 低 15.8pp）。R27 中角色监督把 entmax 的未见句式 H1 从 35.67% 提到 38.44%。本轮以 sparsemax 为基础，叠加角色监督、多任务损失、对比归一化与 α=1.8 中间点，目标是保持 H1≥80% 的同时把未见句式 H1 拉回 40% 以上。",
+  "hard_constraint": "延续 R26 用户要求：不得预先写死任何时序/标记字词表（先、再、把、被等）作为输入特征。",
+  "variants": {
+    "sparsemax_role": {
+      "formula": "p = sparsemax(w·h_j 关系词位)，规范 sparsemax 损失（梯度 p−y，y 为金标关系词位上的均匀标签；主变体）"
+    },
+    "sparsemax_multi": {
+      "formula": "同 sparsemax，损失 = 0.5·候选 NLL + 0.5·规范 sparsemax 损失（诊断）"
+    },
+    "sparsemax_contrast": {
+      "formula": "t_j = w·(h_j − q̄)，q̄ 为全有效词位隐向量均值，sparsemax，候选损失（诊断）"
+    },
+    "sparsemax_role_contrast": {
+      "formula": "t_j = w·(h_j − q̄)，sparsemax，规范 sparsemax 损失（诊断）"
+    },
+    "sparsemax_alpha18": {
+      "formula": "α=1.8，候选损失（诊断，sparsemax 与 entmax 之间）"
+    },
+    "rolew_sparse": {
+      "formula": "α=1.5 角色监督训练的 w，推理时改用 sparsemax（α=2.0）读数（诊断，训练/推理稀疏度解耦）"
+    }
+  },
+  "controls": ["uniform", "uniform_mentions", "first_mentioned", "learned", "relmask_cand", "sparsemax", "random", "shuffled", "pool", "first"],
+  "continuity_checks": {
+    "relmask_cand": "应复现 78.61%（R22）",
+    "sparsemax": "应复现 81.19% / 78.77%（R27 entmax_alpha20）",
+    "learned": "70.16%"
+  },
+  "training": {
+    "data": "B16 历史 train.jsonl 12,000 图，门控开启且金标入围 8,000 条",
+    "epochs": 12, "lr": 0.003, "batch_size": 128, "optimizer": "Adam", "seeds": [1701, 2701, 3701]
+  },
+  "evaluation": {
+    "cohort": "R16/R17 冻结 600 图开发队列（SHA-256 cf7d3ba2…）",
+    "h1": "≥0.80 且相对 first_mentioned 单侧 95% 下界 >0",
+    "h2": "Top-1 相对均匀权重 ≥+0.02 且下界 >0",
+    "primary": "sparsemax_role",
+    "generalization_watch": "unseen_template H1 逐项报告；目标 ≥ 40%"
+  },
+  "decision_rule": {
+    "dev_pass": "主变体 H1/H2 双过且 unseen_template H1 ≥ 40% 时冻结进入新 H3 验收准备；",
+    "dev_fail": "如实记录，下一轮沿指标最优方向继续"
+  },
+  "environment": "tdklgrqctvo9g2techo.funhpc.com；/data/miniconda/envs/torch；Python 3.12.13 / PyTorch 2.10.0+cu128"
+}

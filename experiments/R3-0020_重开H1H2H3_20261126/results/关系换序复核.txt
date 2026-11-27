@@ -1,0 +1,88 @@
+{
+  "original_gold_checked": 3000,
+  "eligible_graphs": {
+    "relation_order": 1000
+  },
+  "excluded_without_unique_reverse_path": {
+    "competing_chain": 1000,
+    "role_reversal": 1000
+  },
+  "models": {
+    "serial": {
+      "by_seed": {
+        "1701": {
+          "pairs": 1000,
+          "original_correct": 408,
+          "reverse_correct": 435,
+          "prediction_flipped": 423,
+          "both_correct": 133
+        },
+        "2701": {
+          "pairs": 1000,
+          "original_correct": 407,
+          "reverse_correct": 436,
+          "prediction_flipped": 415,
+          "both_correct": 129
+        },
+        "3701": {
+          "pairs": 1000,
+          "original_correct": 457,
+          "reverse_correct": 450,
+          "prediction_flipped": 457,
+          "both_correct": 182
+        }
+      },
+      "all_seeds": {
+        "pairs": 3000,
+        "original_correct": 1272,
+        "reverse_correct": 1321,
+        "prediction_flipped": 1295,
+        "both_correct": 444
+      }
+    },
+    "pooled": {
+      "by_seed": {
+        "1701": {
+          "pairs": 1000,
+          "original_correct": 532,
+          "reverse_correct": 547,
+          "prediction_flipped": 419,
+          "both_correct": 249
+        },
+        "2701": {
+          "pairs": 1000,
+          "original_correct": 532,
+          "reverse_correct": 562,
+          "prediction_flipped": 380,
+          "both_correct": 237
+        },
+        "3701": {
+          "pairs": 1000,
+          "original_correct": 492,
+          "reverse_correct": 510,
+          "prediction_flipped": 512,
+          "both_correct": 257
+        }
+      },
+      "all_seeds": {
+        "pairs": 3000,
+        "original_correct": 1556,
+        "reverse_correct": 1619,
+        "prediction_flipped": 1311,
+        "both_correct": 743
+      }
+    }
+  },
+  "paired_both_correct_difference": {
+    "contrast": "serial_minus_pooled",
+    "difference_pp": -9.9667,
+    "one_sided_95_lower_pp": -11.5333,
+    "two_sided_95_interval_pp": [
+      -11.8333,
+      -8.0333
+    ],
+    "bootstrap_unit": "graph",
+    "bootstrap_draws": 10000,
+    "bootstrap_seed": 619482
+  }
+}

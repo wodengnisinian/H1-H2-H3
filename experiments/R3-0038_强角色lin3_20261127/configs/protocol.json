@@ -1,0 +1,43 @@
+{
+  "id": "R38",
+  "title": "强角色权重（γ=0.3/0.4）rolew + lin3 混合",
+  "created_utc": "2026-11-27T09:25:00+00:00",
+  "motivation": "R37：γ=0.5 的 rolew 变化被 λ 吸收，lin3_g05_lam10 = 79.63%/35.61%。本轮把角色权重加大（γ=0.3/0.4，即 70%/60% 角色损失），提升 rolew 分量的 H1 与泛化，再进 lin3（λ3=0.10，β=0.3/0.5），目标同时越过 H1≥80% 与未见句式 ≥35%。",
+  "hard_constraint": "延续 R26 用户要求：不得预先写死任何时序/标记字词表（先、再、把、被等）作为输入特征。",
+  "variants": {
+    "lin3_g03_lam10": {
+      "formula": "rolew_g03（γ=0.3）分量 + lin3（λ3=0.10，β=0.3），w_s 零初始化训练，λ 可学习（主变体）"
+    },
+    "lin3_g04_lam10": {
+      "formula": "同主变体，rolew_g04（γ=0.4，诊断）"
+    },
+    "lin3_g03_lam10_role05": {
+      "formula": "同主变体，β=0.5（诊断）"
+    },
+    "lin3_g03_lam08": {
+      "formula": "同主变体，λ3=0.08（诊断）"
+    }
+  },
+  "controls": ["uniform", "uniform_mentions", "first_mentioned", "learned", "relmask_cand", "entmax15", "sparsemax", "rolew_sparse", "rolew_g03", "rolew_g04", "mix2r", "lin3_g05_lam10", "random", "shuffled", "pool", "first"],
+  "continuity_checks": {
+    "rolew_sparse": "79.02%",
+    "lin3_g05_lam10": "79.63% / 未见 35.61%（R37）",
+    "mix2r": "80.17%"
+  },
+  "training": {
+    "data": "B16 历史 train.jsonl 12,000 图，门控开启且金标入围 8,000 条（非增广）",
+    "epochs": 12, "lr": 0.003, "batch_size": 128, "optimizer": "Adam", "seeds": [1701, 2701, 3701]
+  },
+  "evaluation": {
+    "cohort": "R16/R17 冻结 600 图开发队列（SHA-256 cf7d3ba2…）",
+    "h1": "≥0.80 且相对 first_mentioned 单侧 95% 下界 >0",
+    "h2": "Top-1 相对均匀权重 ≥+0.02 且下界 >0",
+    "primary": "lin3_g03_lam10",
+    "generalization_watch": "unseen_template H1 逐项报告；入选要求 ≥ 35%"
+  },
+  "decision_rule": {
+    "dev_pass": "主变体 H1/H2 双过且 unseen_template H1 ≥ 35% 时冻结代码与权重，进入新 H3 验收准备（新独立队列、一次性开封、用户授权，按 R24 流程）；",
+    "dev_fail": "如实记录，下一轮沿指标最优方向继续"
+  },
+  "environment": "tdklgrqctvo9g2techo.funhpc.com；/data/miniconda/envs/torch；Python 3.12.13 / PyTorch 2.10.0+cu128"
+}

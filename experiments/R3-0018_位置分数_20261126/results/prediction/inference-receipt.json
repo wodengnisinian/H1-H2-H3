@@ -1,0 +1,75 @@
+{
+  "id": "R18",
+  "primary_variant": "pos_table",
+  "seeds": [
+    1701,
+    2701,
+    3701
+  ],
+  "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad",
+  "source_sha256": {
+    "/data/spiderweb-r3-20261124-1740/inputs/prior/code/model.py": "f85636ffa19443880e48d953c7d552af3d6bda5238c60ad424f445202c2c2b0f"
+  },
+  "script_sha256": "ab317e814757f55b55ed3207e0de28dbaceb11f458f259811648eb5f45e90809",
+  "receipts": [
+    {
+      "seed": 1701,
+      "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad",
+      "script_sha256": "ab317e814757f55b55ed3207e0de28dbaceb11f458f259811648eb5f45e90809",
+      "frozen_files_sha256": {
+        "/data/spiderweb-r3-20261124-1740/inputs/b13/inputs/server-run/development/serial/1701/best.pt": "703b3edfbf72b2213431c054e38dcad3300dd880f8443707b7119b9859a7728c",
+        "/data/spiderweb-r3-20261124-1740/inputs/b13/inputs/server-run/controls/pooled/1701/best.pt": "e9115ffc1f49266ff49efa12f3a7470fee5047bea32621f0a3d481a066e52bc7",
+        "/data/spiderweb-r3-20261124-1740/inputs/prior/runs/本地开发-01/w-1701.json": "a3cf4167344c14eb0d0e281e9e43ce379289fe40157e39de9a230074c211fa59"
+      },
+      "counts": {
+        "prediction_rows": 28600
+      },
+      "predictions_sha256": "118268a24a4d0f8c6b514913e0ee24f659831e8ebba5407c6eb97ca2cfc29140"
+    },
+    {
+      "seed": 2701,
+      "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad",
+      "script_sha256": "ab317e814757f55b55ed3207e0de28dbaceb11f458f259811648eb5f45e90809",
+      "frozen_files_sha256": {
+        "/data/spiderweb-r3-20261124-1740/inputs/b13/inputs/server-run/development/serial/2701/best.pt": "521911f7ec4b7679a4ba733754d3f87b890f0723596f075fd79b1a9b21cfa4bf",
+        "/data/spiderweb-r3-20261124-1740/inputs/b13/inputs/server-run/controls/pooled/2701/best.pt": "146b7c702f326cc9fb050fddc076850eacd7295abf12a6a0a7bbaddaee91bae9",
+        "/data/spiderweb-r3-20261124-1740/inputs/prior/runs/本地开发-01/w-2701.json": "1d3a0e23cdb417f229a7231cec039b8d9b7ec803c08b539a4f38ce4fc6f183a9"
+      },
+      "counts": {
+        "prediction_rows": 28600
+      },
+      "predictions_sha256": "0861165898134b4d077d936edb41c5da6adb208c2d38314b725f535e95c80649"
+    },
+    {
+      "seed": 3701,
+      "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad",
+      "script_sha256": "ab317e814757f55b55ed3207e0de28dbaceb11f458f259811648eb5f45e90809",
+      "frozen_files_sha256": {
+        "/data/spiderweb-r3-20261124-1740/inputs/b13/inputs/server-run/development/serial/3701/best.pt": "d5585978da8310b9e5452f0a3cd3a6a6be07559a91943816076d52d42895939b",
+        "/data/spiderweb-r3-20261124-1740/inputs/b13/inputs/server-run/controls/pooled/3701/best.pt": "462f8ef29c84f13036353588308d17ef2858c060839bdf198e64dcb46ba69f2b",
+        "/data/spiderweb-r3-20261124-1740/inputs/prior/runs/本地开发-01/w-3701.json": "9217b8edda35fad73650fbe8bdf354e26df0a4f0f8530b6549d62773f93f670e"
+      },
+      "counts": {
+        "prediction_rows": 28600
+      },
+      "predictions_sha256": "d3c3aa000fb2a62a44483277495fce1a63b8060482e5e65aa0894b03dd6c05b8"
+    }
+  ],
+  "predictions_sha256": "eb27bc5e4b75270907389374777db097b02131e0fd13688a351c5de2454f0ae8",
+  "historic_training_unchanged": true,
+  "training_updates": "per-seed re-training of w plus position scores on the same 8,000 rows",
+  "position_score": "t_j = w.h_j + s_j; pos_table = learned absolute table, pos_linear = a*j+b, pos_only = table only",
+  "r18_h1": "Sum softmax question-token masses over each mentioned relation; ties half credit.",
+  "r18_h2": "Frozen direction plus gated weighted relation logmeanexp; archived L2 disabled.",
+  "views": {
+    "original": 600,
+    "paraphrase": 600,
+    "q0": 200,
+    "q1": 200,
+    "q2": 200,
+    "q3": 200,
+    "unseen_template": 600
+  },
+  "python": "3.12.13",
+  "torch": "2.10.0+cu128"
+}

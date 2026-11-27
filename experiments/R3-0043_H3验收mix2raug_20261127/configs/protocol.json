@@ -1,0 +1,28 @@
+{
+  "id": "R43",
+  "title": "mix2r_aug 的全新 H3 独立验收（一次性开封）",
+  "created_utc": "2026-11-27T12:30:00+00:00",
+  "motivation": "R42 验收未通过（对池化 +4.00pp），且证明 learned 软注入拉低正式队列 Top-1；dev H2 最高的 mix2r_aug（H1 93.14%、H2 85.91%，无 learned 注入）是正式队列的最强候选。按 R39 冻结其代码与权重，抽取新独立队列做一次性验收。",
+  "authorization": "用户目标指令（2026-11-27）明确要求循环实验直到满足 H1/H2/H3 条件；延续 R42 流程执行本次一次性验收",
+  "candidate": {
+    "variant": "mix2r_aug",
+    "formula": "p = λ·sparsemax(w_s·h_j) + (1−λ)·entmax(2.0)(w_r·h_j)，仅关系词位；w_s 增广候选损失、w_r 增广 γ=0.5 角色+候选训练，λ 按种子冻结（0.4607/0.4260/0.4769）",
+    "hard_constraint": "不包含任何手工时序词表特征（先/再/把/被等）",
+    "seeds": [1701, 2701, 3701]
+  },
+  "cohort": {
+    "graphs": 3000,
+    "per_stratum": {"relation_order": 1000, "role_reversal": 1000, "competing_chain": 1000},
+    "index_range": [40000000, 45000000],
+    "excluded_populations": ["b13 历史 3,000 图", "fresh_dev 600 图", "R16 冻结开发队列 600 图", "R09 正式队列 4,800 图", "R21 正式队列 3,000 图", "R24 正式队列 3,000 图", "R42 正式队列 3,000 图", "本队列已抽取集合"],
+    "templates": "/data/spiderweb-r3-20261124-1740/R3/configs/formal_templates.json（R09 冻结问法，SHA-256 40f0dee7…）",
+    "entropy": "freeze 后 secrets.token_hex(32) 作为抽图随机种子"
+  },
+  "acceptance": {
+    "primary": "原问 Top-1；图内平均三种子，三题型等权；题型内按图配对重抽 10,000 次，第 500 个排序值作单侧 95% 下界",
+    "thresholds": "相对直接首位与相对池化各自增益 ≥0.05 且对应下界 >0，两项同时满足才通过",
+    "secondary": "改写命中率、同图四问全对率（可逆图）、候选覆盖率同时报告",
+    "openings": "1 次；开封后不复测"
+  },
+  "environment": "tdklgrqctvo9g2techo.funhpc.com；/data/miniconda/envs/torch；Python 3.12.13 / PyTorch 2.10.0+cu128"
+}

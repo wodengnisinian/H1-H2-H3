@@ -1,0 +1,24 @@
+{
+  "id": "R25",
+  "title": "从冻结 Transformer 的注意力对接中读取时序特征",
+  "created_utc": "2026-11-27T02:00:00+00:00",
+  "hypothesis": "冻结编码器的单层多头自注意力已经完成「每个词与其他词对接」。与其手写时序符号线索（R23 cue，独立 H3 未过），不如直接读注意力权重：对每个关系词 j，取其到「先类时序词」的注意力总和与到「后类时序词」的注意力总和之差 a1_j，叠加到词读出上 t_j = w·h_j + s1·a1_j（仅关系词位置参与 softmax）。诊断变体 attn_rel 再叠加两个关系词互相对接的注意力 a2_j。同论文训练预算下，能否在冻结 600 图队列通过 H1/H2，并在泛化上超过手工 cue。",
+  "variants": {
+    "attn": "t_j = w·h_j + s1·a1_j；a1_j = Σ_{i∈先类} W[j,i] − Σ_{i∈后类} W[j,i]，W 为单层自注意力平均头权重",
+    "attn_rel": "t_j = w·h_j + s1·a1_j + s2·a2_j；a2_j = Σ_{i∈另一关系词} (W[j,i] + W[i,j])（诊断）"
+  },
+  "markers": {"先类": ["先", "首先", "第一步", "开头", "此前"], "后类": ["再", "随后", "之后", "第二", "最后", "结束"]},
+  "controls": ["uniform", "uniform_mentions", "first_mentioned", "learned", "cue（R23 冻结权重，参考）", "random", "shuffled", "pool", "first"],
+  "training": {
+    "data": "B16 历史 train.jsonl 全部 12,000 张图，门控开启且金标入围的 8,000 条",
+    "epochs": 12, "lr": 0.003, "batch_size": 128, "optimizer": "Adam",
+    "freeze": "编码器、注意力权重、候选规则全部冻结；注意力只读取不训练"
+  },
+  "evaluation": {
+    "cohort": "R16/R17 冻结 600 图开发队列（SHA-256 cf7d3ba2…）",
+    "h1": "两关系质量取最大为预测首步；门槛 ≥0.80 且相对 first_mentioned 单侧 95% 下界 >0",
+    "h2": "Top-1 相对全有效位均匀权重 ≥+0.02 且下界 >0；题型内按图配对重抽 10,000 次",
+    "seeds": [1701, 2701, 3701]
+  },
+  "environment": "tdklgrqctvo9g2techo.funhpc.com；/data/miniconda/envs/torch；Python 3.12.13 / PyTorch 2.10.0+cu128 / NumPy 1.26.4"
+}

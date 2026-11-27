@@ -1,0 +1,1238 @@
+{
+  "seeds": [
+    1701,
+    2701,
+    3701
+  ],
+  "primary": "mix2raug",
+  "question_views": {
+    "original": {
+      "overall": {
+        "graphs": 3000,
+        "graph_seed_judgments": 9000,
+        "coverage": {
+          "hits": 9000,
+          "denominator": 9000,
+          "percent": 100.0
+        },
+        "coverage_by_graph": {
+          "hits": 3000,
+          "denominator": 3000,
+          "percent": 100.0
+        },
+        "accuracy": {
+          "first": {
+            "hits": 6081,
+            "denominator": 9000,
+            "percent": 67.56666666666666
+          },
+          "pool": {
+            "hits": 6301,
+            "denominator": 9000,
+            "percent": 70.0111111111111
+          },
+          "direction": {
+            "hits": 6528,
+            "denominator": 9000,
+            "percent": 72.53333333333333
+          },
+          "old": {
+            "hits": 6291,
+            "denominator": 9000,
+            "percent": 69.9
+          },
+          "uniform": {
+            "hits": 6464,
+            "denominator": 9000,
+            "percent": 71.82222222222222
+          },
+          "learned": {
+            "hits": 6732,
+            "denominator": 9000,
+            "percent": 74.8
+          },
+          "mix2raug": {
+            "hits": 6791,
+            "denominator": 9000,
+            "percent": 75.45555555555555
+          }
+        }
+      },
+      "by_kind": {
+        "competing_chain": {
+          "graphs": 1000,
+          "graph_seed_judgments": 3000,
+          "coverage": {
+            "hits": 3000,
+            "denominator": 3000,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 1000,
+            "denominator": 1000,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 3000,
+              "denominator": 3000,
+              "percent": 100.0
+            },
+            "pool": {
+              "hits": 2363,
+              "denominator": 3000,
+              "percent": 78.76666666666667
+            },
+            "direction": {
+              "hits": 2482,
+              "denominator": 3000,
+              "percent": 82.73333333333333
+            },
+            "old": {
+              "hits": 2482,
+              "denominator": 3000,
+              "percent": 82.73333333333333
+            },
+            "uniform": {
+              "hits": 2482,
+              "denominator": 3000,
+              "percent": 82.73333333333333
+            },
+            "learned": {
+              "hits": 2482,
+              "denominator": 3000,
+              "percent": 82.73333333333333
+            },
+            "mix2raug": {
+              "hits": 2482,
+              "denominator": 3000,
+              "percent": 82.73333333333333
+            }
+          }
+        },
+        "relation_order": {
+          "graphs": 1000,
+          "graph_seed_judgments": 3000,
+          "coverage": {
+            "hits": 3000,
+            "denominator": 3000,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 1000,
+            "denominator": 1000,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 1578,
+              "denominator": 3000,
+              "percent": 52.6
+            },
+            "pool": {
+              "hits": 2016,
+              "denominator": 3000,
+              "percent": 67.2
+            },
+            "direction": {
+              "hits": 2072,
+              "denominator": 3000,
+              "percent": 69.06666666666666
+            },
+            "old": {
+              "hits": 1944,
+              "denominator": 3000,
+              "percent": 64.8
+            },
+            "uniform": {
+              "hits": 2041,
+              "denominator": 3000,
+              "percent": 68.03333333333333
+            },
+            "learned": {
+              "hits": 2172,
+              "denominator": 3000,
+              "percent": 72.4
+            },
+            "mix2raug": {
+              "hits": 2180,
+              "denominator": 3000,
+              "percent": 72.66666666666667
+            }
+          }
+        },
+        "role_reversal": {
+          "graphs": 1000,
+          "graph_seed_judgments": 3000,
+          "coverage": {
+            "hits": 3000,
+            "denominator": 3000,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 1000,
+            "denominator": 1000,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 1503,
+              "denominator": 3000,
+              "percent": 50.1
+            },
+            "pool": {
+              "hits": 1922,
+              "denominator": 3000,
+              "percent": 64.06666666666666
+            },
+            "direction": {
+              "hits": 1974,
+              "denominator": 3000,
+              "percent": 65.8
+            },
+            "old": {
+              "hits": 1865,
+              "denominator": 3000,
+              "percent": 62.166666666666664
+            },
+            "uniform": {
+              "hits": 1941,
+              "denominator": 3000,
+              "percent": 64.7
+            },
+            "learned": {
+              "hits": 2078,
+              "denominator": 3000,
+              "percent": 69.26666666666667
+            },
+            "mix2raug": {
+              "hits": 2129,
+              "denominator": 3000,
+              "percent": 70.96666666666667
+            }
+          }
+        }
+      },
+      "by_seed": {
+        "1701": {
+          "graphs": 3000,
+          "graph_seed_judgments": 3000,
+          "coverage": {
+            "hits": 3000,
+            "denominator": 3000,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 3000,
+            "denominator": 3000,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 2027,
+              "denominator": 3000,
+              "percent": 67.56666666666666
+            },
+            "pool": {
+              "hits": 1908,
+              "denominator": 3000,
+              "percent": 63.6
+            },
+            "direction": {
+              "hits": 2100,
+              "denominator": 3000,
+              "percent": 70.0
+            },
+            "old": {
+              "hits": 1900,
+              "denominator": 3000,
+              "percent": 63.333333333333336
+            },
+            "uniform": {
+              "hits": 2039,
+              "denominator": 3000,
+              "percent": 67.96666666666667
+            },
+            "learned": {
+              "hits": 2089,
+              "denominator": 3000,
+              "percent": 69.63333333333334
+            },
+            "mix2raug": {
+              "hits": 2225,
+              "denominator": 3000,
+              "percent": 74.16666666666667
+            }
+          }
+        },
+        "2701": {
+          "graphs": 3000,
+          "graph_seed_judgments": 3000,
+          "coverage": {
+            "hits": 3000,
+            "denominator": 3000,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 3000,
+            "denominator": 3000,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 2027,
+              "denominator": 3000,
+              "percent": 67.56666666666666
+            },
+            "pool": {
+              "hits": 2233,
+              "denominator": 3000,
+              "percent": 74.43333333333334
+            },
+            "direction": {
+              "hits": 2240,
+              "denominator": 3000,
+              "percent": 74.66666666666667
+            },
+            "old": {
+              "hits": 2173,
+              "denominator": 3000,
+              "percent": 72.43333333333334
+            },
+            "uniform": {
+              "hits": 2223,
+              "denominator": 3000,
+              "percent": 74.1
+            },
+            "learned": {
+              "hits": 2321,
+              "denominator": 3000,
+              "percent": 77.36666666666666
+            },
+            "mix2raug": {
+              "hits": 2364,
+              "denominator": 3000,
+              "percent": 78.8
+            }
+          }
+        },
+        "3701": {
+          "graphs": 3000,
+          "graph_seed_judgments": 3000,
+          "coverage": {
+            "hits": 3000,
+            "denominator": 3000,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 3000,
+            "denominator": 3000,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 2027,
+              "denominator": 3000,
+              "percent": 67.56666666666666
+            },
+            "pool": {
+              "hits": 2160,
+              "denominator": 3000,
+              "percent": 72.0
+            },
+            "direction": {
+              "hits": 2188,
+              "denominator": 3000,
+              "percent": 72.93333333333334
+            },
+            "old": {
+              "hits": 2218,
+              "denominator": 3000,
+              "percent": 73.93333333333334
+            },
+            "uniform": {
+              "hits": 2202,
+              "denominator": 3000,
+              "percent": 73.4
+            },
+            "learned": {
+              "hits": 2322,
+              "denominator": 3000,
+              "percent": 77.4
+            },
+            "mix2raug": {
+              "hits": 2202,
+              "denominator": 3000,
+              "percent": 73.4
+            }
+          }
+        }
+      },
+      "by_gate": {
+        "on": {
+          "graphs": 2000,
+          "graph_seed_judgments": 6000,
+          "coverage": {
+            "hits": 6000,
+            "denominator": 6000,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 2000,
+            "denominator": 2000,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 3081,
+              "denominator": 6000,
+              "percent": 51.35
+            },
+            "pool": {
+              "hits": 3938,
+              "denominator": 6000,
+              "percent": 65.63333333333334
+            },
+            "direction": {
+              "hits": 4046,
+              "denominator": 6000,
+              "percent": 67.43333333333334
+            },
+            "old": {
+              "hits": 3809,
+              "denominator": 6000,
+              "percent": 63.483333333333334
+            },
+            "uniform": {
+              "hits": 3982,
+              "denominator": 6000,
+              "percent": 66.36666666666666
+            },
+            "learned": {
+              "hits": 4250,
+              "denominator": 6000,
+              "percent": 70.83333333333333
+            },
+            "mix2raug": {
+              "hits": 4309,
+              "denominator": 6000,
+              "percent": 71.81666666666666
+            }
+          }
+        },
+        "off": {
+          "graphs": 1000,
+          "graph_seed_judgments": 3000,
+          "coverage": {
+            "hits": 3000,
+            "denominator": 3000,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 1000,
+            "denominator": 1000,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 3000,
+              "denominator": 3000,
+              "percent": 100.0
+            },
+            "pool": {
+              "hits": 2363,
+              "denominator": 3000,
+              "percent": 78.76666666666667
+            },
+            "direction": {
+              "hits": 2482,
+              "denominator": 3000,
+              "percent": 82.73333333333333
+            },
+            "old": {
+              "hits": 2482,
+              "denominator": 3000,
+              "percent": 82.73333333333333
+            },
+            "uniform": {
+              "hits": 2482,
+              "denominator": 3000,
+              "percent": 82.73333333333333
+            },
+            "learned": {
+              "hits": 2482,
+              "denominator": 3000,
+              "percent": 82.73333333333333
+            },
+            "mix2raug": {
+              "hits": 2482,
+              "denominator": 3000,
+              "percent": 82.73333333333333
+            }
+          }
+        }
+      },
+      "macro_accuracy_percent": {
+        "first": 67.56666666666666,
+        "pool": 70.0111111111111,
+        "direction": 72.53333333333333,
+        "old": 69.9,
+        "uniform": 71.82222222222222,
+        "learned": 74.8,
+        "mix2raug": 75.45555555555555
+      }
+    },
+    "paraphrase": {
+      "overall": {
+        "graphs": 3000,
+        "graph_seed_judgments": 9000,
+        "coverage": {
+          "hits": 9000,
+          "denominator": 9000,
+          "percent": 100.0
+        },
+        "coverage_by_graph": {
+          "hits": 3000,
+          "denominator": 3000,
+          "percent": 100.0
+        },
+        "accuracy": {
+          "first": {
+            "hits": 6081,
+            "denominator": 9000,
+            "percent": 67.56666666666666
+          },
+          "pool": {
+            "hits": 6561,
+            "denominator": 9000,
+            "percent": 72.9
+          },
+          "direction": {
+            "hits": 6862,
+            "denominator": 9000,
+            "percent": 76.24444444444444
+          },
+          "old": {
+            "hits": 7330,
+            "denominator": 9000,
+            "percent": 81.44444444444444
+          },
+          "uniform": {
+            "hits": 6938,
+            "denominator": 9000,
+            "percent": 77.08888888888889
+          },
+          "learned": {
+            "hits": 7356,
+            "denominator": 9000,
+            "percent": 81.73333333333333
+          },
+          "mix2raug": {
+            "hits": 7508,
+            "denominator": 9000,
+            "percent": 83.42222222222222
+          }
+        }
+      },
+      "by_kind": {
+        "competing_chain": {
+          "graphs": 1000,
+          "graph_seed_judgments": 3000,
+          "coverage": {
+            "hits": 3000,
+            "denominator": 3000,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 1000,
+            "denominator": 1000,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 3000,
+              "denominator": 3000,
+              "percent": 100.0
+            },
+            "pool": {
+              "hits": 2502,
+              "denominator": 3000,
+              "percent": 83.4
+            },
+            "direction": {
+              "hits": 2578,
+              "denominator": 3000,
+              "percent": 85.93333333333334
+            },
+            "old": {
+              "hits": 2578,
+              "denominator": 3000,
+              "percent": 85.93333333333334
+            },
+            "uniform": {
+              "hits": 2578,
+              "denominator": 3000,
+              "percent": 85.93333333333334
+            },
+            "learned": {
+              "hits": 2578,
+              "denominator": 3000,
+              "percent": 85.93333333333334
+            },
+            "mix2raug": {
+              "hits": 2578,
+              "denominator": 3000,
+              "percent": 85.93333333333334
+            }
+          }
+        },
+        "relation_order": {
+          "graphs": 1000,
+          "graph_seed_judgments": 3000,
+          "coverage": {
+            "hits": 3000,
+            "denominator": 3000,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 1000,
+            "denominator": 1000,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 1578,
+              "denominator": 3000,
+              "percent": 52.6
+            },
+            "pool": {
+              "hits": 2077,
+              "denominator": 3000,
+              "percent": 69.23333333333333
+            },
+            "direction": {
+              "hits": 2194,
+              "denominator": 3000,
+              "percent": 73.13333333333334
+            },
+            "old": {
+              "hits": 2410,
+              "denominator": 3000,
+              "percent": 80.33333333333333
+            },
+            "uniform": {
+              "hits": 2225,
+              "denominator": 3000,
+              "percent": 74.16666666666667
+            },
+            "learned": {
+              "hits": 2423,
+              "denominator": 3000,
+              "percent": 80.76666666666667
+            },
+            "mix2raug": {
+              "hits": 2478,
+              "denominator": 3000,
+              "percent": 82.6
+            }
+          }
+        },
+        "role_reversal": {
+          "graphs": 1000,
+          "graph_seed_judgments": 3000,
+          "coverage": {
+            "hits": 3000,
+            "denominator": 3000,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 1000,
+            "denominator": 1000,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 1503,
+              "denominator": 3000,
+              "percent": 50.1
+            },
+            "pool": {
+              "hits": 1982,
+              "denominator": 3000,
+              "percent": 66.06666666666666
+            },
+            "direction": {
+              "hits": 2090,
+              "denominator": 3000,
+              "percent": 69.66666666666667
+            },
+            "old": {
+              "hits": 2342,
+              "denominator": 3000,
+              "percent": 78.06666666666666
+            },
+            "uniform": {
+              "hits": 2135,
+              "denominator": 3000,
+              "percent": 71.16666666666667
+            },
+            "learned": {
+              "hits": 2355,
+              "denominator": 3000,
+              "percent": 78.5
+            },
+            "mix2raug": {
+              "hits": 2452,
+              "denominator": 3000,
+              "percent": 81.73333333333333
+            }
+          }
+        }
+      },
+      "by_seed": {
+        "1701": {
+          "graphs": 3000,
+          "graph_seed_judgments": 3000,
+          "coverage": {
+            "hits": 3000,
+            "denominator": 3000,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 3000,
+            "denominator": 3000,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 2027,
+              "denominator": 3000,
+              "percent": 67.56666666666666
+            },
+            "pool": {
+              "hits": 2532,
+              "denominator": 3000,
+              "percent": 84.4
+            },
+            "direction": {
+              "hits": 2328,
+              "denominator": 3000,
+              "percent": 77.6
+            },
+            "old": {
+              "hits": 2450,
+              "denominator": 3000,
+              "percent": 81.66666666666667
+            },
+            "uniform": {
+              "hits": 2367,
+              "denominator": 3000,
+              "percent": 78.9
+            },
+            "learned": {
+              "hits": 2467,
+              "denominator": 3000,
+              "percent": 82.23333333333333
+            },
+            "mix2raug": {
+              "hits": 2823,
+              "denominator": 3000,
+              "percent": 94.1
+            }
+          }
+        },
+        "2701": {
+          "graphs": 3000,
+          "graph_seed_judgments": 3000,
+          "coverage": {
+            "hits": 3000,
+            "denominator": 3000,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 3000,
+            "denominator": 3000,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 2027,
+              "denominator": 3000,
+              "percent": 67.56666666666666
+            },
+            "pool": {
+              "hits": 2263,
+              "denominator": 3000,
+              "percent": 75.43333333333334
+            },
+            "direction": {
+              "hits": 2363,
+              "denominator": 3000,
+              "percent": 78.76666666666667
+            },
+            "old": {
+              "hits": 2513,
+              "denominator": 3000,
+              "percent": 83.76666666666667
+            },
+            "uniform": {
+              "hits": 2418,
+              "denominator": 3000,
+              "percent": 80.6
+            },
+            "learned": {
+              "hits": 2538,
+              "denominator": 3000,
+              "percent": 84.6
+            },
+            "mix2raug": {
+              "hits": 2718,
+              "denominator": 3000,
+              "percent": 90.6
+            }
+          }
+        },
+        "3701": {
+          "graphs": 3000,
+          "graph_seed_judgments": 3000,
+          "coverage": {
+            "hits": 3000,
+            "denominator": 3000,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 3000,
+            "denominator": 3000,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 2027,
+              "denominator": 3000,
+              "percent": 67.56666666666666
+            },
+            "pool": {
+              "hits": 1766,
+              "denominator": 3000,
+              "percent": 58.86666666666667
+            },
+            "direction": {
+              "hits": 2171,
+              "denominator": 3000,
+              "percent": 72.36666666666666
+            },
+            "old": {
+              "hits": 2367,
+              "denominator": 3000,
+              "percent": 78.9
+            },
+            "uniform": {
+              "hits": 2153,
+              "denominator": 3000,
+              "percent": 71.76666666666667
+            },
+            "learned": {
+              "hits": 2351,
+              "denominator": 3000,
+              "percent": 78.36666666666666
+            },
+            "mix2raug": {
+              "hits": 1967,
+              "denominator": 3000,
+              "percent": 65.56666666666666
+            }
+          }
+        }
+      },
+      "by_gate": {
+        "on": {
+          "graphs": 2000,
+          "graph_seed_judgments": 6000,
+          "coverage": {
+            "hits": 6000,
+            "denominator": 6000,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 2000,
+            "denominator": 2000,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 3081,
+              "denominator": 6000,
+              "percent": 51.35
+            },
+            "pool": {
+              "hits": 4059,
+              "denominator": 6000,
+              "percent": 67.65
+            },
+            "direction": {
+              "hits": 4284,
+              "denominator": 6000,
+              "percent": 71.4
+            },
+            "old": {
+              "hits": 4752,
+              "denominator": 6000,
+              "percent": 79.2
+            },
+            "uniform": {
+              "hits": 4360,
+              "denominator": 6000,
+              "percent": 72.66666666666667
+            },
+            "learned": {
+              "hits": 4778,
+              "denominator": 6000,
+              "percent": 79.63333333333334
+            },
+            "mix2raug": {
+              "hits": 4930,
+              "denominator": 6000,
+              "percent": 82.16666666666667
+            }
+          }
+        },
+        "off": {
+          "graphs": 1000,
+          "graph_seed_judgments": 3000,
+          "coverage": {
+            "hits": 3000,
+            "denominator": 3000,
+            "percent": 100.0
+          },
+          "coverage_by_graph": {
+            "hits": 1000,
+            "denominator": 1000,
+            "percent": 100.0
+          },
+          "accuracy": {
+            "first": {
+              "hits": 3000,
+              "denominator": 3000,
+              "percent": 100.0
+            },
+            "pool": {
+              "hits": 2502,
+              "denominator": 3000,
+              "percent": 83.4
+            },
+            "direction": {
+              "hits": 2578,
+              "denominator": 3000,
+              "percent": 85.93333333333334
+            },
+            "old": {
+              "hits": 2578,
+              "denominator": 3000,
+              "percent": 85.93333333333334
+            },
+            "uniform": {
+              "hits": 2578,
+              "denominator": 3000,
+              "percent": 85.93333333333334
+            },
+            "learned": {
+              "hits": 2578,
+              "denominator": 3000,
+              "percent": 85.93333333333334
+            },
+            "mix2raug": {
+              "hits": 2578,
+              "denominator": 3000,
+              "percent": 85.93333333333334
+            }
+          }
+        }
+      },
+      "macro_accuracy_percent": {
+        "first": 67.56666666666666,
+        "pool": 72.9,
+        "direction": 76.24444444444444,
+        "old": 81.44444444444444,
+        "uniform": 77.08888888888889,
+        "learned": 81.73333333333333,
+        "mix2raug": 83.42222222222222
+      }
+    }
+  },
+  "paired_comparisons": {
+    "original": {
+      "graphs": 3000,
+      "graph_seed_judgments": 9000,
+      "graphs_by_kind": {
+        "competing_chain": 1000,
+        "relation_order": 1000,
+        "role_reversal": 1000
+      },
+      "replicates": 10000,
+      "seed": 619482,
+      "lower_rank_one_based": 500,
+      "resampling": "paired graph within stratum, fixed seeds averaged per graph, equal stratum weight",
+      "rng": "numpy.default_rng PCG64; joint multinomial",
+      "contrasts_mix2raug_minus": {
+        "first": {
+          "delta_pp": 7.888888888888889,
+          "lower_95_one_sided_pp": 6.311111111111112,
+          "point_pass": true,
+          "interval_pass": true
+        },
+        "pool": {
+          "delta_pp": 5.444444444444445,
+          "lower_95_one_sided_pp": 4.588888888888889,
+          "point_pass": true,
+          "interval_pass": true
+        }
+      },
+      "both_thresholds_met": true
+    },
+    "paraphrase": {
+      "graphs": 3000,
+      "graph_seed_judgments": 9000,
+      "graphs_by_kind": {
+        "competing_chain": 1000,
+        "relation_order": 1000,
+        "role_reversal": 1000
+      },
+      "replicates": 10000,
+      "seed": 619482,
+      "lower_rank_one_based": 500,
+      "resampling": "paired graph within stratum, fixed seeds averaged per graph, equal stratum weight",
+      "rng": "numpy.default_rng PCG64; joint multinomial",
+      "contrasts_mix2raug_minus": {
+        "first": {
+          "delta_pp": 15.855555555555556,
+          "lower_95_one_sided_pp": 14.455555555555556,
+          "point_pass": true,
+          "interval_pass": true
+        },
+        "pool": {
+          "delta_pp": 10.522222222222222,
+          "lower_95_one_sided_pp": 9.700000000000001,
+          "point_pass": true,
+          "interval_pass": true
+        }
+      },
+      "both_thresholds_met": true
+    }
+  },
+  "h3": {
+    "primary_view": "original",
+    "reference_panel_three_fixed_seeds_and_three_kinds": true,
+    "both_thresholds_met": true
+  },
+  "four_question": {
+    "overall": {
+      "graphs": 1000,
+      "graph_seed_quartets": 3000,
+      "all_four": {
+        "first": {
+          "hits": 0,
+          "denominator": 3000,
+          "percent": 0.0
+        },
+        "pool": {
+          "hits": 0,
+          "denominator": 3000,
+          "percent": 0.0
+        },
+        "direction": {
+          "hits": 0,
+          "denominator": 3000,
+          "percent": 0.0
+        },
+        "old": {
+          "hits": 2,
+          "denominator": 3000,
+          "percent": 0.06666666666666667
+        },
+        "uniform": {
+          "hits": 0,
+          "denominator": 3000,
+          "percent": 0.0
+        },
+        "learned": {
+          "hits": 1,
+          "denominator": 3000,
+          "percent": 0.03333333333333333
+        },
+        "mix2raug": {
+          "hits": 2374,
+          "denominator": 3000,
+          "percent": 79.13333333333334
+        }
+      }
+    },
+    "by_kind": {
+      "relation_order": {
+        "graphs": 1000,
+        "graph_seed_quartets": 3000,
+        "all_four": {
+          "first": {
+            "hits": 0,
+            "denominator": 3000,
+            "percent": 0.0
+          },
+          "pool": {
+            "hits": 0,
+            "denominator": 3000,
+            "percent": 0.0
+          },
+          "direction": {
+            "hits": 0,
+            "denominator": 3000,
+            "percent": 0.0
+          },
+          "old": {
+            "hits": 2,
+            "denominator": 3000,
+            "percent": 0.06666666666666667
+          },
+          "uniform": {
+            "hits": 0,
+            "denominator": 3000,
+            "percent": 0.0
+          },
+          "learned": {
+            "hits": 1,
+            "denominator": 3000,
+            "percent": 0.03333333333333333
+          },
+          "mix2raug": {
+            "hits": 2374,
+            "denominator": 3000,
+            "percent": 79.13333333333334
+          }
+        }
+      }
+    },
+    "by_seed": {
+      "1701": {
+        "graphs": 1000,
+        "graph_seed_quartets": 1000,
+        "all_four": {
+          "first": {
+            "hits": 0,
+            "denominator": 1000,
+            "percent": 0.0
+          },
+          "pool": {
+            "hits": 0,
+            "denominator": 1000,
+            "percent": 0.0
+          },
+          "direction": {
+            "hits": 0,
+            "denominator": 1000,
+            "percent": 0.0
+          },
+          "old": {
+            "hits": 0,
+            "denominator": 1000,
+            "percent": 0.0
+          },
+          "uniform": {
+            "hits": 0,
+            "denominator": 1000,
+            "percent": 0.0
+          },
+          "learned": {
+            "hits": 1,
+            "denominator": 1000,
+            "percent": 0.1
+          },
+          "mix2raug": {
+            "hits": 835,
+            "denominator": 1000,
+            "percent": 83.5
+          }
+        }
+      },
+      "2701": {
+        "graphs": 1000,
+        "graph_seed_quartets": 1000,
+        "all_four": {
+          "first": {
+            "hits": 0,
+            "denominator": 1000,
+            "percent": 0.0
+          },
+          "pool": {
+            "hits": 0,
+            "denominator": 1000,
+            "percent": 0.0
+          },
+          "direction": {
+            "hits": 0,
+            "denominator": 1000,
+            "percent": 0.0
+          },
+          "old": {
+            "hits": 0,
+            "denominator": 1000,
+            "percent": 0.0
+          },
+          "uniform": {
+            "hits": 0,
+            "denominator": 1000,
+            "percent": 0.0
+          },
+          "learned": {
+            "hits": 0,
+            "denominator": 1000,
+            "percent": 0.0
+          },
+          "mix2raug": {
+            "hits": 603,
+            "denominator": 1000,
+            "percent": 60.3
+          }
+        }
+      },
+      "3701": {
+        "graphs": 1000,
+        "graph_seed_quartets": 1000,
+        "all_four": {
+          "first": {
+            "hits": 0,
+            "denominator": 1000,
+            "percent": 0.0
+          },
+          "pool": {
+            "hits": 0,
+            "denominator": 1000,
+            "percent": 0.0
+          },
+          "direction": {
+            "hits": 0,
+            "denominator": 1000,
+            "percent": 0.0
+          },
+          "old": {
+            "hits": 2,
+            "denominator": 1000,
+            "percent": 0.2
+          },
+          "uniform": {
+            "hits": 0,
+            "denominator": 1000,
+            "percent": 0.0
+          },
+          "learned": {
+            "hits": 0,
+            "denominator": 1000,
+            "percent": 0.0
+          },
+          "mix2raug": {
+            "hits": 936,
+            "denominator": 1000,
+            "percent": 93.6
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "id": "R34",
+  "title": "对数空间几何混合：移动稀疏-泛化前沿",
+  "created_utc": "2026-11-27T07:05:00+00:00",
+  "motivation": "R33 否定了 clause 全量增广。回到 R32 的线性混合前沿（mix2r 80.17%/32.11%，lam02 79.36%/35.50%）。本轮换混合方式：对数空间几何混合 p ∝ p_s^λ · p_r^(1−λ)（对概率取幂再归一化），并加入冻结 learned 的几何三分量与固定 λ3 的线性三分量，目标把前沿上移过 (80%, 35%)。",
+  "hard_constraint": "延续 R26 用户要求：不得预先写死任何时序/标记字词表（先、再、把、被等）作为输入特征。",
+  "variants": {
+    "geo2r": {
+      "formula": "log p = λ·log sparsemax(w_s·h) + (1−λ)·log entmax(2.0)(w_r·h) − logZ，w_r 为 α=1.5 角色监督预训练冻结，w_s 零初始化训练，λ 可学习，候选损失（主变体）"
+    },
+    "geo2r_tau": {
+      "formula": "同 geo2r，稀疏侧另加可学习温度 τ（诊断）"
+    },
+    "geo3": {
+      "formula": "几何三分量：λ1·log sparsemax + λ2·log rolew + λ3·log softmax(learned_w)（关系词位，learned 冻结），λ=softmax 可学习（诊断）"
+    },
+    "lin3_lam15": {
+      "formula": "线性三分量（R31 mix3 形式），λ3 固定 0.15，λ1/λ2 可学习（诊断）"
+    }
+  },
+  "controls": ["uniform", "uniform_mentions", "first_mentioned", "learned", "relmask_cand", "entmax15", "sparsemax", "rolew_sparse", "mix2r", "random", "shuffled", "pool", "first"],
+  "continuity_checks": {
+    "sparsemax": "81.19%",
+    "rolew_sparse": "79.02%",
+    "mix2r": "80.17%（R32 线性混合，本轮用非增广 rolew 正确接线复现）"
+  },
+  "training": {
+    "data": "B16 历史 train.jsonl 12,000 图，门控开启且金标入围 8,000 条（非增广）",
+    "epochs": 12, "lr": 0.003, "batch_size": 128, "optimizer": "Adam", "seeds": [1701, 2701, 3701]
+  },
+  "evaluation": {
+    "cohort": "R16/R17 冻结 600 图开发队列（SHA-256 cf7d3ba2…）",
+    "h1": "≥0.80 且相对 first_mentioned 单侧 95% 下界 >0",
+    "h2": "Top-1 相对均匀权重 ≥+0.02 且下界 >0",
+    "primary": "geo2r",
+    "generalization_watch": "unseen_template H1 逐项报告；入选要求 ≥ 35%"
+  },
+  "decision_rule": {
+    "dev_pass": "主变体 H1/H2 双过且 unseen_template H1 ≥ 35% 时冻结代码与权重，进入新 H3 验收准备（新独立队列、一次性开封、用户授权，按 R24 流程）；",
+    "dev_fail": "如实记录，下一轮沿指标最优方向继续"
+  },
+  "environment": "tdklgrqctvo9g2techo.funhpc.com；/data/miniconda/envs/torch；Python 3.12.13 / PyTorch 2.10.0+cu128"
+}

@@ -1,0 +1,55 @@
+{
+  "id": "R26",
+  "title": "锐化与词典无关的顺序读出：针对三大失败机理的组合升级",
+  "created_utc": "2026-11-27T02:00:00+00:00",
+  "motivation": "R18 否定绝对位置分数，R25 否定注意力对接特征，R24 显示 R23 cue 的最小一维符号线索在独立 H3 上失效（未见句式 H1 仅 39.17%），R12 硬选择与 R22 关系词掩码的对比说明软分配稀释信号。本轮把文献检索（sparsemax/α-entmax、温度锐化）与项目内证据组合成一次预注册升级。",
+  "hard_constraint": "实验变体不得预先写死任何时序/标记字词表（如 先、再、把、被、之前、之后 等）作为输入特征；顺序信息只能来自冻结 Transformer 的隐向量 h_j（可学习读出）或词典无关的结构特征（如两个关系提及之间的无符号距离分档）。此约束为本次新增用户要求，覆盖所有训练与推理变体。",
+  "literature": {
+    "sparsemax": "Martins & Astudillo 2016, From Softmax to Sparsemax: 稀疏投影产生精确为零的注意力质量，缓解软分配稀释",
+    "alpha_entmax": "Peters et al. 2019, Sparse Sequence-to-Sequence Models (ACL 2019, arXiv:1905.05702): α-entmax 介于 softmax 与 argmax 之间，α=1.5 部分稀疏",
+    "temperature": "温度锐化放大 pre-softmax logit 差，把相对优势转成绝对质量",
+    "position_notes": "绝对位置表过拟合模板（R18 证据），本轮不引入任何绝对位置；仅允许词典无关的相对距离诊断变体"
+  },
+  "variants": {
+    "relmask_tau": {
+      "formula": "t_j = τ·(w·h_j)，τ=exp(log_tau) 可学习初始为 1，仅两个关系提及位置参与 softmax；候选损失 12 轮（主变体）",
+      "target": "软分配稀释（锐化）"
+    },
+    "relmask_entmax": {
+      "formula": "p = α-entmax(t)，α=1.5 固定，t_j = w·h_j；候选损失（诊断，稀疏化）"
+    },
+    "relmask_hard": {
+      "formula": "训练时温度按轮次退火 τ_t = 2^t 逼近关系级硬选择；推理时关系级硬选择（总质量最大者，并列取 RELATIONS 字典序，质量均分到其词位）；候选损失（诊断）",
+      "target": "软分配稀释（R12 式硬选择，但不使用 R12 的手工时序特征）"
+    },
+    "relpair_role_tau": {
+      "formula": "logit(A 先) = τ·(w·(h̄_A − h̄_B))，h̄_V 为关系 V 全部提及位置隐向量的均值；反称参数化不利用表面顺序；损失为 −log p_(gold relation)；τ 可学习（诊断，词典无关的顺序读出）"
+    },
+    "relmask_gap": {
+      "formula": "t_j = w·h_j + u·g_j；g_j 为词典无关的无符号特征：词位 j 到另一个关系提及集合最近距离的 8 分档 one-hot（诊断）"
+    }
+  },
+  "controls": ["uniform", "uniform_mentions", "first_mentioned", "learned", "relmask_cand", "random", "shuffled", "pool", "first"],
+  "removed_arms": "cue 与任何基于手工时序词表（先/再/把/被等）的变体按新增硬约束全部移除，不参与本轮。",
+  "continuity_checks": {
+    "relmask_cand": "重训 relmask_cand 应与 R22 一致（H1 78.61%）",
+    "learned": "历史 w 冻结读出 H1 70.16%"
+  },
+  "training": {
+    "data": "B16 历史 train.jsonl 全部 12,000 张图，门控开启且金标入围的 8,000 条",
+    "epochs": 12, "lr": 0.003, "batch_size": 128, "optimizer": "Adam", "seeds": [1701, 2701, 3701]
+  },
+  "evaluation": {
+    "cohort": "R16/R17 冻结 600 图开发队列（SHA-256 cf7d3ba2…，2,600 行）",
+    "h1": "两关系质量取最大为预测首步；门槛 ≥0.80 且相对 first_mentioned 单侧 95% 下界 >0",
+    "h2": "Top-1 相对全有效位均匀权重 ≥+0.02 且下界 >0；题型内按图配对重抽 10,000 次",
+    "primary": "relmask_tau",
+    "generalization_watch": "unseen_template 视图的 H1/H2 必须逐项报告；历史参考：cue 39.17% / 47.22%，learned 43.44% / 50.50%",
+    "stats": "复用 R18 的 r18_stats.py（SHA-256 以归档为准）"
+  },
+  "decision_rule": {
+    "dev_pass": "主变体 H1/H2 双过且 unseen_template H1 ≥ 40% 时，冻结代码与权重，进入新 H3 验收准备（需新独立队列与一次性开封授权，按 R24 流程）",
+    "dev_fail": "如实记录否定结论，按指标选择下一步变体，循环下一轮"
+  },
+  "environment": "tdklgrqctvo9g2techo.funhpc.com；/data/miniconda/envs/torch；Python 3.12.13 / PyTorch 2.10.0+cu128 / NumPy 1.26.4"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "R21",
+  "title": "在论文 H1/H2 机制上增加 Token 位置分数，并执行全新 H3 独立验收",
+  "created_utc": "2026-11-26T07:00:00+00:00",
+  "hypothesis": "在方法论文的共享词权重机制上给每个题面词位增加可学习位置分数 s_j，t_j = w·h_j + s_j，主变体 pos_table（绝对位置表）。与 w 在相同训练数据（12,000 图、8,000 门控样本）、相同预算（Adam lr=0.003、batch 128、12 轮）下联合训练。H1/H2 在论文自己的开发集（历史 1,800 图 + 新开发 600 图）上评测；H3 按用户明确授权，对 pos_table 执行一次全新的独立验收：3,000 张新图（三题型各 1,000）、三个固定种子、共 9,000 次原问判断，相对直接首位与池化基线各要求增益 ≥5 个百分点且单侧 95% 下界 >0，一次性开封。",
+  "primary_variant": "pos_table",
+  "diagnostics": ["pos_linear", "pos_only"],
+  "controls": ["first", "pool", "direction", "old", "uniform", "learned"],
+  "training": {
+    "data": "B16 历史 train.jsonl 全部 12,000 张图，门控开启且金标入围的 8,000 条",
+    "epochs": 12, "lr": 0.003, "batch_size": 128, "optimizer": "Adam",
+    "pos_table": "s 为绝对位置表，长度覆盖训练与评测队列的最大题面长度，超表位置记 0",
+    "pos_linear": "s_j = a*j + b",
+    "pos_only": "w 冻结为 0，仅训练位置表"
+  },
+  "h3": {
+    "authorization": "用户在 2026-11-26 对话中明确授权一次全新独立验收",
+    "cohort": "3,000 张新图，relation_order/role_reversal/competing_chain 各 1,000；索引区间 [65,000,000, 70,000,000)，与历史 R16 开发队列 [60M,65M) 和 R09 正式队列 [70M,74,974,368) 不相交",
+    "exclusions": "b13 历史 3,000 图、fresh_dev 600 图、R16 冻结开发队列 600 图、R09 正式队列 4,800 图的人物集合，以及本队列已抽取集合",
+    "seeds": [1701, 2701, 3701],
+    "acceptance": "主指标原问 Top-1；图内平均种子、三题型等权；题型内按图配对重抽 10,000 次，第 500 个排序值为单侧 95% 下界；对 first 与 pool 两个基线各自增益 ≥0.05 且下界 >0；同图四问全对率同时报告",
+    "openings": "1 次，开封后不复测；抽图熵、冻结清单与开封收据保留",
+    "deviation_note": "论文原协议要求开发达标后方可 H3；本轮 pos_table 开发 H1 未达 80%，H3 为用户明确授权的一次性探索验收，作为独立记录，不构成对开发门槛的推翻。"
+  },
+  "environment": "Windows 本机；Python 3.14.6；PyTorch 2.13.0+cpu；NumPy 2.5.0（论文原环境；云实例已清空不使用）"
+}

@@ -1,0 +1,28 @@
+{
+  "id": "R44",
+  "title": "mix2r_aug 的全新队列复测（第二次独立 H3 测试）",
+  "created_utc": "2026-11-27T14:40:00+00:00",
+  "motivation": "用户要求使用最终算法再次进行测试。R43 已在 [40M,45M) 队列一次性通过验收；本轮使用完全相同的冻结代码与权重，在未使用的 [45M,50M) 区间抽取全新队列做第二次独立测试，检验结论是否可复现。",
+  "authorization": "用户 2026-11-27 明确要求使用最终算法再次测试",
+  "candidate": {
+    "variant": "mix2r_aug",
+    "formula": "p = λ·sparsemax(w_s·h_j) + (1−λ)·entmax(2.0)(w_r·h_j)，仅关系词位；λ 按种子冻结（0.4607/0.4260/0.4769）",
+    "weights_source": "R3-0039 的 mix2r_aug 训练结果（与 R43 使用的冻结权重逐字节一致）",
+    "hard_constraint": "不包含任何手工时序词表特征（先/再/把/被等）"
+  },
+  "cohort": {
+    "graphs": 3000,
+    "per_stratum": {"relation_order": 1000, "role_reversal": 1000, "competing_chain": 1000},
+    "index_range": [45000000, 50000000],
+    "excluded_populations": ["b13 历史 3,000 图", "fresh_dev 600 图", "R16 冻结开发队列 600 图", "R09 正式队列 4,800 图", "R21 正式队列 3,000 图", "R24 正式队列 3,000 图", "R42 正式队列 3,000 图", "R43 正式队列 3,000 图", "本队列已抽取集合"],
+    "templates": "/data/spiderweb-r3-20261124-1740/R3/configs/formal_templates.json（R09 冻结问法）",
+    "entropy": "freeze 后 secrets.token_hex(32) 作为抽图随机种子"
+  },
+  "acceptance": {
+    "primary": "原问 Top-1；图内平均三种子，三题型等权；题型内按图配对重抽 10,000 次，第 500 个排序值作单侧 95% 下界",
+    "thresholds": "相对直接首位与相对池化各自增益 ≥0.05 且对应下界 >0，两项同时满足才通过",
+    "secondary": "改写命中率、同图四问全对率（可逆图）、候选覆盖率同时报告",
+    "openings": "1 次；开封后不复测"
+  },
+  "environment": "tdklgrqctvo9g2techo.funhpc.com；/data/miniconda/envs/torch；Python 3.12.13 / PyTorch 2.10.0+cu128"
+}

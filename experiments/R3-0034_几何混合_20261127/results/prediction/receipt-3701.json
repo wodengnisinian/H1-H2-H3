@@ -1,0 +1,14 @@
+{
+  "seed": 3701,
+  "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad",
+  "script_sha256": "eef62340efa13cd3caa6b58d81e8f3fdc11f718621a72e2e4c9c54b229ce9f7c",
+  "frozen_files_sha256": {
+    "/data/spiderweb-r3-20261124-1740/inputs/b13/inputs/server-run/development/serial/3701/best.pt": "d5585978da8310b9e5452f0a3cd3a6a6be07559a91943816076d52d42895939b",
+    "/data/spiderweb-r3-20261124-1740/inputs/b13/inputs/server-run/controls/pooled/3701/best.pt": "462f8ef29c84f13036353588308d17ef2858c060839bdf198e64dcb46ba69f2b",
+    "/data/spiderweb-r3-20261124-1740/inputs/prior/runs/本地开发-01/w-3701.json": "9217b8edda35fad73650fbe8bdf354e26df0a4f0f8530b6549d62773f93f670e"
+  },
+  "counts": {
+    "prediction_rows": 41600
+  },
+  "predictions_sha256": "016706e68f9f136518f2a475b94ba2de1f71e8c0ac994cb4731d587a08c767a8"
+}

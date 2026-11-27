@@ -1,0 +1,74 @@
+{
+  "id": "R25",
+  "variants": [
+    "attn",
+    "attn_rel"
+  ],
+  "seeds": [
+    1701,
+    2701,
+    3701
+  ],
+  "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad",
+  "source_sha256": {
+    "/data/spiderweb-r3-20261124-1740/inputs/prior/code/model.py": "f85636ffa19443880e48d953c7d552af3d6bda5238c60ad424f445202c2c2b0f"
+  },
+  "script_sha256": "50f427ebac6959edc1eb3ef8def0447b5efcbbb7070d762b5d7e4b29a4b8f2d9",
+  "receipts": [
+    {
+      "seed": 1701,
+      "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad",
+      "script_sha256": "50f427ebac6959edc1eb3ef8def0447b5efcbbb7070d762b5d7e4b29a4b8f2d9",
+      "frozen_files_sha256": {
+        "/data/spiderweb-r3-20261124-1740/inputs/b13/inputs/server-run/development/serial/1701/best.pt": "703b3edfbf72b2213431c054e38dcad3300dd880f8443707b7119b9859a7728c",
+        "/data/spiderweb-r3-20261124-1740/inputs/b13/inputs/server-run/controls/pooled/1701/best.pt": "e9115ffc1f49266ff49efa12f3a7470fee5047bea32621f0a3d481a066e52bc7",
+        "/data/spiderweb-r3-20261124-1740/inputs/prior/runs/本地开发-01/w-1701.json": "a3cf4167344c14eb0d0e281e9e43ce379289fe40157e39de9a230074c211fa59"
+      },
+      "counts": {
+        "prediction_rows": 28600
+      },
+      "predictions_sha256": "fcdb611bc58674e0940625f2349d18d71e7e699a4c2278ce874512bb02b3494f"
+    },
+    {
+      "seed": 2701,
+      "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad",
+      "script_sha256": "50f427ebac6959edc1eb3ef8def0447b5efcbbb7070d762b5d7e4b29a4b8f2d9",
+      "frozen_files_sha256": {
+        "/data/spiderweb-r3-20261124-1740/inputs/b13/inputs/server-run/development/serial/2701/best.pt": "521911f7ec4b7679a4ba733754d3f87b890f0723596f075fd79b1a9b21cfa4bf",
+        "/data/spiderweb-r3-20261124-1740/inputs/b13/inputs/server-run/controls/pooled/2701/best.pt": "146b7c702f326cc9fb050fddc076850eacd7295abf12a6a0a7bbaddaee91bae9",
+        "/data/spiderweb-r3-20261124-1740/inputs/prior/runs/本地开发-01/w-2701.json": "1d3a0e23cdb417f229a7231cec039b8d9b7ec803c08b539a4f38ce4fc6f183a9"
+      },
+      "counts": {
+        "prediction_rows": 28600
+      },
+      "predictions_sha256": "d62d5891cb39c6c47d14f646cfe2b2395c8d27c6ee05c5c2d6bfaa8f29c85a3f"
+    },
+    {
+      "seed": 3701,
+      "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad",
+      "script_sha256": "50f427ebac6959edc1eb3ef8def0447b5efcbbb7070d762b5d7e4b29a4b8f2d9",
+      "frozen_files_sha256": {
+        "/data/spiderweb-r3-20261124-1740/inputs/b13/inputs/server-run/development/serial/3701/best.pt": "d5585978da8310b9e5452f0a3cd3a6a6be07559a91943816076d52d42895939b",
+        "/data/spiderweb-r3-20261124-1740/inputs/b13/inputs/server-run/controls/pooled/3701/best.pt": "462f8ef29c84f13036353588308d17ef2858c060839bdf198e64dcb46ba69f2b",
+        "/data/spiderweb-r3-20261124-1740/inputs/prior/runs/本地开发-01/w-3701.json": "9217b8edda35fad73650fbe8bdf354e26df0a4f0f8530b6549d62773f93f670e"
+      },
+      "counts": {
+        "prediction_rows": 28600
+      },
+      "predictions_sha256": "27d59846fbf536d1719bab03cd4ea00beea2ca4c4ad183aab65dbb89423b93b0"
+    }
+  ],
+  "predictions_sha256": "c4344b1db0b9c332623984454b86a960f180faa3e0e23f74f72f28e7374022f7",
+  "mechanism": "relation-word readout plus attention-docking features from the frozen layer",
+  "views": {
+    "original": 600,
+    "paraphrase": 600,
+    "q0": 200,
+    "q1": 200,
+    "q2": 200,
+    "q3": 200,
+    "unseen_template": 600
+  },
+  "python": "3.12.13",
+  "torch": "2.10.0+cu128"
+}

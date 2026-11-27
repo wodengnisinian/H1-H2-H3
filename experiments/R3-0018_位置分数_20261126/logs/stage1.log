@@ -1,0 +1,19 @@
+{"utc": "2026-11-26T10:56:58.163607+00:00", "event": "start"}
+{"utc": "2026-11-26T10:56:58.254965+00:00", "event": "inputs_verified", "cohort_sha256": "cf7d3ba220b789d978a56667409a3b6b5deb4832b8556d81d96f615acd05c1ad", "rows": 2600, "graphs": 600}
+{"utc": "2026-11-26T10:57:02.230805+00:00", "event": "training_data", "graphs": 12000, "max_question_len": 27}
+{"utc": "2026-11-26T10:57:02.310143+00:00", "event": "seed_started", "seed": 1701}
+{"utc": "2026-11-26T10:57:10.376065+00:00", "event": "trained", "seed": 1701, "mode": "pos_table", "final_nll": 0.00194225387647748, "final_w_norm": 2.9497690200805664}
+{"utc": "2026-11-26T10:57:11.565106+00:00", "event": "trained", "seed": 1701, "mode": "pos_linear", "final_nll": 0.0019799927612766622, "final_w_norm": 3.1500706672668457}
+{"utc": "2026-11-26T10:57:12.583964+00:00", "event": "trained", "seed": 1701, "mode": "pos_only", "final_nll": 0.011611209578812122, "final_w_norm": 0.0}
+{"utc": "2026-11-26T10:57:15.831393+00:00", "event": "seed_saved", "seed": 1701, "prediction_rows": 28600}
+{"utc": "2026-11-26T10:57:15.831534+00:00", "event": "seed_started", "seed": 2701}
+{"utc": "2026-11-26T10:57:23.588894+00:00", "event": "trained", "seed": 2701, "mode": "pos_table", "final_nll": 0.0029826418720185757, "final_w_norm": 4.0477118492126465}
+{"utc": "2026-11-26T10:57:25.041305+00:00", "event": "trained", "seed": 2701, "mode": "pos_linear", "final_nll": 0.002988241009414196, "final_w_norm": 4.187211513519287}
+{"utc": "2026-11-26T10:57:26.234620+00:00", "event": "trained", "seed": 2701, "mode": "pos_only", "final_nll": 0.013284089773893356, "final_w_norm": 0.0}
+{"utc": "2026-11-26T10:57:30.171919+00:00", "event": "seed_saved", "seed": 2701, "prediction_rows": 28600}
+{"utc": "2026-11-26T10:57:30.172035+00:00", "event": "seed_started", "seed": 3701}
+{"utc": "2026-11-26T10:57:38.284252+00:00", "event": "trained", "seed": 3701, "mode": "pos_table", "final_nll": 0.0015451190359890461, "final_w_norm": 3.0349032878875732}
+{"utc": "2026-11-26T10:57:39.685926+00:00", "event": "trained", "seed": 3701, "mode": "pos_linear", "final_nll": 0.001556439759209752, "final_w_norm": 3.258986234664917}
+{"utc": "2026-11-26T10:57:40.869929+00:00", "event": "trained", "seed": 3701, "mode": "pos_only", "final_nll": 0.00581136192753911, "final_w_norm": 0.0}
+{"utc": "2026-11-26T10:57:44.702129+00:00", "event": "seed_saved", "seed": 3701, "prediction_rows": 28600}
+{"utc": "2026-11-26T10:57:44.723059+00:00", "event": "complete", "predictions_sha256": "eb27bc5e4b75270907389374777db097b02131e0fd13688a351c5de2454f0ae8"}
